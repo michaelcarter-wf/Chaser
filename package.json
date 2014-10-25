@@ -1,0 +1,20 @@
+{
+  "name": "prChaser",
+  "version": "1.0.0",
+  "description": "Searches through the current users repo and finds @mentions",
+  "main": "github.js",
+  "dependencies": {
+    "jquery": "^2.1.1",
+    "lodash": "^2.4.1",
+    "octonode": "^0.6.9",
+    "react": "^0.11.2"
+  },
+  "devDependencies": {
+    "jsx-loader": "^0.11.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "bradybecker-wf",
+  "license": "ISC"
+}
