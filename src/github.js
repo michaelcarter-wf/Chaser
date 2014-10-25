@@ -6,77 +6,42 @@ function github() {
 	function setToken(newToken){
 		this.githubToken = newToken;
 	}
+	
+	//TODO get access token here
+	function _request(requestType, url, data){
+		data = data || {};
+		// this will prevent caching until I handle it
+		data['timestamp'] = new Date().getTime(); 
 
-	function request(request, url, data){
-		var dfd = new $.Deferred();
-
-		$.ajax({
-			type: "GET",
+		return $.ajax({
+			type: requestType,
 			url: url,
-			data: { 
-		  		access_token: this.githubToken,
-		  		// adding until the cache is setup
-		  		timestamp : new Date().getTime() 
-		  	}
-		}).done(function(PR) {
-			dfd.resolve(PR);
+			data: data
 		});
-
-		return dfd.promise();
 	}
 
-
 	function getNotifications(all) {
-		var dfd = new $.Deferred();
-		console.log(this.githubToken);
-		$.ajax({
-			type: "GET",
-			url: 'https://api.github.com/notifications',
-			data: { 
-		  		access_token: this.githubToken,
-		  		all: all,
-		  		// adding until the cache is setup
-		  		timestamp : new Date().getTime() 
-		  	}
-		  }).done(function(notifications) {
-		  	dfd.resolve(notifications);
-		  });
-
-		return dfd.promise();
+		var data = { 
+			access_token: this.githubToken,
+			all: all,
+		};
+		return _request('GET', 'https://api.github.com/v3/notifications', data);
 	}
 
 	function getPullRequest(url) {
-		var dfd = new $.Deferred();
+		var data = { 
+			access_token: this.githubToken
+		};
 
-		$.ajax({
-		  type: "GET",
-		  url: url,
-		  data: { 
-		  	access_token: this.githubToken,
-		  	// adding until the cache is setup
-		  	timestamp : new Date().getTime() 
-		  }
-		}).done(function(PR) {
-			dfd.resolve(PR);
-		});
-
-		return dfd.promise();
+		return _request('GET', url, data);
 	}
 
 	function verifyUserToken(token) {
-	
-		var promise = $.ajax({
-		  type: "GET",
-		  url: 'https://api.github.com/user',
-		  data: { 
-		  	access_token: token,
-		  	// adding until the cache is setup
-		  	timestamp : new Date().getTime() 
-		  }
-		});
+		var data = {
+			access_token: token
+		}; 
 
-
-		return promise;
+		return _request('GET', 'https://api.github.com/user', data);
 	}
 
 	// get comments on a PR 
