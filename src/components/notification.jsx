@@ -1,9 +1,15 @@
 /** @jsx React.DOM */
 var React = require('react/addons'),
 	$ = require('jquery'),
-	github = require('../github');
+	github = require('../github'),
+	moment =require('moment');
+
+
 
 var badgeStyle = {}; 
+var imageStyle = {
+
+}; 
 
 var Notification = React.createClass({
 
@@ -39,13 +45,16 @@ var Notification = React.createClass({
     	if (this.state.pullRequest) {
 	    	var pr = this.state.pullRequest;
 
-	        return <li className="list-group-item">
-	        	  <h5 className="list-group-item-heading"><a href='#' onClick={this.openNewTab}>{ pr.title }</a></h5>
-	        	  <ul className="list-inline">
-	        	  	  <li><small><em>{ pr.head.user.login }</em></small></li>
-	        	  	  <li><small className="badge" style={badgeStyle}>{ this.state.unread }</small> </li>
-	        	  </ul>
-	        </li>
+
+	        return <div className="media" onClick={this.openNewTab}>
+			  <span className="pull-left">
+			    <img className="media-object avatar-image" src={pr.head.user.avatar_url} alt="avatar_url"/>
+			  </span>
+			  <div className="media-body">
+			    <h5 className="media-heading"><small className="badge" style={badgeStyle}>{ this.state.unread }</small> { pr.title } </h5>
+			    <small className="created-date">{moment.utc(pr.created_at).fromNow()}</small>
+			  </div>
+			</div>
     	} else {
     		return false;
     	}

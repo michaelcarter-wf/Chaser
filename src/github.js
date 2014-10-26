@@ -6,7 +6,7 @@ function github() {
 	function setToken(newToken){
 		this.githubToken = newToken;
 	}
-	
+
 	//TODO get access token here
 	function _request(requestType, url, data){
 		data = data || {};
@@ -25,7 +25,7 @@ function github() {
 			access_token: this.githubToken,
 			all: all,
 		};
-		return _request('GET', 'https://api.github.com/v3/notifications', data);
+		return _request('GET', 'https://api.github.com/notifications', data);
 	}
 
 	function getPullRequest(url) {

@@ -47,9 +47,7 @@ var PR = React.createClass({
 	    });
 
         return (<div style={divStyle}> 
-        	<ul className="list-group table-stripe">
-            	{notificationNodes}
-        	</ul>
+        	{notificationNodes}
         </div>);
     }
 });
