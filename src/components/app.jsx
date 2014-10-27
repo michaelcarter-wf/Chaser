@@ -3,7 +3,6 @@ var React = require('react/addons'),
 	PR = require('./pr'),
     github = require('../github');
 
-var githubToken = 'e7e66722a80a5cd4815e8dafee36a5483cbdbc64';
 var _githubTokenKey = 'github',
     _userKey = 'login';
 
