@@ -69,7 +69,7 @@ var App = React.createClass({
         }
 
     	if (!this.state.githubTokenValid){
-			return (<div>
+			return (<div className="login-page">
                 {errorNode}
         	   <div className="form-group">
                 <label className="sr-only" for="githubToken">Github Token</label>

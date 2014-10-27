@@ -44,6 +44,8 @@ function github() {
 		return _request('GET', 'https://api.github.com/user', data);
 	}
 
+	// TODO make sure this isn't called a bazillion times
+	// TODO only check the comments since the VERY last commit (use updated_at?)
 	function isPlusOneNeeded(commentsUrl, userId) {
 		var dfd = new $.Deferred();
     	var plusOneNeeded = true;
@@ -53,14 +55,17 @@ function github() {
 
     	_request('GET', commentsUrl, data).done(function(comments){
     		console.log(comments);
-    		// for (var i=0; i < comments.length; i++) {
-    		// 	// and author is the opener of the PR
-    		// 	if (comments[i].body.indexOf('@' + userId) > 0) {
-    		// 		plusOneNeeded = true; 
-    		// 	} else if (plusOneNeeded && comments[i].user.login === userId) {
-    		// 		plusOneNeeded = false; 
-    		// 	}
-    		// }
+    		for (var i=0; i < comments.length; i++) {
+    			// and author is the opener of the PR
+    			if (comments[i].body.indexOf('@' + userId) > 0) {
+    				plusOneNeeded = true; 
+    			} else if (plusOneNeeded && comments[i].user.login === userId) {
+    				if (comments[i].body.indexOf('+1') >= 0) {
+    					// can get the plus on date here!
+    					plusOneNeeded = false; 
+    				}
+    			}
+    		}
     		dfd.resolve(plusOneNeeded);
     	});
     	return dfd.promise();

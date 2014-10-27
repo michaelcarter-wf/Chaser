@@ -31,7 +31,7 @@ var Notification = React.createClass({
 				that.setState({'pullRequest': pullRequest});
 				
 				if (!that.state.unread.length) {
-					isPlusOneNeeded(); 
+					that.isPlusOneNeeded(pullRequest.comments_url); 
 				} else {
 					that.setState({'badgeText': that.state.unread});
 				}
@@ -40,10 +40,11 @@ var Notification = React.createClass({
 
     },
 
-    isPlusOneNeeded : function() {
+    isPlusOneNeeded : function(url) {
+    	var that = this;
 		chrome.storage.local.get('login', function(results){
-			github.isPlusOneNeeded(pr.comments_url, results.login).done(function(plusOneNeeded){
-				var text = plusOneNeeded ? '+1 needed': '';
+			github.isPlusOneNeeded(url, results.login).done(function(plusOneNeeded){
+				var text = plusOneNeeded ? '+1': '';
 				that.setState({'badgeText': text});
 			});
 		});
