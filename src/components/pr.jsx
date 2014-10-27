@@ -37,9 +37,8 @@ var PR = React.createClass({
 
     render: function () {
     	var that = this; 
-    	var loading = <div className="progress">
-  			<div className="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style={{'width': '100%'}}>
-  			</div>
+    	var loading = <div className="progress text-center">
+        	<img src="../src/images/octocat-spinner-32.gif"/>
 		</div>;
 
 	    var notificationNodes = this.state.loading ? loading : this.state.notifications.map(function (notification) {

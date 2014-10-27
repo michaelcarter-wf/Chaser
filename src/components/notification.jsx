@@ -11,7 +11,7 @@ var Notification = React.createClass({
 		var unread = this.props.notification.unread ? 'unread': '';
 
 		if (this.props.notification.unread){
-			badgeStyle = {'background-color':'red'};
+			badgeStyle = {'color':'red'};
 		}
 
 		return {
@@ -33,7 +33,7 @@ var Notification = React.createClass({
 				if (!that.state.unread.length) {
 					that.isPlusOneNeeded(pullRequest.comments_url); 
 				} else {
-					that.setState({'badgeText': that.state.unread});
+					that.setState({'badgeText': that.state.unread + ' '});
 				}
 			}
 		});
@@ -44,12 +44,12 @@ var Notification = React.createClass({
     	var that = this;
 		chrome.storage.local.get('login', function(results){
 			github.isPlusOneNeeded(url, results.login).done(function(plusOneNeeded){
-				var text = plusOneNeeded ? '+1': '';
+				var text = plusOneNeeded ? '+1 needed ': '';
 				that.setState({'badgeText': text});
 			});
 		});
     },
-    
+
     // need a chrome API file
     openNewTab : function(){
 		chrome.tabs.create({ url: this.state.pullRequest.html_url });
@@ -65,8 +65,8 @@ var Notification = React.createClass({
 			    <img className="media-object avatar-image" src={pr.head.user.avatar_url} alt="avatar_url"/>
 			  </span>
 			  <div className="media-body">
-			    <h5 className="media-heading"><small className="badge" style={badgeStyle}>{ this.state.badgeText }</small> { pr.title } </h5>
-			    <small className="created-date">{moment.utc(pr.created_at).fromNow()}</small>
+			    <h5 className="media-heading">{ pr.title } <small className='created-date' style={badgeStyle}>{ this.state.badgeText }</small> </h5>
+			    <small className="created-date">{moment.utc(pr.created_at).fromNow()} | last updated: {moment.utc(pr.updated_at).fromNow()}</small>
 			  </div>
 			</div>
     	} else {
