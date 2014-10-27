@@ -1,4 +1,3 @@
-//var githubToken = 'e7e66722a80a5cd4815e8dafee36a5483cbdbc64';
 function github() {
 	$ = require('jquery');
 	this.githubToken = ''; 
