@@ -28,7 +28,7 @@ function github() {
 		return _request('GET', 'https://api.github.com/notifications', data);
 	}
 
-	function getPullRequest(url) {
+	function getUrl(url) {
 		var data = { 
 			access_token: this.githubToken
 		};
@@ -44,14 +44,37 @@ function github() {
 		return _request('GET', 'https://api.github.com/user', data);
 	}
 
+	function isPlusOneNeeded(commentsUrl, userId) {
+		var dfd = new $.Deferred();
+    	var plusOneNeeded = true;
+		var data = {
+			access_token: this.githubToken,
+		}; 
+
+    	_request('GET', commentsUrl, data).done(function(comments){
+    		console.log(comments);
+    		// for (var i=0; i < comments.length; i++) {
+    		// 	// and author is the opener of the PR
+    		// 	if (comments[i].body.indexOf('@' + userId) > 0) {
+    		// 		plusOneNeeded = true; 
+    		// 	} else if (plusOneNeeded && comments[i].user.login === userId) {
+    		// 		plusOneNeeded = false; 
+    		// 	}
+    		// }
+    		dfd.resolve(plusOneNeeded);
+    	});
+    	return dfd.promise();
+    }
+
 	// get comments on a PR 
 	// get commit history on PR
 
 	return {
 		'getNotifications': getNotifications,
-		'getPullRequest': getPullRequest,
+		'getUrl': getUrl,
 		'verifyUserToken': verifyUserToken,
-		'setToken': setToken	
+		'setToken': setToken,
+		'isPlusOneNeeded': isPlusOneNeeded	
 	};
 }
 

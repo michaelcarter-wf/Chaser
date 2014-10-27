@@ -4,7 +4,8 @@ var React = require('react/addons'),
     github = require('../github');
 
 var githubToken = 'e7e66722a80a5cd4815e8dafee36a5483cbdbc64';
-var _githubTokenKey = 'github';
+var _githubTokenKey = 'github',
+    _userKey = 'login';
 
 var App = React.createClass({
 	getInitialState: function () {
@@ -44,6 +45,7 @@ var App = React.createClass({
         function onSuccess(success) {
             var obj= {};
             obj[_githubTokenKey] = that.state.githubToken;
+            obj[_userKey] = success.login;
             storage.set(obj);                
             that.setState({
                 'githubToken': that.state.githubToken,

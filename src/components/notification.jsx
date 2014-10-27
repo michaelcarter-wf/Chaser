@@ -1,15 +1,9 @@
 /** @jsx React.DOM */
 var React = require('react/addons'),
-	$ = require('jquery'),
 	github = require('../github'),
 	moment =require('moment');
 
-
-
 var badgeStyle = {}; 
-var imageStyle = {
-
-}; 
 
 var Notification = React.createClass({
 
@@ -24,16 +18,34 @@ var Notification = React.createClass({
 			notifications: [],
 			pullRequest: null,
 			unread: unread,
+			badgeText: ''
 		};
 	},
 
     componentDidMount : function(){
     	github.setToken(this.props.githubToken);
     	var that = this;
-		github.getPullRequest(this.props.notification.subject.url).done(function(pullRequest){
+    	// get the pull request
+		github.getUrl(this.props.notification.subject.url).done(function(pullRequest){
 			if (pullRequest.state === 'open') {
 				that.setState({'pullRequest': pullRequest});
+				
+				if (!that.state.unread.length) {
+					isPlusOneNeeded(); 
+				} else {
+					that.setState({'badgeText': that.state.unread});
+				}
 			}
+		});
+
+    },
+
+    isPlusOneNeeded : function() {
+		chrome.storage.local.get('login', function(results){
+			github.isPlusOneNeeded(pr.comments_url, results.login).done(function(plusOneNeeded){
+				var text = plusOneNeeded ? '+1 needed': '';
+				that.setState({'badgeText': text});
+			});
 		});
     },
 
@@ -41,17 +53,17 @@ var Notification = React.createClass({
 		chrome.tabs.create({ url: this.state.pullRequest.html_url });
     },
 
-    render: function () {
+    render: function () { 
+    	var that = this; 
     	if (this.state.pullRequest) {
 	    	var pr = this.state.pullRequest;
-
 
 	        return <div className="media" onClick={this.openNewTab}>
 			  <span className="pull-left">
 			    <img className="media-object avatar-image" src={pr.head.user.avatar_url} alt="avatar_url"/>
 			  </span>
 			  <div className="media-body">
-			    <h5 className="media-heading"><small className="badge" style={badgeStyle}>{ this.state.unread }</small> { pr.title } </h5>
+			    <h5 className="media-heading"><small className="badge" style={badgeStyle}>{ this.state.badgeText }</small> { pr.title } </h5>
 			    <small className="created-date">{moment.utc(pr.created_at).fromNow()}</small>
 			  </div>
 			</div>
