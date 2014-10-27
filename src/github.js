@@ -54,7 +54,6 @@ function github() {
 		}; 
 
     	_request('GET', commentsUrl, data).done(function(comments){
-    		console.log(comments);
     		for (var i=0; i < comments.length; i++) {
     			// and author is the opener of the PR
     			if (comments[i].body.indexOf('@' + userId) > 0) {
@@ -70,9 +69,6 @@ function github() {
     	});
     	return dfd.promise();
     }
-
-	// get comments on a PR 
-	// get commit history on PR
 
 	return {
 		'getNotifications': getNotifications,

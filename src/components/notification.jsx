@@ -49,7 +49,8 @@ var Notification = React.createClass({
 			});
 		});
     },
-
+    
+    // need a chrome API file
     openNewTab : function(){
 		chrome.tabs.create({ url: this.state.pullRequest.html_url });
     },
