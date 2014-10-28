@@ -55,6 +55,7 @@ var Notification = React.createClass({
 		chrome.tabs.create({ url: this.state.pullRequest.html_url });
     },
 
+    // check for last commit for updated
     render: function () { 
     	var that = this; 
     	if (this.state.pullRequest) {
@@ -66,7 +67,7 @@ var Notification = React.createClass({
 			  </span>
 			  <div className="media-body">
 			    <h5 className="media-heading">{ pr.title } <small className='created-date' style={badgeStyle}>{ this.state.badgeText }</small> </h5>
-			    <small className="created-date">{moment.utc(pr.created_at).fromNow()} | last updated: {moment.utc(pr.updated_at).fromNow()}</small>
+			    <small className="created-date">{moment.utc(pr.created_at).fromNow()} | updated {moment.utc(pr.updated_at).fromNow()}</small>
 			  </div>
 			</div>
     	} else {
