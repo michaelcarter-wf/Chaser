@@ -11,6 +11,7 @@ var divStyle = {
 var PR = React.createClass({
 
 	getInitialState: function () { 
+		github.setToken(this.props.githubToken);
 		return {
 			notifications: [],
 			loading: true,
@@ -20,16 +21,9 @@ var PR = React.createClass({
 
     componentDidMount : function(){
     	var that = this; 
-    	var newNotifications = [];
-    	github.setToken(this.props.githubToken);
-		github.getNotifications(true).done(function( notifications ) {
-			for (var i=0; i < notifications.length; i++){
-				if (notifications[i].reason === 'mention') {
-					newNotifications.push(notifications[i]);
-				}
-			}
+		github.getNotifications(true, 'mention').done(function( notifications ) {
 			that.setState({
-				'notifications': newNotifications,
+				'notifications': notifications,
 				'loading': false
 			});
 		});

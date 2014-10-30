@@ -1,15 +1,39 @@
-function github() {
-    $ = require('jquery');
-    this.githubToken = '';
+function github(accessToken) {
+    var $ = require('jquery'),
+        moment = require('moment'),
+        constants = require('./constants');
+
+    var API = {};
+    API.githubToken = accessToken;
+
+    function getToken(){
+        return API.githubToken; 
+    }
 
     function setToken(newToken){
-        this.githubToken = newToken;
+        API.githubToken = newToken;
+    }
+
+    function setUser(login){
+        API.user = login;
+    }
+
+    //TODO get access token here
+    function _requestAuthed(requestType, url, data){
+        data = data || {};
+        data['timestamp'] = new Date().getTime();
+        data['access_token'] = API.githubToken;
+
+        return $.ajax({
+            type: requestType,
+            url: url,
+            data: data
+        });
     }
 
     //TODO get access token here
     function _request(requestType, url, data){
         data = data || {};
-        // this will prevent caching until I handle it
         data['timestamp'] = new Date().getTime();
 
         return $.ajax({
@@ -19,64 +43,68 @@ function github() {
         });
     }
 
-    function getNotifications(all) {
-        var data = {
-            access_token: this.githubToken,
-            all: all,
-        };
-        return _request('GET', 'https://api.github.com/notifications', data);
+    function getPullRequest(url) {
+        return _requestAuthed(constants.http.get, url);
     }
+    API.getPullRequest = getPullRequest; 
+
+    function getNotifications(all, reason) {
+        var dfd = new $.Deferred(),
+            startDate = moment().subtract(1, 'month').toISOString();
+
+        var data = {
+            all: all,
+            since: startDate
+        };
+
+        return _requestAuthed(constants.http.get, 'https://api.github.com/notifications', data);
+    }
+    API.getNotifications = getNotifications; 
 
     function getUrl(url) {
-        var data = {
-            access_token: this.githubToken
-        };
-
-        return _request('GET', url, data);
+        return _requestAuthed(constants.http.get, url, data);
     }
 
     function verifyUserToken(token) {
-        var data = {
-            access_token: token
-        };
-
-        return _request('GET', 'https://api.github.com/user', data);
+        return _requestAuthed(constants.http.get, 'https://api.github.com/user', data);
     }
 
     // TODO make sure this isn't called a bazillion times
     // TODO only check the comments since the VERY last commit (use updated_at?)
     function isPlusOneNeeded(commentsUrl, userId) {
         var dfd = new $.Deferred();
-        var plusOneNeeded = true;
-        var data = {
-            access_token: this.githubToken,
-        };
+        var plusOneNeeded = true,
+            atMentionedComment,
+            plusOneComment,
+            data = {}; 
 
-        _request('GET', commentsUrl, data).done(function(comments){
+        _requestAuthed(constants.http.get, commentsUrl, data).done(function(comments){
             for (var i=0; i < comments.length; i++) {
                 // and author is the opener of the PR
                 if (comments[i].body.indexOf('@' + userId) > 0) {
                     plusOneNeeded = true;
+                    atMentionedComment = comments[i]; 
                 } else if (plusOneNeeded && comments[i].user.login === userId) {
                     if (comments[i].body.indexOf('+1') >= 0) {
                         // can get the plus on date here!
                         plusOneNeeded = false;
+                        plusOneComment = comments[i];
                     }
                 }
             }
-            dfd.resolve(plusOneNeeded);
+            dfd.resolve({
+                'plusOneComment': plusOneComment,
+                'plusOneNeeded': plusOneNeeded,
+                'atMentionedComment': atMentionedComment
+            });
         });
         return dfd.promise();
     }
+    API.isPlusOneNeeded = isPlusOneNeeded;
 
-    return {
-        'getNotifications': getNotifications,
-        'getUrl': getUrl,
-        'verifyUserToken': verifyUserToken,
-        'setToken': setToken,
-        'isPlusOneNeeded': isPlusOneNeeded
-    };
+    return API;
+
 }
 
 
-module.exports = github(); 
+module.exports = github; 
