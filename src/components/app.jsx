@@ -4,7 +4,8 @@ var React = require('react/addons'),
     github = require('../github'),
     constants = require('../constants'),
     viewService = require('../ViewService'),
-    chromeApi = require('../chrome');
+    chromeApi = require('../chrome'),
+    Reflux = require('reflux');
 
 var divStyle = {
   'height': '400px',
@@ -13,6 +14,7 @@ var divStyle = {
 };
 
 var App = React.createClass({
+    mixins: [Reflux.ListenerMixin],
     getInitialState: function () {
         return {
             'viewObjects': this.props.viewObjects
@@ -32,12 +34,18 @@ var App = React.createClass({
 
     render: function () {
         var pullRequests = this.state.viewObjects.map(function (viewObject) {
-            return (<PullRequest notification={viewObject.notification} pullRequest={viewObject.pullRequest}/>);
+            return (<PullRequest notification={viewObject.notification} pullRequest={viewObject.pullRequest} commentInfo={viewObject.commentInfo}/>);
         });
     	
     	return	<div>
         <div className='header'>
-            <div className='col-xs-4'></div>
+            <div className='col-xs-4'>
+                <div className='refresh-btn'>
+                    <small className='refresh-btn'>
+                        <em>bradybecker-wf</em>
+                    </small>
+                </div>
+            </div>
             <div className='col-xs-4 text-center'>
                 <img className="text-center github-title" src="src/images/github.png"/>
             </div>

@@ -10,34 +10,15 @@ var badgeStyle = {'color':'red'};
 var PullRequest = React.createClass({
 	
 	getInitialState: function () {
-		var unread = this.props.notification.unread; 
+		var unread = this.props.notification.unread,
+			badgeText = this.props.commentInfo.plusOneNeeded ? '+1 needed ': '';
+
 		return {
-			'badgeText': '',
+			'badgeText': badgeText,
 			'unread': unread,
 			'accessToken': ''
 		};
 	},
-
-	componentDidMount : function(){
-		var that = this; 
-		chromeApi.get(constants.githubTokenKey, function(results) {
-			if (results[constants.githubTokenKey].length) {
-				that.isPlusOneNeeded(that.props.pullRequest.comments_url, results[constants.githubTokenKey]);
-			}
-		});
-    },
-
-    isPlusOneNeeded : function(url, accessToken) {
-    	var that = this,
-    		github = Github(accessToken);
-
-		chromeApi.get('login', function(results){
-			github.isPlusOneNeeded(url, results.login).done(function(result){
-				var plusOneNeeded = result.plusOneNeeded ? '+1 needed ': '';
-				that.setState({'badgeText': plusOneNeeded});
-			});
-		});
-    },
 
     // need a chrome API file
     openNewTab : function(){
@@ -48,7 +29,9 @@ var PullRequest = React.createClass({
     render: function () { 
     	var that = this,
     		pr = this.props.pullRequest,
-    		note = this.props.notification;
+    		note = this.props.notification,
+    		commentInfo = this.props.commentInfo;
+
 
 	        return <div className="media" onClick={this.openNewTab}>
 			  <span className="pull-left">

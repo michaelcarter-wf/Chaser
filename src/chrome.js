@@ -8,9 +8,8 @@ function ChromeApi() {
 	API.get = get; 
 
 	// set an item to local storage
-	function set(object, callback) {
-		chrome.storage.local.set(object, callback); 	
-		return callback
+	function set(object) {
+		chrome.storage.local.set(object); 	
 	}
 	API.set = set;
 

@@ -65,9 +65,10 @@ function github(accessToken) {
         return _requestAuthed(constants.http.get, url, data);
     }
 
-    function verifyUserToken(token) {
-        return _requestAuthed(constants.http.get, 'https://api.github.com/user', data);
+    function verifyUserToken() {
+        return _requestAuthed(constants.http.get, 'https://api.github.com/user');
     }
+    API.verifyUserToken = verifyUserToken;
 
     // TODO make sure this isn't called a bazillion times
     // TODO only check the comments since the VERY last commit (use updated_at?)
