@@ -19,8 +19,7 @@ function viewService() {
 			}
 		}
 
-		// todo check for plus one...
-		// action needed
+		// check for commit after plus one needed
 		function prepItemForView(notification, callback) {
 			github.getPullRequest(notification.subject.url).then(function(pullRequest){ 
 				if (pullRequest.state === 'open') {

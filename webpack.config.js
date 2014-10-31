@@ -1,10 +1,14 @@
 module.exports = {
-    entry: "./src/entry.js",
-    output: {
-        path: __dirname,
-        filename: "bundle2.js"
+     entry: {
+        chaser: "./src/entry.js",
+        chaserEvents: "./src/events.js",
     },
-
+    output: {
+        // Make sure to use [name] or [id] in output.filename
+        //  when using multiple entry points
+        filename: "[name].bundle.js",
+        chunkFilename: "[id].bundle.js"
+    },
     resolve: {
         // Allow to omit extensions when requiring these files
         extensions: ['', '.js', '.jsx']

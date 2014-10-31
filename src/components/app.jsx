@@ -23,6 +23,7 @@ var App = React.createClass({
 
     refreshList: function(){
         var that = this; 
+        that.setState({'viewObjects': []});
         chromeApi.get(constants.githubTokenKey, function(results) {
             if (results[constants.githubTokenKey].length) {
                 viewService.prepViewObjects(results[constants.githubTokenKey], function(newViewObjects){

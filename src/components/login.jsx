@@ -1,6 +1,5 @@
 /** @jsx React.DOM */
 var React = require('react/addons'),
-	PullRequest = require('./pullRequest'),
     Github = require('../github'),
     constants = require('../constants'),
     viewService = require('../ViewService'),
