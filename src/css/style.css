@@ -1,0 +1,56 @@
+.list-group-item:nth-child(even){
+	background-color: '#FFF';
+}
+
+.avatar-image {
+	width: 35px;
+	height: 35px;
+	border-radius: 20px;
+	margin-right: 3px;
+}
+
+.created-date {
+	margin: 0;
+	color: #999;
+	font-size: 10px;
+}
+
+.media-heading {
+	margin: 0 0 0px;
+}
+
+.media {
+	padding: 10px;
+	margin-top: 5px;
+	cursor: pointer;
+}
+.media:hover {
+	background-color: #FBFBFB;
+}
+
+.login-page {
+	padding: 10px;
+	height: 200px;
+}
+
+.github-title {
+	width: 30px;
+	height: 30px;
+}
+
+.header{
+	width: 100%;
+	padding: 8px;
+	border-bottom: 1px solid #F1F1F1; 
+
+	background-color: #FBFBFB;
+	background-image: linear-gradient(#f9f9f9, #FBFBFB);
+	background-repeat: repeat-x;
+	height: 50px;
+}
+
+.refresh-btn {
+	margin-top: 5px;
+	color: black;
+	background-color: #FBFBFB;
+}

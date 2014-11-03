@@ -1,90 +1,69 @@
 /** @jsx React.DOM */
 var React = require('react/addons'),
-	PR = require('./pr'),
-    github = require('../github');
+	PullRequest = require('./pullRequest'),
+    github = require('../github'),
+    constants = require('../constants'),
+    viewService = require('../viewService'),
+    chromeApi = require('../chrome'),
+    Reflux = require('reflux');
 
-var _githubTokenKey = 'github',
-    _userKey = 'login';
+var divStyle = {
+  'height': '400px',
+  'overflow-y':'scroll',
+  'width': '100%'
+};
 
 var App = React.createClass({
-	getInitialState: function () {
-		return {
-			githubToken: '',
-			loading: true,
-            githubTokenValid: false
-		};
-	},
-
-    componentDidMount : function(){
-    	var that = this; 
-    	// check for the stored github token
-    	chrome.storage.local.get(_githubTokenKey, function(results){
-    		if (results[_githubTokenKey].length) {
-    			that.setState({
-                    'githubToken': results[_githubTokenKey],
-                    'githubTokenValid': true
-                });
-    		} else {
-    			that.setState({loading: false});
-    		}
-		}); 
+    mixins: [Reflux.ListenerMixin],
+    getInitialState: function () {
+        return {
+            'viewObjects': this.props.viewObjects
+        };
     },
 
-    handleChange : function(e){
-        var newState = this.state; 
-        newState[e.currentTarget.id] = e.currentTarget.value;
-        newState['disabled'] = e.currentTarget.value.length ? true : false;  
-        this.setState(newState);
-    },
-
-    handleSubmit : function(e){
-        var storage = chrome.storage.local;
-
+    refreshList: function(){
         var that = this; 
-        function onSuccess(success) {
-            var obj= {};
-            obj[_githubTokenKey] = that.state.githubToken;
-            obj[_userKey] = success.login;
-            storage.set(obj);                
-            that.setState({
-                'githubToken': that.state.githubToken,
-                'githubTokenValid': true
-            });
-        }
-
-        function onError(error) {
-            that.setState({'error': error.responseJSON.message});
-        }
-
-        var newState = this.state;
-        github.verifyUserToken(this.state.githubToken).then(onSuccess, onError);
-        
+        that.setState({'viewObjects': []});
+        chromeApi.get(constants.githubTokenKey, function(results) {
+            if (results[constants.githubTokenKey].length) {
+                viewService.prepViewObjects(results[constants.githubTokenKey], function(newViewObjects){
+                    that.setState({'viewObjects': newViewObjects});
+                });
+            }
+        });
     },
 
     render: function () {
-        var errorNode ='';
-        if (this.state.error) {
-            errorNode = <div className="alert alert-danger text-center" role="alert"> {this.state.error}</div>
-        }
-
-    	if (!this.state.githubTokenValid){
-			return (<div className="login-page">
-                {errorNode}
-        	   <div className="form-group">
-                <label className="sr-only" for="githubToken">Github Token</label>
-                <input className="form-control" id="githubToken" placeholder="Enter Gitub Token" onInput={this.handleChange} />                
-              </div>
-              <button type="submit" className="btn btn-primary pull-right" onClick={this.handleSubmit}>Submit</button>
-        	</div>); 
-    	} else {
-    		return	<PR githubToken={this.state.githubToken}/>
-    	}
+        var pullRequests = this.state.viewObjects.map(function (viewObject) {
+            return (<PullRequest notification={viewObject.notification} pullRequest={viewObject.pullRequest} commentInfo={viewObject.commentInfo}/>);
+        });
+    	
+    	return	<div>
+        <div className='header'>
+            <div className='col-xs-4'>
+                <div className='refresh-btn'>
+                    <small className='refresh-btn'>
+                        <em>bradybecker-wf</em>
+                    </small>
+                </div>
+            </div>
+            <div className='col-xs-4 text-center'>
+                <img className="text-center github-title" src="src/images/github.png"/>
+            </div>
+            <div className='col-xs-4'>
+                <button className="btn btn-default btn-xs pull-right refresh-btn" onClick={this.refreshList}>
+                    <span className="glyphicon glyphicon-refresh"></span>
+                </button>
+            </div>
+        </div>
+        <div style={divStyle}> {pullRequests} </div>
+        </div>
     }
 });
 
 // let it roll
-App.start = function () {
-    React.renderComponent(<App/>, document.getElementById('app'));
+App.start = function (viewObjects) {
+    React.renderComponent(<App viewObjects={viewObjects}/>, document.getElementById('app'));
 };
 
 module.exports = window.App = App;
