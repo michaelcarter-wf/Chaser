@@ -93,9 +93,9 @@ function github(accessToken) {
     }
     API.isPlusOneNeeded = isPlusOneNeeded;
 
-    function getUsersRepos(){
-        https://api.github.com/user/repos?access_token=29ed73c4694450b7b11c864484806856fd2a3490
-    }
+    // function getUsersRepos(){
+    //     https://api.github.com/user/repos?access_token=29ed73c4694450b7b11c864484806856fd2a3490
+    // }
 
     // https://api.github.com/repos/bradybecker-wf/wf-home-html/pulls?access_token=29ed73c4694450b7b11c864484806856fd2a3490
 
