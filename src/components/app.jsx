@@ -3,7 +3,7 @@ var React = require('react/addons'),
 	PullRequest = require('./pullRequest'),
     github = require('../github'),
     constants = require('../constants'),
-    viewService = require('../ViewService'),
+    viewService = require('../viewService'),
     chromeApi = require('../chrome'),
     Reflux = require('reflux');
 

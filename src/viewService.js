@@ -10,9 +10,11 @@ function viewService() {
 			tokenObj = {},
 			github = Github(accessToken);
 
+		// are all items prepped and ready
 		function isFinished(){
 			prepped --; 
 			if (prepped === 0)  {
+				viewObjects.sort(function(x, y) {return y.commentInfo.plusOneNeeded-x.commentInfo.plusOneNeeded});
 				var viewObjectsToStore = {'viewObjects': viewObjects};
 				chromeApi.set(viewObjectsToStore);
 				successCallback(viewObjects);
@@ -41,6 +43,7 @@ function viewService() {
 			});
 		}
 
+		// start off by getting all notifications that are @mentions
 		github.getNotifications(true, 'mention').done(function( notifications ) {
 			for(var i=0; i < notifications.length; i++){
 	            if (notifications[i].reason === 'mention') {

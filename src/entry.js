@@ -5,7 +5,7 @@ var App = require('./components/app'),
 var Github = require('./github'),
 	constants = require('./constants'),
 	chromeApi = require('./chrome'),
-	viewService = require('./ViewService'),
+	viewService = require('./viewService'),
 	Reflux = require('reflux'),
 	Login = require('./components/login');
 

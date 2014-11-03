@@ -1,5 +1,6 @@
 var settings = {
 	'githubTokenKey': 'github',
+	'githubUrl': 'https://api.github.com/',
 	'userKey': 'login',
 	'currentUser': '_currentUser_',
 	'viewObjects': '_viewObjects_',

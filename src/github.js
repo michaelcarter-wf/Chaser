@@ -4,19 +4,8 @@ function github(accessToken) {
         constants = require('./constants');
 
     var API = {};
+
     API.githubToken = accessToken;
-
-    function getToken(){
-        return API.githubToken; 
-    }
-
-    function setToken(newToken){
-        API.githubToken = newToken;
-    }
-
-    function setUser(login){
-        API.user = login;
-    }
 
     //TODO get access token here
     function _requestAuthed(requestType, url, data){
@@ -57,7 +46,7 @@ function github(accessToken) {
             since: startDate
         };
 
-        return _requestAuthed(constants.http.get, 'https://api.github.com/notifications', data);
+        return _requestAuthed(constants.http.get, constants.githubUrl + 'notifications', data);
     }
     API.getNotifications = getNotifications; 
 
@@ -66,7 +55,7 @@ function github(accessToken) {
     }
 
     function verifyUserToken() {
-        return _requestAuthed(constants.http.get, 'https://api.github.com/user');
+        return _requestAuthed(constants.http.get, constants.githubUrl + 'user');
     }
     API.verifyUserToken = verifyUserToken;
 
@@ -88,6 +77,7 @@ function github(accessToken) {
                 } else if (plusOneNeeded && comments[i].user.login === userId) {
                     if (comments[i].body.indexOf('+1') >= 0) {
                         // can get the plus on date here!
+                        // action needed maybed?
                         plusOneNeeded = false;
                         plusOneComment = comments[i];
                     }
@@ -102,6 +92,12 @@ function github(accessToken) {
         return dfd.promise();
     }
     API.isPlusOneNeeded = isPlusOneNeeded;
+
+    function getUsersRepos(){
+        https://api.github.com/user/repos?access_token=29ed73c4694450b7b11c864484806856fd2a3490
+    }
+
+    // https://api.github.com/repos/bradybecker-wf/wf-home-html/pulls?access_token=29ed73c4694450b7b11c864484806856fd2a3490
 
     return API;
 

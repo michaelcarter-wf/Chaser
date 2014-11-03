@@ -19,6 +19,14 @@ module.exports = {
             { test: /\.jsx$/, loader: 'jsx' },
         ]
     },
+    
+    stats: {
+        // Configure the console output
+        colors: false,
+        modules: true,
+        reasons: true
+    },
+
     externals: {
         // Showdown is not is node_modules,
         // so we tell Webpack to resolve it to a global
