@@ -7,11 +7,10 @@ function github(accessToken) {
 
     API.githubToken = accessToken;
 
-    //TODO get access token here
     function _requestAuthed(requestType, url, data){
         data = data || {};
-        data['timestamp'] = new Date().getTime();
-        data['access_token'] = API.githubToken;
+        data.timestamp = new Date().getTime();
+        data.access_token = API.githubToken;
 
         return $.ajax({
             type: requestType,
@@ -20,10 +19,9 @@ function github(accessToken) {
         });
     }
 
-    //TODO get access token here
     function _request(requestType, url, data){
         data = data || {};
-        data['timestamp'] = new Date().getTime();
+        data.timestamp = new Date().getTime();
 
         return $.ajax({
             type: requestType,
@@ -59,35 +57,41 @@ function github(accessToken) {
     }
     API.verifyUserToken = verifyUserToken;
 
+    function getActionsNeeded(comments, userId) {
+        var plusOneNeeded = true; 
+        for (var i=0; i < comments.length; i++) {
+            if (comments[i].body.indexOf('@' + userId) > 0) {
+                plusOneNeeded = true;
+                atMentionedComment = comments[i]; 
+            } else if (plusOneNeeded && comments[i].user.login === userId) {
+                if (comments[i].body.indexOf('+1') >= 0) {
+                    // can get the plus on date here!
+                    // action needed maybed?
+                    plusOneNeeded = false;
+                    plusOneComment = comments[i];
+                }
+            }
+        }
+
+        return {
+            'plusOneComment': plusOneComment,
+            'plusOneNeeded': plusOneNeeded,
+            'atMentionedComment': atMentionedComment
+        };
+    }
+    API.getActionsNeeded = getActionsNeeded; 
+
     // TODO make sure this isn't called a bazillion times
     // TODO only check the comments since the VERY last commit (use updated_at?)
     function isPlusOneNeeded(commentsUrl, userId) {
         var dfd = new $.Deferred();
-        var plusOneNeeded = true,
-            atMentionedComment,
+        var atMentionedComment,
             plusOneComment,
-            data = {}; 
+            data = {'per_page': 100}; 
 
         _requestAuthed(constants.http.get, commentsUrl, data).done(function(comments){
-            for (var i=0; i < comments.length; i++) {
-                // and author is the opener of the PR
-                if (comments[i].body.indexOf('@' + userId) > 0) {
-                    plusOneNeeded = true;
-                    atMentionedComment = comments[i]; 
-                } else if (plusOneNeeded && comments[i].user.login === userId) {
-                    if (comments[i].body.indexOf('+1') >= 0) {
-                        // can get the plus on date here!
-                        // action needed maybed?
-                        plusOneNeeded = false;
-                        plusOneComment = comments[i];
-                    }
-                }
-            }
-            dfd.resolve({
-                'plusOneComment': plusOneComment,
-                'plusOneNeeded': plusOneNeeded,
-                'atMentionedComment': atMentionedComment
-            });
+            var actions = getActionsNeeded(comments, userId);
+            dfd.resolve(actions);
         });
         return dfd.promise();
     }

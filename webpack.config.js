@@ -7,7 +7,8 @@ module.exports = {
         // Make sure to use [name] or [id] in output.filename
         //  when using multiple entry points
         filename: "[name].bundle.js",
-        chunkFilename: "[id].bundle.js"
+        chunkFilename: "[id].bundle.js",
+        publicPath: ''
     },
     resolve: {
         // Allow to omit extensions when requiring these files

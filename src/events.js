@@ -11,6 +11,7 @@ function checkForNotifications(){
 	chrome.alarms.create('refresh', {periodInMinutes: tenMinutes});
   		viewService.prepViewObjects(github.githubToken, function(results){
 	  		var actionItems = 0; 
+	  		// TODO move this to the view service
 	  		for (var i=0; i < results.length; i++) {
 	  			if (results[i].commentInfo.plusOneNeeded) {
 	  				actionItems++; 
