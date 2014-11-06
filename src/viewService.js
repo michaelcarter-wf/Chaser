@@ -14,7 +14,8 @@ function viewService() {
 		function isFinished(){
 			prepped --; 
 			if (prepped === 0)  {
-				viewObjects.sort(function(x, y) {return y.commentInfo.plusOneNeeded-x.commentInfo.plusOneNeeded});
+				// put the action needed objects at the top of the list
+				viewObjects.sort(function(x, y) {return y.commentInfo.plusOneNeeded-x.commentInfo.plusOneNeeded;});
 				var viewObjectsToStore = {'viewObjects': viewObjects};
 				chromeApi.set(viewObjectsToStore);
 				successCallback(viewObjects);

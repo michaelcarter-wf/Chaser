@@ -1,3 +1,5 @@
+// should put the stores on the window
+require('./stores');
 require('./css/style.css');
 var App = require('./components/app'),
 	github; 
@@ -11,7 +13,6 @@ var Github = require('./github'),
 
 
 function fireItUp(viewObjects) {
-	// console.log(viewObjects);
 	App.start(viewObjects);
 }
 
@@ -28,4 +29,3 @@ chromeApi.get('viewObjects', function(results) {
 		fireItUp(results.viewObjects);
 	}
 });
-

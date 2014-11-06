@@ -1,11 +1,13 @@
 /** @jsx React.DOM */
 var React = require('react/addons'),
-	PullRequest = require('./pullRequest'),
-    github = require('../github'),
+    PullRequest = require('./pullRequest'),
     constants = require('../constants'),
     viewService = require('../viewService'),
     chromeApi = require('../chrome'),
-    Reflux = require('reflux');
+    Reflux = require('reflux'),
+    StatusStore = require('../stores'),
+    Header = require('./header'),
+    Loading = require('./loading');
 
 var divStyle = {
   'height': '400px',
@@ -13,57 +15,59 @@ var divStyle = {
   'width': '100%'
 };
 
+
 var App = React.createClass({
     mixins: [Reflux.ListenerMixin],
     getInitialState: function () {
         return {
-            'viewObjects': this.props.viewObjects
+            'viewObjects': this.props.viewObjects,
+            'loading': false
         };
+    },
+
+    componentDidMount: function() {
+        StatusStore.listen(this.refreshList);
     },
 
     refreshList: function(){
         var that = this; 
-        that.setState({'viewObjects': []});
+        that.setState({
+            'viewObjects': [],
+            'loading': true
+        });
         chromeApi.get(constants.githubTokenKey, function(results) {
             if (results[constants.githubTokenKey].length) {
                 viewService.prepViewObjects(results[constants.githubTokenKey], function(newViewObjects){
-                    that.setState({'viewObjects': newViewObjects});
+                    that.setState({
+                        'viewObjects': newViewObjects,
+                        'loading': false
+                    });
+                    chrome.browserAction.setBadgeText({'text':newViewObjects.length.toString()});
                 });
             }
         });
     },
 
     render: function () {
-        var pullRequests = this.state.viewObjects.map(function (viewObject) {
-            return (<PullRequest notification={viewObject.notification} pullRequest={viewObject.pullRequest} commentInfo={viewObject.commentInfo}/>);
-        });
-    	
+        /* jshint ignore:start */
+        var pullRequests = this.state.loading ? <Loading/> : this.state.viewObjects.map(function (viewObject) {
+                return (<PullRequest notification={viewObject.notification} pullRequest={viewObject.pullRequest} commentInfo={viewObject.commentInfo}/>);
+            });
+
     	return	<div>
-        <div className='header'>
-            <div className='col-xs-4'>
-                <div className='refresh-btn'>
-                    <small className='refresh-btn'>
-                        <em>bradybecker-wf</em>
-                    </small>
-                </div>
-            </div>
-            <div className='col-xs-4 text-center'>
-                <img className="text-center github-title" src="src/images/github.png"/>
-            </div>
-            <div className='col-xs-4'>
-                <button className="btn btn-default btn-xs pull-right refresh-btn" onClick={this.refreshList}>
-                    <span className="glyphicon glyphicon-refresh"></span>
-                </button>
-            </div>
+            <Header />
+            <div style={divStyle}> {pullRequests} </div>
         </div>
-        <div style={divStyle}> {pullRequests} </div>
-        </div>
+        /* jshint ignore:end */
+
     }
 });
 
 // let it roll
 App.start = function (viewObjects) {
+    /* jshint ignore:start */
     React.renderComponent(<App viewObjects={viewObjects}/>, document.getElementById('app'));
+    /* jshint ignore:start */
 };
 
 module.exports = window.App = App;

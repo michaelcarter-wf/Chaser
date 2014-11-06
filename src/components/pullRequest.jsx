@@ -7,6 +7,8 @@ var React = require('react/addons'),
 
 var badgeStyle = {'color':'red'}; 
 
+var mediaWidth = {'width': '75%'};
+
 var PullRequest = React.createClass({
 	
 	getInitialState: function () {
@@ -37,10 +39,16 @@ var PullRequest = React.createClass({
 			  <span className="pull-left">
 			    <img className="media-object avatar-image" src={pr.head.user.avatar_url} alt="avatar_url"/>
 			  </span>
-			  <div className="media-body">
-			    <h5 className="media-heading">{ pr.title } <small className='created-date' style={badgeStyle}> {this.state.badgeText} {this.state.unread} </small> </h5>
-			    <small className="created-date">{moment.utc(pr.created_at).fromNow()} | updated {moment.utc(pr.updated_at).fromNow()}</small>
+			  <div className="media-body pull-left" style={mediaWidth}>
+			  <small className="small-text created-date"><em>{pr.base.repo.full_name}</em></small>
+			    <h6 className="media-heading">
+					{ pr.title } <br/>
+			    	<small className="small-text">
+			    		updated {moment.utc(pr.updated_at).fromNow()} <span style={badgeStyle}> {this.state.badgeText} {this.state.unread} </span>
+			    	</small>
+			    </h6>
 			  </div>
+			  <div className='pull-left'><small className='small-text'>{moment.utc(pr.created_at).format('MM/DD')} </small></div>
 			</div>
     }
 });
