@@ -59,7 +59,8 @@ function github(accessToken) {
 
     function getActionsNeeded(comments, userId) {
         var plusOneNeeded = true;
-        var plusOneComment; 
+        var plusOneComment,
+            atMentionedComment; 
         for (var i=0; i < comments.length; i++) {
             if (comments[i].body.indexOf('@' + userId) > 0) {
                 plusOneNeeded = true;

@@ -12,7 +12,8 @@ var React = require('react/addons'),
 var divStyle = {
   'height': '400px',
   'overflow-y':'scroll',
-  'width': '100%'
+  'width': '100%',
+  'background-color': '#FBFBFB'
 };
 
 

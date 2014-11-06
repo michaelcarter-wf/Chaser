@@ -34,6 +34,9 @@ var PullRequest = React.createClass({
     		note = this.props.notification,
     		commentInfo = this.props.commentInfo;
 
+    		if (!commentInfo.plusOneNeeded) {
+    			//return false; 
+    		}
 
 	        return <div className="media" onClick={this.openNewTab}>
 			  <span className="pull-left">
