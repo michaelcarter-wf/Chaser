@@ -42,7 +42,13 @@ var App = React.createClass({
                         'viewObjects': newViewObjects,
                         'loading': false
                     });
-                    chrome.browserAction.setBadgeText({'text':newViewObjects.length.toString()});
+                    var actionItems = 0; 
+                    for (var i=0; i < newViewObjects.length; i++) {
+                        if (newViewObjects[i].commentInfo.plusOneNeeded) {
+                            actionItems++; 
+                        }
+                    }
+                    chrome.browserAction.setBadgeText({'text':actionItems.toString()});
                 });
             }
         });
