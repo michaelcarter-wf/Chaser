@@ -10,6 +10,19 @@ var React = require('react/addons'),
 
 var Header = React.createClass({
 
+    getInitialState: function () {
+        return {
+            'userLogin': '',
+        };
+    },
+
+    componentDidMount: function() {
+        var that = this;
+        chromeApi.get(constants.userKey, function(results) {
+            that.setState({'userLogin': results.login});
+        }); 
+    },
+
     refreshList: function(){
         var that = this; 
         Actions.refresh();
@@ -20,7 +33,7 @@ var Header = React.createClass({
             <div className='col-xs-4'>
                 <div className='refresh-btn'>
                     <small className='refresh-btn'>
-                        <em>bradybecker-wf</em>
+                        <em>{this.state.userLogin}</em>
                     </small>
                 </div>
             </div>

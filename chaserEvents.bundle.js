@@ -44,10 +44,10 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var chromeApi = __webpack_require__(1),
-		viewService = __webpack_require__(2),
+	var chromeApi = __webpack_require__(4),
+		viewService = __webpack_require__(5),
 		constants = __webpack_require__(3),
-		Github = __webpack_require__(4),
+		Github = __webpack_require__(2),
 		github,
 		tenMinutes = 10;
 
@@ -86,118 +86,8 @@
 	init();
 
 /***/ },
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	function ChromeApi() {
-		var API = {}; 
-
-		// get an item from local storage by key
-		function get(key, callback) {
-			chrome.storage.local.get(key, callback); 
-		}
-		API.get = get; 
-
-		// set an item to local storage
-		function set(object) {
-			chrome.storage.local.set(object); 	
-		}
-		API.set = set;
-
-		return API; 
-	}
-
-	module.exports = ChromeApi(); 
-
-/***/ },
+/* 1 */,
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	function viewService() {
-		var Github = __webpack_require__(4),
-			constants = __webpack_require__(3),
-			chromeApi = __webpack_require__(1),
-			API = {};
-
-		function prepViewObjects(accessToken, successCallback){
-			var viewObjects = [],
-				prepped = 0,
-				tokenObj = {},
-				github = Github(accessToken);
-
-			// are all items prepped and ready
-			function isFinished(){
-				prepped --; 
-				if (prepped === 0)  {
-					// put the action needed objects at the top of the list
-					viewObjects.sort(function(x, y) {return y.commentInfo.plusOneNeeded-x.commentInfo.plusOneNeeded;});
-					var viewObjectsToStore = {'viewObjects': viewObjects};
-					chromeApi.set(viewObjectsToStore);
-					successCallback(viewObjects);
-				}
-			}
-
-			// check for commit after plus one needed
-			function prepItemForView(notification, callback) {
-				github.getPullRequest(notification.subject.url).then(function(pullRequest){ 
-					if (pullRequest.state === 'open') {
-						chromeApi.get('login', function(results){
-							github.isPlusOneNeeded(pullRequest.comments_url, results.login).done(function(result){
-								viewObjects.push({
-									'notification': notification,
-									'pullRequest': pullRequest,
-									'commentInfo': result
-								});
-								isFinished(); 
-							});
-						});
-					} else {
-						isFinished();
-					}
-				}, function(){
-					prepped--;
-				});
-			}
-
-			// start off by getting all notifications that are @mentions
-			github.getNotifications(true, 'mention').done(function( notifications ) {
-				for(var i=0; i < notifications.length; i++){
-		            if (notifications[i].reason === 'mention') {
-		            	prepped++;
-						prepItemForView(notifications[i]);
-					}
-				}
-			});	
-		}
-		API.prepViewObjects = prepViewObjects; 
-
-
-
-		return API;
-	}
-
-	module.exports = viewService(); 
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var settings = {
-		'githubTokenKey': 'github',
-		'githubUrl': 'https://api.github.com/',
-		'userKey': 'login',
-		'currentUser': '_currentUser_',
-		'viewObjects': '_viewObjects_',
-		'http': {
-			'get': 'GET'
-		}
-	};
-
-	module.exports = settings; 
-
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	function github(accessToken) {
@@ -259,10 +149,12 @@
 	    }
 	    API.verifyUserToken = verifyUserToken;
 
+	    // TODO Check for FYI. 
 	    function getActionsNeeded(comments, userId) {
 	        var plusOneNeeded = true;
 	        var plusOneComment,
 	            atMentionedComment; 
+
 	        for (var i=0; i < comments.length; i++) {
 	            if (comments[i].body.indexOf('@' + userId) > 0) {
 	                plusOneNeeded = true;
@@ -285,7 +177,6 @@
 	    }
 	    API.getActionsNeeded = getActionsNeeded; 
 
-	    // TODO make sure this isn't called a bazillion times
 	    // TODO only check the comments since the VERY last commit (use updated_at?)
 	    function isPlusOneNeeded(commentsUrl, userId) {
 	        var dfd = new $.Deferred();
@@ -316,7 +207,122 @@
 
 
 /***/ },
-/* 5 */,
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var settings = {
+		'githubTokenKey': 'github',
+		'githubUrl': 'https://api.github.com/',
+		'userKey': 'login',
+		'currentUser': '_currentUser_',
+		'viewObjects': '_viewObjects_',
+		'lastUpdated': '_lastUpdated_',
+		'http': {
+			'get': 'GET'
+		}
+	};
+
+	module.exports = settings; 
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	function ChromeApi() {
+		var API = {}; 
+
+		// get an item from local storage by key
+		function get(key, callback) {
+			chrome.storage.local.get(key, callback); 
+		}
+		API.get = get; 
+
+		// set an item to local storage
+		function set(object) {
+			chrome.storage.local.set(object); 	
+		}
+		API.set = set;
+
+		return API; 
+	}
+
+	module.exports = ChromeApi(); 
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	function viewService() {
+		var Github = __webpack_require__(2),
+			constants = __webpack_require__(3),
+			chromeApi = __webpack_require__(4),
+			API = {},
+			moment = __webpack_require__(13);
+
+		function prepViewObjects(accessToken, successCallback){
+			var viewObjects = [],
+				prepped = 0,
+				tokenObj = {},
+				github = Github(accessToken);
+
+			// are all items prepped and ready
+			function isFinished(){
+				prepped --; 
+				if (prepped === 0)  {
+					// put the action needed objects at the top of the list
+					viewObjects.sort(function(x, y) {return y.commentInfo.plusOneNeeded-x.commentInfo.plusOneNeeded;});
+					var viewObjectsToStore = {
+						'viewObjects': viewObjects,
+						'_lastUpdated_': moment().format()
+					};
+					chromeApi.set(viewObjectsToStore);
+					successCallback(viewObjects);
+				}
+			}
+
+			// check for commit after plus one needed
+			function prepItemForView(notification, callback) {
+				github.getPullRequest(notification.subject.url).then(function(pullRequest){ 
+					if (pullRequest.state === 'open') {
+						chromeApi.get('login', function(results){
+							github.isPlusOneNeeded(pullRequest.comments_url, results.login).done(function(result){
+								viewObjects.push({
+									'notification': notification,
+									'pullRequest': pullRequest,
+									'commentInfo': result
+								});
+								isFinished(); 
+							});
+						});
+					} else {
+						isFinished();
+					}
+				}, function(){
+					prepped--;
+				});
+			}
+
+			// start off by getting all notifications that are @mentions
+			github.getNotifications(true, 'mention').done(function( notifications ) {
+				for(var i=0; i < notifications.length; i++){
+		            if (notifications[i].reason === 'mention') {
+		            	prepped++;
+						prepItemForView(notifications[i]);
+					}
+				}
+			});	
+		}
+		API.prepViewObjects = prepViewObjects; 
+
+
+
+		return API;
+	}
+
+	module.exports = viewService(); 
+
+/***/ },
 /* 6 */,
 /* 7 */,
 /* 8 */,
@@ -1096,7 +1102,7 @@
 	        if (!locales[name] && hasModule) {
 	            try {
 	                oldLocale = moment.locale();
-	                __webpack_require__(30)("./" + name);
+	                __webpack_require__(31)("./" + name);
 	                // because defineLocale currently also sets the global locale, we want to undo that for lazy loaded locales
 	                moment.locale(oldLocale);
 	            } catch (e) { }
@@ -12398,7 +12404,8 @@
 /* 27 */,
 /* 28 */,
 /* 29 */,
-/* 30 */
+/* 30 */,
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
@@ -12570,11 +12577,10 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 30;
+	webpackContext.id = 31;
 
 
 /***/ },
-/* 31 */,
 /* 32 */
 /***/ function(module, exports, __webpack_require__) {
 

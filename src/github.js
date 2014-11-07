@@ -57,10 +57,12 @@ function github(accessToken) {
     }
     API.verifyUserToken = verifyUserToken;
 
+    // TODO Check for FYI. 
     function getActionsNeeded(comments, userId) {
         var plusOneNeeded = true;
         var plusOneComment,
             atMentionedComment; 
+
         for (var i=0; i < comments.length; i++) {
             if (comments[i].body.indexOf('@' + userId) > 0) {
                 plusOneNeeded = true;
@@ -83,7 +85,6 @@ function github(accessToken) {
     }
     API.getActionsNeeded = getActionsNeeded; 
 
-    // TODO make sure this isn't called a bazillion times
     // TODO only check the comments since the VERY last commit (use updated_at?)
     function isPlusOneNeeded(commentsUrl, userId) {
         var dfd = new $.Deferred();

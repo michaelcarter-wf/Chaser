@@ -1,5 +1,6 @@
 var Reflux = require('reflux'),
-    actions = require('./actions');
+    actions = require('./actions'),
+    moment = require('moment');
 
 // Creates a DataStore
 var StatusStore = Reflux.createStore({
@@ -8,7 +9,7 @@ var StatusStore = Reflux.createStore({
     // Callback
     onRefresh: function() {
         // Pass on to listeners
-        this.trigger(status);
+        this.trigger(moment().format());
     }
 
 });

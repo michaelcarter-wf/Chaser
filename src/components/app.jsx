@@ -7,7 +7,8 @@ var React = require('react/addons'),
     Reflux = require('reflux'),
     StatusStore = require('../stores'),
     Header = require('./header'),
-    Loading = require('./loading');
+    Loading = require('./loading'),
+    Footer = require('./footer');
 
 var divStyle = {
   'height': '400px',
@@ -62,8 +63,9 @@ var App = React.createClass({
             });
 
     	return	<div>
-            <Header />
+            <Header/>
             <div style={divStyle}> {pullRequests} </div>
+            <Footer/>
         </div>
         /* jshint ignore:end */
 

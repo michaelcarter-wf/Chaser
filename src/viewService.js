@@ -2,7 +2,8 @@ function viewService() {
 	var Github = require('./github'),
 		constants = require('./constants'),
 		chromeApi = require('./chrome'),
-		API = {};
+		API = {},
+		moment = require('moment');
 
 	function prepViewObjects(accessToken, successCallback){
 		var viewObjects = [],
@@ -16,7 +17,10 @@ function viewService() {
 			if (prepped === 0)  {
 				// put the action needed objects at the top of the list
 				viewObjects.sort(function(x, y) {return y.commentInfo.plusOneNeeded-x.commentInfo.plusOneNeeded;});
-				var viewObjectsToStore = {'viewObjects': viewObjects};
+				var viewObjectsToStore = {
+					'viewObjects': viewObjects,
+					'_lastUpdated_': moment().format()
+				};
 				chromeApi.set(viewObjectsToStore);
 				successCallback(viewObjects);
 			}

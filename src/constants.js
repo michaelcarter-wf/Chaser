@@ -4,6 +4,7 @@ var settings = {
 	'userKey': 'login',
 	'currentUser': '_currentUser_',
 	'viewObjects': '_viewObjects_',
+	'lastUpdated': '_lastUpdated_',
 	'http': {
 		'get': 'GET'
 	}
