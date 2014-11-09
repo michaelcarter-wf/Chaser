@@ -5,9 +5,8 @@ var React = require('react/addons'),
 	constants = require('../constants'),
 	chromeApi = require('../chrome');
 
-var badgeStyle = {'color':'red'}; 
-
-var mediaWidth = {'width': '75%'};
+var badgeStyle = {'color':'red'},
+	mediaWidth = {'width': '75%'};
 
 var PullRequest = React.createClass({
 	

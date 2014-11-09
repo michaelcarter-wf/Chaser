@@ -5,7 +5,7 @@ var React = require('react/addons'),
     viewService = require('../viewService'),
     chromeApi = require('../chrome'),
     Reflux = require('reflux'),
-    StatusStore = require('../stores'),
+    ViewOjectStore = require('../stores/viewOjectStore'),
     Header = require('./header'),
     Loading = require('./loading'),
     Footer = require('./footer');
@@ -17,18 +17,18 @@ var divStyle = {
   'background-color': '#FBFBFB'
 };
 
-
 var App = React.createClass({
     mixins: [Reflux.ListenerMixin],
-    getInitialState: function () {
+    getInitialState: function() {
         return {
             'viewObjects': this.props.viewObjects,
-            'loading': false
+            'loading': false,
+            'showOnlyActionNeeded': true
         };
     },
 
     componentDidMount: function() {
-        StatusStore.listen(this.refreshList);
+        ViewOjectStore.listen(this.refreshList);
     },
 
     refreshList: function(){
@@ -39,18 +39,20 @@ var App = React.createClass({
         });
         chromeApi.get(constants.githubTokenKey, function(results) {
             if (results[constants.githubTokenKey].length) {
-                viewService.prepViewObjects(results[constants.githubTokenKey], function(newViewObjects){
+                viewService.prepViewObjects(results[constants.githubTokenKey], function(newViewObjects) {
                     that.setState({
                         'viewObjects': newViewObjects,
                         'loading': false
                     });
-                    var actionItems = 0; 
-                    for (var i=0; i < newViewObjects.length; i++) {
+                    var actionItems = 0;
+                    for (var i = 0; i < newViewObjects.length; i++) {
                         if (newViewObjects[i].commentInfo.plusOneNeeded) {
-                            actionItems++; 
+                            actionItems++;
                         }
                     }
-                    chrome.browserAction.setBadgeText({'text':actionItems.toString()});
+                    chrome.browserAction.setBadgeText({
+                        'text': actionItems.toString()
+                    });
                 });
             }
         });

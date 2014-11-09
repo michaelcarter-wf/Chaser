@@ -1,8 +1,8 @@
 var Reflux = require('reflux');
 
 var Actions = Reflux.createActions([
-    "toggle",
-    "refresh"
+    "refresh",
+    "showOnlyActionNeeded"
 ]);
 
 module.exports = Actions;

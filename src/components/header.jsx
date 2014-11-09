@@ -5,8 +5,7 @@ var React = require('react/addons'),
     constants = require('../constants'),
     viewService = require('../viewService'),
     chromeApi = require('../chrome'),
-    Reflux = require('reflux'),
-    Actions = require('../actions');
+    Reflux = require('reflux');
 
 var Header = React.createClass({
 
@@ -24,9 +23,9 @@ var Header = React.createClass({
     },
 
     refreshList: function(){
-        var that = this; 
         Actions.refresh();
     },
+    
     /* jshint ignore:start */
     render: function () {
         return <div className='header'>

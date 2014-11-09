@@ -15,19 +15,14 @@ var Footer = React.createClass({
     },
 
     onRefresh: function(info) {
-        var that = this; 
-        if (info) {
-            that.setState({'lastUpdated': info});
-        } else {
-            chromeApi.get(constants.lastUpdated, function(results) {
-                that.setState({'lastUpdated': results[constants.lastUpdated]});
-            }); 
-        }
+        this.setState({'lastUpdated': info});
     },
 
     componentDidMount: function() {
-        this.onRefresh(); 
-        StatusStore.listen(this.onRefresh);
+        var that = this; 
+        chromeApi.get(constants.lastUpdated, function(results) {
+            that.onRefresh(results[constants.lastUpdated]); 
+        }); 
     },
 
     refreshList: function(){
@@ -37,8 +32,18 @@ var Footer = React.createClass({
     render: function () {
         var date = this.state.lastUpdated.length ? moment.utc(this.state.lastUpdated).fromNow() : ''; 
 
-        return <div className='text-center footer'>
-            <p className='small-text'><em> updated {date} </em><br/><a href='#' onClick={this.refreshList}>refresh</a></p>
+        return <div className='footer'>
+            <div className='col-xs-6'>
+                <button className="btn btn-default btn-xs pull-left">
+                    <span className="glyphicon glyphicon-filter"></span><small> Show Action Needed</small>
+                </button>
+            </div>
+            <div className='col-xs-6'>
+                <p className='small-text pull-right'>
+                    <em> updated {date} </em><br/>
+                </p>
+            </div>
+            <div className='clear'></div>
         </div>
     }
     /* jshint ignore:end */
