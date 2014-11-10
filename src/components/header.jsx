@@ -5,7 +5,8 @@ var React = require('react/addons'),
     constants = require('../constants'),
     viewService = require('../viewService'),
     chromeApi = require('../chrome'),
-    Reflux = require('reflux');
+    Reflux = require('reflux'),
+    Actions = require('../actions');
 
 var Header = React.createClass({
 

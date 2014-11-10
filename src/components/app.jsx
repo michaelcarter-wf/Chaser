@@ -5,10 +5,11 @@ var React = require('react/addons'),
     viewService = require('../viewService'),
     chromeApi = require('../chrome'),
     Reflux = require('reflux'),
-    ViewOjectStore = require('../stores/viewOjectStore'),
+    ViewObjectStore = require('../stores/ViewObjectStore'),
     Header = require('./header'),
     Loading = require('./loading'),
-    Footer = require('./footer');
+    Footer = require('./footer'),
+    moment = require('moment');
 
 var divStyle = {
   'height': '400px',
@@ -21,44 +22,29 @@ var App = React.createClass({
     mixins: [Reflux.ListenerMixin],
     getInitialState: function() {
         return {
-            'viewObjects': this.props.viewObjects,
-            'loading': false,
-            'showOnlyActionNeeded': true
+            'viewObjects': [],
+            'loading': true,
+            'showOnlyActionNeeded': true,
+            'updatedDate': ''
         };
     },
 
     componentDidMount: function() {
-        ViewOjectStore.listen(this.refreshList);
+        var that = this; 
+        ViewObjectStore.listen(this.refreshList);
     },
 
-    refreshList: function(){
-        var that = this; 
-        that.setState({
-            'viewObjects': [],
-            'loading': true
-        });
-        chromeApi.get(constants.githubTokenKey, function(results) {
-            if (results[constants.githubTokenKey].length) {
-                viewService.prepViewObjects(results[constants.githubTokenKey], function(newViewObjects) {
-                    that.setState({
-                        'viewObjects': newViewObjects,
-                        'loading': false
-                    });
-                    var actionItems = 0;
-                    for (var i = 0; i < newViewObjects.length; i++) {
-                        if (newViewObjects[i].commentInfo.plusOneNeeded) {
-                            actionItems++;
-                        }
-                    }
-                    chrome.browserAction.setBadgeText({
-                        'text': actionItems.toString()
-                    });
-                });
-            }
+    refreshList: function(data){
+        var updatedDate = moment().format(); 
+        this.setState({
+            'viewObjects': data,
+            'loading': false,
+            'updatedDate': updatedDate
         });
     },
 
     render: function () {
+        var that = this;
         /* jshint ignore:start */
         var pullRequests = this.state.loading ? <Loading/> : this.state.viewObjects.map(function (viewObject) {
                 return (<PullRequest notification={viewObject.notification} pullRequest={viewObject.pullRequest} commentInfo={viewObject.commentInfo}/>);
@@ -67,7 +53,7 @@ var App = React.createClass({
     	return	<div>
             <Header/>
             <div style={divStyle}> {pullRequests} </div>
-            <Footer/>
+            <Footer lastUpdatedDate={that.state.updatedDate}/>
         </div>
         /* jshint ignore:end */
 
@@ -75,9 +61,9 @@ var App = React.createClass({
 });
 
 // let it roll
-App.start = function (viewObjects) {
+App.start = function () {
     /* jshint ignore:start */
-    React.renderComponent(<App viewObjects={viewObjects}/>, document.getElementById('app'));
+    React.renderComponent(<App/>, document.getElementById('app'));
     /* jshint ignore:start */
 };
 

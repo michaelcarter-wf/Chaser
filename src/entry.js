@@ -1,5 +1,4 @@
 // should put the stores on the window
-require('./stores');
 require('./css/style.css');
 var App = require('./components/app'),
 	github; 
@@ -8,12 +7,11 @@ var Github = require('./github'),
 	constants = require('./constants'),
 	chromeApi = require('./chrome'),
 	viewService = require('./viewService'),
-	Reflux = require('reflux'),
 	Login = require('./components/login');
 
 
-function fireItUp(viewObjects) {
-	App.start(viewObjects);
+function fireItUp() {
+	App.start();
 }
 
 chromeApi.get('viewObjects', function(results) {
@@ -26,6 +24,6 @@ chromeApi.get('viewObjects', function(results) {
 			}
 		});
 	} else {
-		fireItUp(results.viewObjects);
+		fireItUp();
 	}
 });
