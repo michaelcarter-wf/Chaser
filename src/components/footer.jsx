@@ -45,12 +45,12 @@ var Footer = React.createClass({
 
         return <div className='footer'>
             <div className='col-xs-6'>
-                <button className="btn btn-default btn-xs pull-left" onClick={this.showActionNeeded}>
-                    <span className="glyphicon glyphicon-filter"></span><small> {buttonText}</small>
-                </button>
+                <a href='#' className='small-text' onClick={this.showActionNeeded}>
+                    <small> {buttonText}</small>
+                </a>
             </div>
             <div className='col-xs-6'>
-                <p className='small-text pull-right'>
+                <p className='small-text text-right'>
                     <em> updated {lastUpdatedDate} </em><br/>
                 </p>
             </div>

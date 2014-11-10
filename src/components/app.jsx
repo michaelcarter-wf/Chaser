@@ -35,6 +35,9 @@ var App = React.createClass({
     },
 
     refreshList: function(data){
+        this.setState({
+            'viewObjects': [],
+        });
         var updatedDate = moment().format(); 
         this.setState({
             'viewObjects': data,
