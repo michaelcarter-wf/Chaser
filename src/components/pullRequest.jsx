@@ -12,7 +12,7 @@ var PullRequest = React.createClass({
 	
 	getInitialState: function () {
 		var unread = this.props.notification.unread,
-			badgeText = this.props.commentInfo.plusOneNeeded ? '+1 needed ': '';
+			badgeText = this.props.commentInfo.plusOneNeeded ? 'Action Needed ': '';
 
 		return {
 			'badgeText': badgeText,

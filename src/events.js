@@ -6,19 +6,11 @@ var chromeApi = require('./chrome'),
 	tenMinutes = 10;
 
 
-function checkForNotifications(){
-	console.log('checking for checkForNotifications');
-	chrome.alarms.create('refresh', {periodInMinutes: tenMinutes});
-  		viewService.prepViewObjects(github.githubToken, function(results){
-	  		var actionItems = 0; 
-	  		// TODO move this to the view service
-	  		for (var i=0; i < results.length; i++) {
-	  			if (results[i].commentInfo.plusOneNeeded) {
-	  				actionItems++; 
-	  			}
-	  		}
-	  		chrome.browserAction.setBadgeText({'text':actionItems.toString()});
-  	});
+function checkForNotifications() {
+	chrome.alarms.create('refresh', {
+		periodInMinutes: tenMinutes
+	});
+	viewService.prepViewObjects(github.githubToken);
 }
 
 function onAlarm(alarm) {

@@ -23,6 +23,10 @@ var Header = React.createClass({
         }); 
     },
 
+    switchToUserPullRequests: function() {
+        Actions.switchTo('userPr');
+    },
+
     refreshList: function(){
         Actions.refresh();
     },
@@ -32,7 +36,7 @@ var Header = React.createClass({
         return <div className='header'>
             <div className='col-xs-4'>
                 <div className='refresh-btn'>
-                    <small className='refresh-btn'>
+                    <small className='refresh-btn' onClick={this.switchToUserPullRequests}>
                         <em>{this.state.userLogin}</em>
                     </small>
                 </div>

@@ -100,9 +100,17 @@ function github(accessToken) {
     }
     API.isPlusOneNeeded = isPlusOneNeeded;
 
-    // function getUsersRepos(){
-    //     https://api.github.com/user/repos?access_token=29ed73c4694450b7b11c864484806856fd2a3490
-    // }
+    function getUsersRepos(){
+        return _requestAuthed(constants.http.get, constants.githubUrl + 'user/repos');
+    }
+    API.getUsersRepos = getUsersRepos; 
+
+    function getUserPullRequests(url) {
+        var params = {'state': 'open'};
+        return _requestAuthed(constants.http.get, url, params);
+    }
+    API.getUserPullRequests = getUserPullRequests;
+
 
     // https://api.github.com/repos/bradybecker-wf/wf-home-html/pulls?access_token=29ed73c4694450b7b11c864484806856fd2a3490
 

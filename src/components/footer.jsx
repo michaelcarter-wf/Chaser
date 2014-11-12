@@ -41,18 +41,18 @@ var Footer = React.createClass({
     /* jshint ignore:start */
     render: function () {
         var buttonText = this.state.showAll ? 'Show Few': 'Show All';
-        var lastUpdatedDate = this.props.lastUpdatedDate ? moment.utc(this.props.lastUpdatedDate).fromNow() : ''; 
+        var lastUpdatedDate = moment.utc(this.props.lastUpdatedDate).fromNow();
 
         return <div className='footer'>
-            <div className='col-xs-6'>
-                <a href='#' className='small-text' onClick={this.showActionNeeded}>
+            <div className='small-text text-left col-xs-6'>
+                <a href='#' onClick={this.showActionNeeded}>
                     <small> {buttonText}</small>
                 </a>
             </div>
-            <div className='col-xs-6'>
-                <p className='small-text text-right'>
-                    <em> updated {lastUpdatedDate} </em><br/>
-                </p>
+            <div className='small-text text-right col-xs-6'>
+                <span>
+                    <small><em> updated {lastUpdatedDate} </em></small><br/>
+                </span>
             </div>
             <div className='clear'></div>
         </div>
