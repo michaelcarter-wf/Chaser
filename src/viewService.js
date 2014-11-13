@@ -78,19 +78,29 @@ function viewService() {
 	API.prepViewObjects = prepViewObjects; 
 
 
-	function getUserPrs(accessToken) {
+	function getUserPrs(accessToken, callback) {
 		var viewObjects = [],
 			github = Github(accessToken);
 
 		github.getUsersRepos().then(function(repos) {
+			var counter = 0;
 			repos.forEach(function(repo) {
 				var url = constants.githubUrl + 'repos/' + repo.full_name + '/pulls';
 				github.getUserPullRequests(url).then(function(prs) {
-					viewObjects.forEach(function(pr) {
+					counter++; 
+					prs.forEach(function(pr) {
 						viewObjects.push({
-							'pullRequest': prs
+							'notification': null,
+							'pullRequest': pr,
+							'commentInfo': null
 						});
 					});
+					if (counter === repos.length) {
+						viewObjects.sort(function(a,b){
+  							return Date.parse(b.pullRequest.created_at) - Date.parse(a.pullRequest.created_at);
+						});
+						callback(viewObjects);
+					}
 				});
 			});
 		});

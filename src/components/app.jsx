@@ -35,14 +35,15 @@ var App = React.createClass({
     },
 
     refreshList: function(data){
+        debugger;
         var that = this;
         this.setState({
             'viewObjects': [],
         });
         // get the most recent updated date
         chromeApi.get(constants.lastUpdatedDate, function(result) {
+            debugger;
             var updatedDate = result[constants.lastUpdated] || moment().format(); 
-            console.log(updatedDate);
             that.setState({
                 'viewObjects': data,
                 'loading': false,

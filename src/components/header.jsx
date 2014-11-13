@@ -36,13 +36,13 @@ var Header = React.createClass({
         return <div className='header'>
             <div className='col-xs-4'>
                 <div className='refresh-btn'>
-                    <small className='refresh-btn' onClick={this.switchToUserPullRequests}>
+                    <small className='refresh-btn pointer' onClick={this.switchToUserPullRequests}>
                         <em>{this.state.userLogin}</em>
                     </small>
                 </div>
             </div>
             <div className='col-xs-4 text-center'>
-                <img className="text-center github-title" src="src/images/github.png"/>
+                <img className="text-center github-title pointer" src="src/images/github.png" onClick={this.refreshList}/>
             </div>
             <div className='col-xs-4'>
                 <button className="btn btn-default btn-xs pull-right refresh-btn" onClick={this.refreshList}>

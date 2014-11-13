@@ -11,14 +11,14 @@ var badgeStyle = {'color':'red'},
 var PullRequest = React.createClass({
 	
 	getInitialState: function () {
-		var unread = this.props.notification.unread,
-			badgeText = this.props.commentInfo.plusOneNeeded ? 'Action Needed ': '';
+		var newState = {};
+		newState['unread'] = this.props.notification ? this.props.notification.unread : false; 
+		newState['accessToken'] = ''; 
+		if (this.props.commentInfo) {
+			newState['badgeText'] = this.props.commentInfo.plusOneNeeded ? 'Action Needed ': '';
+		}
 
-		return {
-			'badgeText': badgeText,
-			'unread': unread,
-			'accessToken': ''
-		};
+		return newState;
 	},
 
     // need a chrome API file
@@ -29,13 +29,7 @@ var PullRequest = React.createClass({
     // check for last commit for updated
     render: function () { 
     	var that = this,
-    		pr = this.props.pullRequest,
-    		note = this.props.notification,
-    		commentInfo = this.props.commentInfo;
-
-    		if (!commentInfo.plusOneNeeded) {
-    			//return false; 
-    		}
+    		pr = this.props.pullRequest;
 
 	        return <div className="media" onClick={this.openNewTab}>
 			  <span className="pull-left">
