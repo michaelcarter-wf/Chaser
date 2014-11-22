@@ -37,7 +37,7 @@ var ViewObjectStore = Reflux.createStore({
 			that.githubToken = results[constants.githubTokenKey]; 
 		}); 
 
-		this.list = loadList();
+		loadList();
 	},
 
 	// basically give me a new list and trigger the event
@@ -54,6 +54,7 @@ var ViewObjectStore = Reflux.createStore({
 	},
 
 	newList: function(newList) {
+		this.list = newList; 
 		this.trigger(newList);
 	},
 
@@ -68,9 +69,47 @@ var ViewObjectStore = Reflux.createStore({
 			var newList = showAll ? results.viewObjects : results.viewObjects.filter(function(vObject) {
 				return vObject.commentInfo.plusOneNeeded;
 			});
-
+			
+			that.list = newList; 
 			that.trigger(newList);
 		});
+	},
+
+	// take the PR and put it in the cache
+	onHidePR: function(prID){
+		var newList = this.list.filter(function(viewObj){
+			var show = viewObj.pullRequest.id !== prID;
+
+			if (show) {
+				chromeApi.get('hiddenPRs', function(results) {
+					var objectToStore = {
+						'id': prID,
+						'timeStamp': moment().format()
+					};
+					if (results.hiddenPRs) {
+						results.hiddenPRs.push(objectToStore);
+					} else {
+						chromeApi.set({
+							'hiddenPRs': [objectToStore]
+						});
+					}
+				});
+			}
+
+			return show; 
+		});
+
+		// put this in to it's own function
+		var viewObjectsToStore = {
+			'viewObjects': newList,
+			'_lastUpdated_': moment().format()
+		};
+
+		// TODO set the list here.
+		chromeApi.set(viewObjectsToStore);
+
+		this.list = newList; 
+		this.trigger(newList);
 	},
 
 	onSwitchTo: function(view) {
@@ -78,8 +117,9 @@ var ViewObjectStore = Reflux.createStore({
 		viewService.getUserPrs(this.githubToken, function(newList) {
 			that.trigger(newList);
 		});
-		
-	}
+	},
+
+
 
 
 });

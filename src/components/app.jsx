@@ -8,6 +8,7 @@ var React = require('react/addons'),
     ViewObjectStore = require('../stores/ViewObjectStore'),
     Header = require('./header'),
     Loading = require('./loading'),
+    EmptyList = require('./emptyList'),
     Footer = require('./footer'),
     moment = require('moment');
 
@@ -35,14 +36,12 @@ var App = React.createClass({
     },
 
     refreshList: function(data){
-        debugger;
         var that = this;
         this.setState({
             'viewObjects': [],
         });
         // get the most recent updated date
         chromeApi.get(constants.lastUpdatedDate, function(result) {
-            debugger;
             var updatedDate = result[constants.lastUpdated] || moment().format(); 
             that.setState({
                 'viewObjects': data,
@@ -53,11 +52,17 @@ var App = React.createClass({
     },
 
     render: function () {
-        var that = this;
+        var that = this,
+            pullRequests; 
         /* jshint ignore:start */
-        var pullRequests = this.state.loading ? <Loading/> : this.state.viewObjects.map(function (viewObject) {
+        if (this.state.loading) {
+            pullRequests = <Loading />; 
+        } else {
+            pullRequests = this.state.viewObjects.map(function (viewObject) {
                 return (<PullRequest notification={viewObject.notification} pullRequest={viewObject.pullRequest} commentInfo={viewObject.commentInfo}/>);
             });
+            pullRequests = pullRequests.length > 0 ? pullRequests : <EmptyList/>; 
+        }
 
     	return	<div>
             <Header/>

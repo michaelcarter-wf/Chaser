@@ -7,7 +7,7 @@ function viewService() {
 
 	function updateBadgeText(viewObjects) {
 		var actionItems = 0;
-		// TODO move this to the view service
+		
 		for (var i = 0; i < viewObjects.length; i++) {
 			if (viewObjects[i].commentInfo.plusOneNeeded) {
 				actionItems++;
@@ -18,6 +18,7 @@ function viewService() {
 		});
 	}
 
+	// get all code reviews and wrap them in objects for the react components
 	function prepViewObjects(accessToken, successCallback){
 		var viewObjects = [],
 			prepped = 0,
@@ -25,7 +26,7 @@ function viewService() {
 			github = Github(accessToken);
 
 		// are all items prepped and ready
-		function isFinished() {
+		function _isFinished() {
 			prepped--;
 			if (prepped === 0) {
 				// put the action needed objects at the top of the list
@@ -43,8 +44,8 @@ function viewService() {
 			}
 		}
 
-		// check for commit after plus one needed
-		function prepItemForView(notification, callback) {
+		//TODO check for commit after plus one needed
+		function _prepItemForView(notification, callback) {
 			github.getPullRequest(notification.subject.url).then(function(pullRequest) {
 				if (pullRequest.state === 'open') {
 					chromeApi.get('login', function(results) {
@@ -54,11 +55,11 @@ function viewService() {
 								'pullRequest': pullRequest,
 								'commentInfo': result
 							});
-							isFinished();
+							_isFinished();
 						});
 					});
 				} else {
-					isFinished();
+					_isFinished();
 				}
 			}, function() {
 				prepped--;
@@ -70,14 +71,15 @@ function viewService() {
 			for(var i=0; i < notifications.length; i++){
 	            if (notifications[i].reason === 'mention') {
 	            	prepped++;
-					prepItemForView(notifications[i]);
+					_prepItemForView(notifications[i]);
 				}
 			}
 		});	
 	}
 	API.prepViewObjects = prepViewObjects; 
 
-
+	//TODO This doesn't find PRs that are opened to the master branches
+	// get all users reviews and wrap them for react components
 	function getUserPrs(accessToken, callback) {
 		var viewObjects = [],
 			github = Github(accessToken);
@@ -106,6 +108,11 @@ function viewService() {
 		});
 	}
 	API.getUserPrs = getUserPrs; 
+
+	function removeThHiddenPrs(list) {
+
+	}
+	API.removeThHiddenPrs = removeThHiddenPrs; 
 
 
 	return API;

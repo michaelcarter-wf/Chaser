@@ -6,7 +6,7 @@
 	width: 35px;
 	height: 35px;
 	border-radius: 20px;
-	margin-right: 3px;
+	margin-right: 10px;
 	margin-top: 8px;
 }
 
@@ -30,6 +30,13 @@
 	font-size: 10px;
 }
 
+.x-small-text {
+	margin: 0;
+	color: #999;
+	font-size: 8px;
+	top: -1px;
+}
+
 .media-heading {
 	margin: 0 0 0px;
 }
@@ -41,6 +48,11 @@
 	background-color: white;
 	border-radius: 5px;
 }
+
+.media>.pull-left {
+	margin-right: 0px;
+}
+
 .media:hover {
 	background-color: #FBFBFB;
 }
@@ -64,6 +76,14 @@
 	background-image: linear-gradient(#f9f9f9, #FBFBFB);
 	background-repeat: repeat-x;
 	height: 50px;
+}
+
+.hide {
+	display: none;
+}
+
+.red {
+	color: red;
 }
 
 .refresh-btn {
