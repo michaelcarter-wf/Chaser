@@ -4,8 +4,8 @@ var React = require('react/addons'),
 
 var style = {
     'width': '100%',
-    'text-align': 'center',
-    'padding-top': '100px'
+    'textAlign': 'center',
+    'paddingTop': '100px'
     };
 
 var EmptyList = React.createClass({

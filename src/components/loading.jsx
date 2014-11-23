@@ -4,8 +4,8 @@ var React = require('react/addons'),
 
 var style = {
     'width': '100%',
-    'text-align': 'center',
-    'padding-top': '150px'
+    'textAlign': 'center',
+    'paddingTop': '150px'
     };
 
 var Loading = React.createClass({

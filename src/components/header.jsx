@@ -6,7 +6,18 @@ var React = require('react/addons'),
     viewService = require('../viewService'),
     chromeApi = require('../chrome'),
     Reflux = require('reflux'),
-    Actions = require('../actions');
+    Actions = require('../actions'),
+    DropdownButton = require('react-bootstrap/DropdownButton'),
+    MenuItem = require('react-bootstrap/MenuItem');
+
+var buttonStyle = {
+    'padding': '8px 0px 0px 0px',
+    'fontSize': '11px'
+};
+
+var fontSize = {
+    'fontSize': '11px'
+}
 
 var Header = React.createClass({
 
@@ -20,7 +31,7 @@ var Header = React.createClass({
         var that = this;
         chromeApi.get(constants.userKey, function(results) {
             that.setState({'userLogin': results.login});
-        }); 
+        });
     },
 
     switchToUserPullRequests: function() {
@@ -33,13 +44,14 @@ var Header = React.createClass({
     
     /* jshint ignore:start */
     render: function () {
+        var title = 'link';
         return <div className='header'>
             <div className='col-xs-4'>
-                <div className='refresh-btn'>
-                    <small className='refresh-btn pointer' onClick={this.switchToUserPullRequests}>
-                        <em>{this.state.userLogin}</em>
-                    </small>
-                </div>
+                <DropdownButton style={buttonStyle} bsStyle={title.toLowerCase()} title={this.state.userLogin}>
+                    <MenuItem style={fontSize} eventKey="1" onSelect={this.switchToUserPullRequests}>My Pull Requests</MenuItem>
+                    <MenuItem style={fontSize} eventKey="2">Another action</MenuItem>
+                    <MenuItem style={fontSize} eventKey="3">Something else here</MenuItem>
+                </DropdownButton>
             </div>
             <div className='col-xs-4 text-center'>
                 <img className="text-center github-title pointer" src="src/images/github.png" onClick={this.refreshList}/>

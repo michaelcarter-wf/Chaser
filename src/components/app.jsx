@@ -14,9 +14,9 @@ var React = require('react/addons'),
 
 var divStyle = {
   'height': '400px',
-  'overflow-y':'scroll',
+  'overflowY':'scroll',
   'width': '100%',
-  'background-color': '#FBFBFB'
+  'backgroundColor': '#FBFBFB'
 };
 
 var App = React.createClass({
@@ -59,26 +59,26 @@ var App = React.createClass({
             pullRequests = <Loading />; 
         } else {
             pullRequests = this.state.viewObjects.map(function (viewObject) {
-                return (<PullRequest notification={viewObject.notification} pullRequest={viewObject.pullRequest} commentInfo={viewObject.commentInfo}/>);
+                return (<PullRequest notification={viewObject.notification} key={viewObject.pullRequest.id} pullRequest={viewObject.pullRequest} commentInfo={viewObject.commentInfo}/>);
             });
             pullRequests = pullRequests.length > 0 ? pullRequests : <EmptyList/>; 
         }
 
-    	return	<div>
+    	return	(<div>
             <Header/>
             <div style={divStyle}> {pullRequests} </div>
             <Footer lastUpdatedDate={that.state.updatedDate}/>
-        </div>
+        </div>);
         /* jshint ignore:end */
 
     }
 });
 
-// let it roll
-App.start = function () {
-    /* jshint ignore:start */
-    React.renderComponent(<App/>, document.getElementById('app'));
-    /* jshint ignore:start */
-};
+function render() {
+    // let it roll
+    React.render(<App />,document.getElementById('app'));
+}
+App.render = render; 
+
 
 module.exports = window.App = App;

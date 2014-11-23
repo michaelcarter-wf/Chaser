@@ -1,7 +1,8 @@
 // should put the stores on the window
 require('./css/style.css');
-var App = require('./components/app'),
-	github; 
+require('react')
+var github,
+	App = require('./components/app');
 
 var Github = require('./github'),
 	constants = require('./constants'),
@@ -11,7 +12,7 @@ var Github = require('./github'),
 
 
 function fireItUp() {
-	App.start();
+	App.render();
 }
 
 chromeApi.get('viewObjects', function(results) {
