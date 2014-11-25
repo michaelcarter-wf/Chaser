@@ -13,7 +13,7 @@ function fireItUp(newList){
 }
 
 // initially load the list and pass to consumer
-function loadList() {
+function getAtMentions() {
 	chromeApi.get('viewObjects', function(results) {
 		if (!results.viewObjects) {
 			chromeApi.get(constants.githubTokenKey, function(results) {
@@ -31,24 +31,38 @@ function loadList() {
 var ViewObjectStore = Reflux.createStore({
 	listenables: actions,
 
-	init: function() {
+	// so on init in each function pass the view
+	// get the corresponding list and save it to the cache
+	init: function(view) {
+		if (!view){
+			return;
+		}
 		var that = this;
 		chromeApi.get(constants.githubTokenKey, function(results) {
 			that.githubToken = results[constants.githubTokenKey]; 
 		}); 
-
-		loadList();
+		this.view = view;
+		this.onSwitchTo(view);
 	},
 
 	// basically give me a new list and trigger the event
 	onRefresh: function() {
 		var that = this; 
-		chromeApi.get(constants.githubTokenKey, function(results) {
-			if (results[constants.githubTokenKey]) {
-				viewService.prepViewObjects(results[constants.githubTokenKey], function(results){
-					// Pass on to listeners
-					fireItUp();
-				});
+
+		var viewObjectsToStore = {
+			'_lastUpdated_': moment().format()
+		};
+		chromeApi.set(viewObjectsToStore);
+		
+		viewService.prepViewObjects(this.githubToken, function(results) {
+			// Pass on to listeners
+			fireItUp();
+		});
+
+		viewService.getUserPrs(this.githubToken, function(newList) {
+			that.pullRequests = newList;
+			if (that.view === constants.views.pullRequests) {
+				that.trigger(newList);
 			}
 		});
 	},
@@ -70,8 +84,10 @@ var ViewObjectStore = Reflux.createStore({
 				return vObject.commentInfo.plusOneNeeded;
 			});
 			
-			that.list = newList; 
-			that.trigger(newList);
+			that.atMentions = newList;
+			if (that.view === constants.views.atMentions) {
+				that.trigger(newList);
+			}
 		});
 	},
 
@@ -114,9 +130,24 @@ var ViewObjectStore = Reflux.createStore({
 
 	onSwitchTo: function(view) {
 		var that = this;
-		viewService.getUserPrs(this.githubToken, function(newList) {
-			that.trigger(newList);
+
+		chromeApi.get('viewObjects', function(results) {
+			if (!results.viewObjects) {
+
+			} else {
+				chromeApi.get('showAll', function(results) {
+					actions.showActionNeeded(results.showAll);
+				});		
+			}
 		});
+
+		viewService.getUserPrs(this.githubToken, function(newList) {
+			that.pullRequests = newList;
+			if (view === constants.views.pullRequests) {
+				that.trigger(newList);
+			} 
+		});
+		
 	},
 
 

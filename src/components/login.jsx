@@ -81,7 +81,7 @@ var Login = React.createClass({
               <button type="submit" className="btn btn-primary pull-right" onClick={this.handleSubmit}>Submit</button>
             </div>); 
         } else {
-            return  <App viewObjects={this.state.viewObjects}/>;
+            Routes.render();
         }
         /* jshint ignore:end */
 

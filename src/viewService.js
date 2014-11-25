@@ -1,9 +1,18 @@
-function viewService() {
+function ViewService() {
 	var Github = require('./github'),
 		constants = require('./constants'),
 		chromeApi = require('./chrome'),
 		API = {},
 		moment = require('moment');
+
+	// setting all the chrome api goodies here. 
+	function init() {
+		var that = this; 
+		chromeApi.get('login', function(results) {
+			that.login = results.login;
+		});
+		
+	}
 
 	function updateBadgeText(viewObjects) {
 		var actionItems = 0;
@@ -23,7 +32,8 @@ function viewService() {
 		var viewObjects = [],
 			prepped = 0,
 			tokenObj = {},
-			github = Github(accessToken);
+			github = Github(accessToken),
+			hiddenPRs = []; 
 
 		// are all items prepped and ready
 		function _isFinished() {
@@ -37,6 +47,7 @@ function viewService() {
 					'viewObjects': viewObjects,
 					'_lastUpdated_': moment().format()
 				};
+
 				chromeApi.set(viewObjectsToStore);
 				updateBadgeText(viewObjects);
 
@@ -66,15 +77,19 @@ function viewService() {
 			});
 		}
 
-		// start off by getting all notifications that are @mentions
-		github.getNotifications(true, 'mention').done(function( notifications ) {
-			for(var i=0; i < notifications.length; i++){
-	            if (notifications[i].reason === 'mention') {
-	            	prepped++;
-					_prepItemForView(notifications[i]);
+		chromeApi.get('hiddenPRs', function(results) {
+			hiddenPRs = results.hiddenPRs;	
+
+			// start off by getting all notifications that are @mentions
+			github.getNotifications(true, 'mention').done(function( notifications ) {
+				for(var i=0; i < notifications.length; i++){
+		            if (notifications[i].reason === 'mention') {
+		            	prepped++;
+						_prepItemForView(notifications[i]);
+					}
 				}
-			}
-		});	
+			});	
+		});
 	}
 	API.prepViewObjects = prepViewObjects; 
 
@@ -114,8 +129,8 @@ function viewService() {
 	}
 	API.removeThHiddenPrs = removeThHiddenPrs; 
 
-
+	init();
 	return API;
 }
 
-module.exports = viewService(); 
+module.exports = ViewService(); 

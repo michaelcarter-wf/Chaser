@@ -43,11 +43,13 @@ var Footer = React.createClass({
         var buttonText = this.state.showAll ? 'Show Few': 'Show All';
         var lastUpdatedDate = moment.utc(this.props.lastUpdatedDate).fromNow();
 
+        var leftColumn = this.props.leftCol ? <a href='#' onClick={this.showActionNeeded}>
+            <small> {buttonText}</small>
+            </a>: '';
+
         return <div className='footer'>
             <div className='small-text text-left col-xs-6'>
-                <a href='#' onClick={this.showActionNeeded}>
-                    <small> {buttonText}</small>
-                </a>
+                {leftColumn}
             </div>
             <div className='small-text text-right col-xs-6'>
                 <span>
