@@ -1,3 +1,11 @@
+var chromeApi = chrome
+
+if (!chrome) {
+
+} else {
+	chrome = chrome;
+}
+
 function ChromeApi() {
 	var API = {}; 
 
@@ -12,6 +20,11 @@ function ChromeApi() {
 		chrome.storage.local.set(object); 	
 	}
 	API.set = set;
+
+	function setBadgeText(obj) {
+		chrome.browserAction.setBadgeText(obj); 
+	}
+	API.setBadgeText = setBadgeText;
 
 	return API; 
 }

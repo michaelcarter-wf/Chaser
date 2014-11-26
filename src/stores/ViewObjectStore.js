@@ -93,21 +93,19 @@ var ViewObjectStore = Reflux.createStore({
 
 	// take the PR and put it in the cache
 	onHidePR: function(prID){
-		var newList = this.list.filter(function(viewObj){
+		var newList = this.atMentions.filter(function(viewObj){
 			var show = viewObj.pullRequest.id !== prID;
 
 			if (show) {
 				chromeApi.get('hiddenPRs', function(results) {
-					var objectToStore = {
-						'id': prID,
-						'timeStamp': moment().format()
-					};
+					debugger;
 					if (results.hiddenPRs) {
-						results.hiddenPRs.push(objectToStore);
+						results.hiddenPRs[prID] = moment().format();
+						chromeApi.set(results);
 					} else {
-						chromeApi.set({
-							'hiddenPRs': [objectToStore]
-						});
+						objectToStore = {'hiddenPRs': {}}; 
+						objectToStore.hiddenPRs[prID] = moment().format();
+						chromeApi.set(objectToStore);
 					}
 				});
 			}

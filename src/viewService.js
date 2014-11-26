@@ -22,10 +22,23 @@ function ViewService() {
 				actionItems++;
 			}
 		}
-		chrome.browserAction.setBadgeText({
+		chromeApi.setBadgeText({
 			'text': actionItems.toString()
 		});
 	}
+
+	function filterOutHiddenPrs (viewObjects, hiddenPRs) {
+		if (!hiddenPRs) {
+			return viewObjects;
+		}
+
+		var hiddenKeys = Object.keys(hiddenPRs);
+
+		return viewObjects.filter(function(obj) {
+			return hiddenKeys.indexOf(obj.pullRequest.id.toString()) >=0 ? false : true;
+		});
+	}
+	API.filterOutHiddenPrs = filterOutHiddenPrs;
 
 	// get all code reviews and wrap them in objects for the react components
 	function prepViewObjects(accessToken, successCallback){
@@ -39,6 +52,7 @@ function ViewService() {
 		function _isFinished() {
 			prepped--;
 			if (prepped === 0) {
+				debugger;
 				// put the action needed objects at the top of the list
 				viewObjects.sort(function(x, y) {
 					return y.commentInfo.plusOneNeeded - x.commentInfo.plusOneNeeded;
@@ -57,17 +71,16 @@ function ViewService() {
 
 		//TODO check for commit after plus one needed
 		function _prepItemForView(notification, callback) {
+			var that = this;
 			github.getPullRequest(notification.subject.url).then(function(pullRequest) {
 				if (pullRequest.state === 'open') {
-					chromeApi.get('login', function(results) {
-						github.isPlusOneNeeded(pullRequest.comments_url, results.login).done(function(result) {
-							viewObjects.push({
-								'notification': notification,
-								'pullRequest': pullRequest,
-								'commentInfo': result
-							});
-							_isFinished();
+					github.isPlusOneNeeded(pullRequest.comments_url, that.login).done(function(result) {
+						viewObjects.push({
+							'notification': notification,
+							'pullRequest': pullRequest,
+							'commentInfo': result
 						});
+						_isFinished();
 					});
 				} else {
 					_isFinished();
@@ -78,7 +91,7 @@ function ViewService() {
 		}
 
 		chromeApi.get('hiddenPRs', function(results) {
-			hiddenPRs = results.hiddenPRs;	
+			hiddenPRs = results.hiddenPRs;
 
 			// start off by getting all notifications that are @mentions
 			github.getNotifications(true, 'mention').done(function( notifications ) {
@@ -123,11 +136,6 @@ function ViewService() {
 		});
 	}
 	API.getUserPrs = getUserPrs; 
-
-	function removeThHiddenPrs(list) {
-
-	}
-	API.removeThHiddenPrs = removeThHiddenPrs; 
 
 	init();
 	return API;
