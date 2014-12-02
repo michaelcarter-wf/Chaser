@@ -3,10 +3,13 @@ var React = require('react/addons'),
 	Github = require('../github'),
 	moment =require('moment'),
 	constants = require('../constants'),
-	chromeApi = require('../chrome');
+	chromeApi = require('../chrome'),
+	Actions = require('../actions');
 
-var badgeStyle = {'color':'red'},
-	mediaWidth = {'width': '75%'};
+var badgeStyle = {'color':'red'};
+var mediaWidth = {'width': '70%'};
+
+var cx = React.addons.classSet;
 
 var PullRequest = React.createClass({
 	
@@ -17,6 +20,7 @@ var PullRequest = React.createClass({
 		if (this.props.commentInfo) {
 			newState['badgeText'] = this.props.commentInfo.plusOneNeeded ? 'Action Needed ': '';
 		}
+		newState['redX'] = false; 
 
 		return newState;
 	},
@@ -26,25 +30,41 @@ var PullRequest = React.createClass({
 		chrome.tabs.create({ url: this.props.pullRequest.html_url });
     },
 
+    handleHover : function(){
+    	this.setState({'redX': !this.state.redX});
+    },
+
+    removeThisGuy : function(){
+    	Actions.hidePR(this.props.pullRequest.id);
+    },
+
     // check for last commit for updated
     render: function () { 
+		var redX = cx({
+			'red': this.state.redX,
+			'glyphicon': true,
+			'glyphicon-remove': true,
+			'x-small-text': true
+		});
+
     	var that = this,
     		pr = this.props.pullRequest;
 
-	        return <div className="media" onClick={this.openNewTab}>
-			  <span className="pull-left">
-			    <img className="media-object avatar-image" src={pr.head.user.avatar_url} alt="avatar_url"/>
+	        return <div className="media">
+			  <span className="pull-left" onClick={this.openNewTab}>
+			  		<img className="media-object avatar-image" src={pr.head.user.avatar_url} alt="avatar_url"/>
 			  </span>
-			  <div className="media-body pull-left" style={mediaWidth}>
-			  <small className="small-text created-date"><em>{pr.base.repo.full_name}</em></small>
-			    <h6 className="media-heading">
-					{ pr.title } <br/>
-			    	<small className="small-text">
-			    		updated {moment.utc(pr.updated_at).fromNow()} <span style={badgeStyle}> {this.state.badgeText} {this.state.unread} </span>
-			    	</small>
-			    </h6>
+			  <div className="media-body pull-left" style={mediaWidth} onClick={this.openNewTab}>
+			  		<small className="small-text created-date"><em>{pr.base.repo.full_name}</em></small>
+			    	<h6 className="media-heading">
+						{ pr.title } <br/>
+			    		<small className="small-text">
+			    			updated {moment.utc(pr.updated_at).fromNow()} <span style={badgeStyle}> {this.state.badgeText} {this.state.unread} </span>
+			    		</small>
+			    	</h6>
 			  </div>
-			  <div className='pull-left'><small className='small-text'>{moment.utc(pr.created_at).format('MM/DD')} </small></div>
+			  <div className='pull-right' onMouseOver={this.handleHover} onMouseOut={this.handleHover} onClick={this.removeThisGuy}><i className={redX}></i></div>
+			  <div className='pull-right'><small className='small-text'>{moment.utc(pr.created_at).format('MM/DD')} </small></div>
 			</div>
     }
 });

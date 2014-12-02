@@ -62,7 +62,7 @@ function github(accessToken) {
         var plusOneNeeded = true;
         var plusOneComment,
             atMentionedComment; 
-
+            
         for (var i=0; i < comments.length; i++) {
             if (comments[i].body.indexOf('@' + userId) > 0) {
                 plusOneNeeded = true;
@@ -111,8 +111,16 @@ function github(accessToken) {
     }
     API.getUserPullRequests = getUserPullRequests;
 
+    
+    function closePullRequest(pullRequest) {
 
-    // https://api.github.com/repos/bradybecker-wf/wf-home-html/pulls?access_token=29ed73c4694450b7b11c864484806856fd2a3490
+        var patchThis = {
+            "title": "new title",
+            "body": "updated body",
+            "state": "open"
+        }
+
+    }
 
     return API;
 

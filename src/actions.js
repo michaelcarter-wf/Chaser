@@ -5,7 +5,8 @@ var Actions = Reflux.createActions([
 	"showOnlyActionNeeded",
 	"newList",
 	'showActionNeeded',
-	"switchTo"
+	"switchTo",
+	"hidePR"
 ]);
 
 module.exports = Actions;

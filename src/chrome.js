@@ -13,6 +13,11 @@ function ChromeApi() {
 	}
 	API.set = set;
 
+	function setBadgeText(obj) {
+		chrome.browserAction.setBadgeText(obj); 
+	}
+	API.setBadgeText = setBadgeText;
+
 	return API; 
 }
 

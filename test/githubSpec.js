@@ -12,12 +12,6 @@ describe("getActionsNeeded", function() {
   });
 });
 
+var hiddenPrs = [{"id":24471515,"timeStamp":1416608952560}];
 
-describe('should sort array', function(){
-	for (var i=0; i<prs.length; i++) {
-		if (prs[i]) {
-			gutil.log(Date.parse(prs[i].created_at));
-		}
-	}
 
-});

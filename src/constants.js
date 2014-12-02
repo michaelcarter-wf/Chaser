@@ -7,6 +7,10 @@ var settings = {
 	'lastUpdated': '_lastUpdated_',
 	'http': {
 		'get': 'GET'
+	},
+	'views': {
+		'atMentions': '_atMentions',
+		'pullRequests': 'pullRequests'
 	}
 };
 

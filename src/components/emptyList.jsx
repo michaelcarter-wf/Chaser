@@ -5,20 +5,20 @@ var React = require('react/addons'),
 var style = {
     'width': '100%',
     'textAlign': 'center',
-    'paddingTop': '150px'
+    'paddingTop': '100px'
     };
 
-var Loading = React.createClass({
+var EmptyList = React.createClass({
 
     refreshList: function(){
-        var that = this; 
         Actions.refresh();
     },
 
     render: function () {
         /* jshint ignore:start */
         return <div style={style}>
-            <img src="../src/images/octocat-spinner-32.gif"/>
+            <h6> I have nothing for ya! </h6>
+            <a className='small-text' href='#' onClick={Actions.refresh}>refresh</a>
         </div>
         /* jshint ignore:end */
 
@@ -26,4 +26,4 @@ var Loading = React.createClass({
 });
 
 
-module.exports = Loading;
+module.exports = EmptyList;

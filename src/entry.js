@@ -1,9 +1,8 @@
 // should put the stores on the window
 require('./css/style.css');
-var App = require('./components/app'),
-	github; 
-
-var Github = require('./github'),
+require('react');
+var Routes = require('./components/routes');
+var github,
 	constants = require('./constants'),
 	chromeApi = require('./chrome'),
 	viewService = require('./viewService'),
@@ -11,14 +10,14 @@ var Github = require('./github'),
 
 
 function fireItUp() {
-	App.start();
+	Routes.render();
 }
 
 chromeApi.get('viewObjects', function(results) {
 	if (!results.viewObjects) {
 		chromeApi.get(constants.githubTokenKey, function(results) {
 			if (results[constants.githubTokenKey]) {
-				viewService.prepViewObjects(results[constants.githubTokenKey], fireItUp);
+				// viewService.prepViewObjects(results[constants.githubTokenKey], fireItUp);
 			} else {
 				Login.start();
 			}
