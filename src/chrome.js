@@ -1,11 +1,3 @@
-var chromeApi = chrome
-
-if (!chrome) {
-
-} else {
-	chrome = chrome;
-}
-
 function ChromeApi() {
 	var API = {}; 
 

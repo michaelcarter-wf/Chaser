@@ -9,10 +9,15 @@ var Login = require('./login'),
     chromeApi = require('../chrome'),
     AtMentions = require('./atMentions'),
     MyPullRequests = require('./myPullRequests'),
-    Header = require('./header');
+    Header = require('./header'),
+    KeyboardShortcutsMixin = require('./KeyboardShortcutsMixin'),
+    Navigation = Router.Navigation,
+    Mousetrap = require('mousetrap');
 
 
 var Shell = React.createClass({
+  mixins: [KeyboardShortcutsMixin, Navigation],
+
   componentDidMount: function() {
     chromeApi.get('viewObjects', function(results) {
       if (!results.viewObjects) {
@@ -25,6 +30,21 @@ var Shell = React.createClass({
         });
       } 
     });
+
+    // bind keys to control UI
+    Mousetrap.bind(['left', 'right'], this.onKeyLeftRight);
+  },
+
+  onKeyLeftRight: function(e) {
+    var newRoute = window.location.hash.indexOf('myPullRequests') >= 0 ? 'atMentions' : 'myPullRequests';
+    this.replaceWith(newRoute);
+  },
+
+  getKeyboardShortcuts: function() {
+    return {
+      left: this.onKeyLeftRight,
+      right: this.onKeyLeftRight,
+    }
   },
 
   render: function () {
@@ -46,7 +66,7 @@ var routes = (
 );
 
 Router.run(routes, function (Handler) {
-  // Handler.render?
+  // we could pass in the list here?
   React.render(<Handler/>, document.getElementById('app'));
 });
 

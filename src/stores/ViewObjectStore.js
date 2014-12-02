@@ -45,7 +45,6 @@ var ViewObjectStore = Reflux.createStore({
 		this.onSwitchTo(view);
 	},
 
-	// basically give me a new list and trigger the event
 	onRefresh: function() {
 		var that = this; 
 

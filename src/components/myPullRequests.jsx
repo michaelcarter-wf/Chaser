@@ -50,6 +50,10 @@ var MyPullRequests = React.createClass({
         });
     },
 
+    handleKeyPress: function(key) {
+        console.log(key);
+    },
+
     render: function () {
         var that = this,
             pullRequests; 
@@ -70,7 +74,7 @@ var MyPullRequests = React.createClass({
         }
 
     	return	(<div>
-            <div style={divStyle}> {pullRequests} </div>
+            <div style={divStyle} onKeyPress={that.handleKeyPress}> {pullRequests} </div>
             <Footer lastUpdatedDate={that.state.updatedDate}/>
         </div>);
         /* jshint ignore:end */

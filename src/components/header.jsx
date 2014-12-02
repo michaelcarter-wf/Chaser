@@ -10,7 +10,9 @@ var React = require('react/addons'),
     Actions = require('../actions'),
     DropdownButton = require('react-bootstrap/DropdownButton'),
     MenuItem = require('react-bootstrap/MenuItem'),
-    Link = Router.Link;
+    Link = Router.Link,
+    Navigation = Router.Navigation,
+    Mousetrap = require('mousetrap');
 
 var buttonStyle = {
     'padding': '8px 0px 0px 0px',
@@ -22,6 +24,7 @@ var fontSize = {
 }
 
 var Header = React.createClass({
+    mixins: [Navigation],
 
     getInitialState: function () {
         return {
@@ -34,13 +37,22 @@ var Header = React.createClass({
         chromeApi.get(constants.userKey, function(results) {
             that.setState({'userLogin': results.login});
         });
+
+        Mousetrap.bind(['r'], this.refreshList);
+    },
+
+    componentWillUnmount: function() {
+        Mousetrap.unbind('r');
     },
 
     refreshList: function(){
         Actions.refresh();
     },
 
-    changeView: function(e){},
+    //TODO get the count of each list and stick it in the dropdown
+    changeView: function(newRoute) {
+        this.replaceWith(newRoute);
+    },
     
     /* jshint ignore:start */
     render: function () {
@@ -48,12 +60,8 @@ var Header = React.createClass({
         return <div className='header'>
             <div className='col-xs-4'>
                 <DropdownButton style={buttonStyle} bsStyle={title.toLowerCase()} title={this.state.userLogin}>
-                    <MenuItem style={fontSize} eventKey="1" onSelect={this.changeView}>
-                        <Link to="atMentions">@Mentions</Link>
-                    </MenuItem>
-                    <MenuItem style={fontSize} eventKey="2" onSelect={this.changeView}>
-                        <Link to="myPullRequests">Pull Requests</Link>
-                    </MenuItem>
+                    <MenuItem style={fontSize} eventKey="atMentions" onSelect={this.changeView}>@Mentions</MenuItem>
+                    <MenuItem style={fontSize} eventKey="myPullRequests" onSelect={this.changeView}>Pull Requests</MenuItem>
                 </DropdownButton>
             </div>
             <div className='col-xs-4 text-center'>

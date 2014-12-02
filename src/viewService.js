@@ -26,7 +26,10 @@ function ViewService() {
 			'text': actionItems.toString()
 		});
 	}
-
+	
+	/** 
+	* Function to filter out hiddenPRs
+	*/
 	function filterOutHiddenPrs (viewObjects, hiddenPRs) {
 		if (!hiddenPRs) {
 			return viewObjects;
@@ -40,6 +43,7 @@ function ViewService() {
 	}
 	API.filterOutHiddenPrs = filterOutHiddenPrs;
 
+
 	// get all code reviews and wrap them in objects for the react components
 	function prepViewObjects(accessToken, successCallback){
 		var viewObjects = [],
@@ -52,7 +56,7 @@ function ViewService() {
 		function _isFinished() {
 			prepped--;
 			if (prepped === 0) {
-				debugger;
+				viewObjects = filterOutHiddenPrs(viewObjects, hiddenPRs);
 				// put the action needed objects at the top of the list
 				viewObjects.sort(function(x, y) {
 					return y.commentInfo.plusOneNeeded - x.commentInfo.plusOneNeeded;
