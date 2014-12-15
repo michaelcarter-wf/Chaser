@@ -161,9 +161,11 @@
 				'text': actionItems.toString()
 			});
 		}
-		
-		/** 
+
+	    /*
+		*
 		* Function to filter out hiddenPRs
+		*
 		*/
 		function filterOutHiddenPrs (viewObjects, hiddenPRs) {
 			if (!hiddenPRs) {
@@ -287,7 +289,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	function github(accessToken) {
-	    var $ = __webpack_require__(18),
+	    var $ = __webpack_require__(17),
 	        moment = __webpack_require__(11),
 	        constants = __webpack_require__(1);
 
@@ -299,17 +301,6 @@
 	        data = data || {};
 	        data.timestamp = new Date().getTime();
 	        data.access_token = API.githubToken;
-
-	        return $.ajax({
-	            type: requestType,
-	            url: url,
-	            data: data
-	        });
-	    }
-
-	    function _request(requestType, url, data){
-	        data = data || {};
-	        data.timestamp = new Date().getTime();
 
 	        return $.ajax({
 	            type: requestType,
@@ -387,7 +378,9 @@
 	        return dfd.promise();
 	    }
 	    API.isPlusOneNeeded = isPlusOneNeeded;
-
+	    /*
+	    * Function to 
+	    */
 	    function getUsersRepos(){
 	        return _requestAuthed(constants.http.get, constants.githubUrl + 'user/repos');
 	    }
@@ -1197,7 +1190,7 @@
 	        if (!locales[name] && hasModule) {
 	            try {
 	                oldLocale = moment.locale();
-	                __webpack_require__(20)("./" + name);
+	                __webpack_require__(19)("./" + name);
 	                // because defineLocale currently also sets the global locale, we want to undo that for lazy loaded locales
 	                moment.locale(oldLocale);
 	            } catch (e) { }
@@ -3285,7 +3278,7 @@
 	    }
 	}).call(this);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(133)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(132)(module)))
 
 /***/ },
 /* 12 */,
@@ -3293,8 +3286,7 @@
 /* 14 */,
 /* 15 */,
 /* 16 */,
-/* 17 */,
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -12490,8 +12482,8 @@
 
 
 /***/ },
-/* 19 */,
-/* 20 */
+/* 18 */,
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
@@ -12663,10 +12655,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 20;
+	webpackContext.id = 19;
 
 
 /***/ },
+/* 20 */,
 /* 21 */,
 /* 22 */,
 /* 23 */,
@@ -19934,8 +19927,7 @@
 
 
 /***/ },
-/* 132 */,
-/* 133 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(module) {

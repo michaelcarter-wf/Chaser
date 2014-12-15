@@ -26,9 +26,11 @@ function ViewService() {
 			'text': actionItems.toString()
 		});
 	}
-	
-	/** 
+
+    /*
+	*
 	* Function to filter out hiddenPRs
+	*
 	*/
 	function filterOutHiddenPrs (viewObjects, hiddenPRs) {
 		if (!hiddenPRs) {

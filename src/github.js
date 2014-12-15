@@ -19,17 +19,6 @@ function github(accessToken) {
         });
     }
 
-    function _request(requestType, url, data){
-        data = data || {};
-        data.timestamp = new Date().getTime();
-
-        return $.ajax({
-            type: requestType,
-            url: url,
-            data: data
-        });
-    }
-
     function getPullRequest(url) {
         return _requestAuthed(constants.http.get, url);
     }
@@ -99,7 +88,9 @@ function github(accessToken) {
         return dfd.promise();
     }
     API.isPlusOneNeeded = isPlusOneNeeded;
-
+    /*
+    * Function to 
+    */
     function getUsersRepos(){
         return _requestAuthed(constants.http.get, constants.githubUrl + 'user/repos');
     }
