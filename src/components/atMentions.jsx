@@ -10,7 +10,10 @@ var React = require('react/addons'),
     Loading = require('./loading'),
     EmptyList = require('./emptyList'),
     Footer = require('./footer'),
-    moment = require('moment');
+    moment = require('moment'),
+    OverlayTrigger = require('react-bootstrap/OverlayTrigger'),
+    Button = require('react-bootstrap/Button'),
+    Tooltip = require('react-bootstrap/Tooltip');
 
 var divStyle = {
   'height': '400px',

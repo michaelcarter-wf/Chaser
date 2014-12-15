@@ -4,7 +4,10 @@ var React = require('react/addons'),
 	moment =require('moment'),
 	constants = require('../constants'),
 	chromeApi = require('../chrome'),
-	Actions = require('../actions');
+	Actions = require('../actions'),
+	OverlayTrigger = require('react-bootstrap/OverlayTrigger'),
+	Button = require('react-bootstrap/Button'),
+	Tooltip = require('react-bootstrap/Tooltip');
 
 var badgeStyle = {'color':'red'};
 var mediaWidth = {'width': '70%'};
@@ -49,8 +52,13 @@ var PullRequest = React.createClass({
 
     	var that = this,
     		pr = this.props.pullRequest;
+    		var toolTip; 
+    		if (this.props.commentInfo && this.props.commentInfo.atMentionedComment) {
+    			toolTip = <Tooltip> {this.props.commentInfo.atMentionedComment.body} </Tooltip>
+    		}
 
-	        return <div className="media">
+	        return <OverlayTrigger placement="bottom" overlay={toolTip}>
+	        <div className="media">
 			  <span className="pull-left" onClick={this.openNewTab}>
 			  		<img className="media-object avatar-image" src={pr.head.user.avatar_url} alt="avatar_url"/>
 			  </span>
@@ -66,6 +74,7 @@ var PullRequest = React.createClass({
 			  <div className='pull-right' onMouseOver={this.handleHover} onMouseOut={this.handleHover} onClick={this.removeThisGuy}><i className={redX}></i></div>
 			  <div className='pull-right'><small className='small-text'>{moment.utc(pr.created_at).format('MM/DD')} </small></div>
 			</div>
+			</OverlayTrigger>
     }
 });
 

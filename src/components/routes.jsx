@@ -10,13 +10,12 @@ var Login = require('./login'),
     AtMentions = require('./atMentions'),
     MyPullRequests = require('./myPullRequests'),
     Header = require('./header'),
-    KeyboardShortcutsMixin = require('./KeyboardShortcutsMixin'),
     Navigation = Router.Navigation,
     Mousetrap = require('mousetrap');
 
 
 var Shell = React.createClass({
-  mixins: [KeyboardShortcutsMixin, Navigation],
+  mixins: [Navigation],
 
   componentDidMount: function() {
     chromeApi.get('viewObjects', function(results) {
@@ -38,13 +37,6 @@ var Shell = React.createClass({
   onKeyLeftRight: function(e) {
     var newRoute = window.location.hash.indexOf('myPullRequests') >= 0 ? 'atMentions' : 'myPullRequests';
     this.replaceWith(newRoute);
-  },
-
-  getKeyboardShortcuts: function() {
-    return {
-      left: this.onKeyLeftRight,
-      right: this.onKeyLeftRight,
-    }
   },
 
   render: function () {
