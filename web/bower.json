@@ -1,0 +1,20 @@
+{
+  "name": "mini",
+  "version": "0.0.0",
+  "authors": [
+    "Brady Becker <brady.becker@webfilings.com>"
+  ],
+  "main": "web/index.html",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "octicons": "~2.1.2",
+    "web-skin": "git@github.com:Workiva/web-skin#~0.4.24"
+  }
+}
