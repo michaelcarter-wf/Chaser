@@ -2,18 +2,28 @@
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
 import 'dart:html';
+
 import 'package:react/react_client.dart' as reactClient;
-import 'package:react/react.dart';
+import 'package:react/react.dart' as react;
 
-import 'components/header.dart' show Header;
+import 'package:wChaser/src/components/header.dart';
+import 'package:wChaser/src/services/github.dart';
+import 'package:wChaser/src/models/models.dart';
+import 'package:wChaser/src/utils/utils.dart';
 
-void main() {
+void main() async {
   reactClient.setClientConfiguration();
-  var component = div({"className": "somehing"}, [
-    h1({}, "Big Time Headline"),
-    Header({}),
-  ]);
 
-  render(component, querySelector('#output'));
+  var component = react.div({"className": "somehing"}, Header({}));
+
+  react.render(component, querySelector('#output'));
+
+  GitHubService gitHubService = new GitHubService();
+  List<GitHubNotification> notifications = await gitHubService.getNotifications();
+  PullRequest pullRequest = await gitHubService.getPullRequest(notifications[1].pullRequest);
+  List<GitHubComment> comments = await gitHubService.getPullRequestComments(pullRequest);
+  bool plusOneNeeded = isPlusOneNeeded(comments, 'bradybecker-wf');
+  print(plusOneNeeded);
 //  querySelector('#output').text = 'Your Dart app is running.';
+
 }

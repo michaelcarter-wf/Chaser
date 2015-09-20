@@ -6,10 +6,22 @@ description: An absolute bare-bones web app.
 environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
-  browser: '>=0.10.0 <0.11.0'
-  pubsub: ">=1.1.9 <2.0.0"
-  react: ">=0.5.0 <0.6.0"
-  web_skin_react:
+  browser_detect: ">=1.0.0 <2.0.0"
+  react: ">=0.6.0"
+  web_skin_dart:
     git:
-      url: git@github.com:Workiva/web-skin-react.git
-      ref: 1.1.0
+      url: git@github.com:Workiva/web_skin_dart.git
+      ref: 0.0.5
+dev_dependencies:
+  coverage: "^0.7.2"
+  dart_dev: "^1.0.0"
+  dart_style: "^0.2.0"
+  dartdoc: "^0.4.0"
+  source_gen: "^0.4.1"
+  test: "^0.12.0"
+  w_flux:
+    git:
+      url: git@github.com:Workiva/w_flux.git
+      ref: 0.3.0
+dependency_overrides:
+  dart_style: "^0.2.0"
