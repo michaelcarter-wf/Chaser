@@ -30,19 +30,19 @@ class GitHubService {
         'since': oneMonthAgo,
         'participating': true
     };
-    List notifications = await _requestAuthed('GET', '${gitHubUrl}notifications', sendData:data);
+    List notificationsJson = await _requestAuthed('GET', '${gitHubUrl}notifications', sendData:data);
 
-    return notifications.map((notification) {
-      return new GitHubNotification(notification);
+    return notificationsJson.map((notificationJson) {
+      return new GitHubNotification(notificationJson);
     }).toList();
   }
 
-  Future<PullRequest> getPullRequest(String url) async {
+  Future<GitHubPullRequest> getPullRequest(String url) async {
     var pullRequestJson = await _requestAuthed('GET', url);
-    return new PullRequest(pullRequestJson);
+    return new GitHubPullRequest(pullRequestJson);
   }
 
-  Future<List<GitHubComment>> getPullRequestComments(PullRequest pullRequest) async {
+  Future<List<GitHubComment>> getPullRequestComments(GitHubPullRequest pullRequest) async {
     var pullRequestsCommentsJson = await _requestAuthed('GET', pullRequest.commentsUrl);
 
     return pullRequestsCommentsJson.map((pullRequestJson) {

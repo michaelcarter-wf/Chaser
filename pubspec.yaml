@@ -8,6 +8,7 @@ environment:
 dependencies:
   browser_detect: ">=1.0.0 <2.0.0"
   react: ">=0.6.0"
+  chrome: any
   web_skin_dart:
     git:
       url: git@github.com:Workiva/web_skin_dart.git
@@ -25,3 +26,6 @@ dev_dependencies:
       ref: 0.3.0
 dependency_overrides:
   dart_style: "^0.2.0"
+
+#transformers:
+#- chrome
