@@ -17,11 +17,6 @@ class _PullRequestRow extends react.Component {
 
   GitHubPullRequest get pullRequest => props['pullRequest'];
 
-  getInitialState() {
-    return {
-    };
-  }
-
   openNewTab(_) {
 //      chrome.tabs.create(new chrome.TabsCreateParams(url:pullRequest.htmlUrl));
       window.open(pullRequest.htmlUrl, pullRequest.id.toString());
@@ -47,20 +42,16 @@ class _PullRequestRow extends react.Component {
       ..className = 'media-body pull-left'
       ..style = mediaWidth
       ..onClick = openNewTab
-    )([
-        (Dom.small()
-          ..className = 'smal-text create-date')
+    )
+    ([
+        (Dom.small()..className = 'smal-text create-date')
         ((Dom.em())(pullRequest.fullName)),
-        (Dom.h6()
-          ..className = 'media-heading')
+        (Dom.h6()..className = 'media-heading')
         ([
             pullRequest.title,
             (Dom.br())(),
-            (Dom.small()
-              ..className = 'smal-text')
-            ([
-              'updated ${pullRequest.updatedAt}'
-            ])
+            (Dom.small()..className = 'small-text')
+            ('updated ${pullRequest.updatedAt}')
         ])
     ]);
   }
@@ -87,8 +78,7 @@ class _PullRequestRow extends react.Component {
 //			</div>
 
   render() {
-    return (Dom.div()
-      ..className = 'media')
+    return (Dom.div()..className = 'media')
     ([
         renderImage(),
         renderTitle(),

@@ -6,7 +6,7 @@ class GitHubNotification {
   bool unread;
 
   GitHubNotification(json) {
-    reason = json['mention'];
+    reason = json['reason'];
     pullRequest = json['subject']['url'];
     unread = json['unread'];
   }

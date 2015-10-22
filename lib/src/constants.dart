@@ -19,4 +19,5 @@ var settings = {
 enum views { atMentions, pullRequests }
 
 final String localStorageKey = 'github';
+final String MENTION = 'mention';
 
