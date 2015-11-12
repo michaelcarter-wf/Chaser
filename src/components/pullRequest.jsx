@@ -57,10 +57,15 @@ var PullRequest = React.createClass({
     			toolTip = <Tooltip> {this.props.commentInfo.atMentionedComment.body} </Tooltip>
     		}
 
+    		if (!pr.head || !pr.base) {
+    			return false;
+    		}
+    		var avatar_url = pr.head.user.avatar_url; 
+
 	        return <OverlayTrigger placement="bottom" overlay={toolTip}>
 	        <div className="media">
 			  <span className="pull-left" onClick={this.openNewTab}>
-			  		<img className="media-object avatar-image" src={pr.head.user.avatar_url} alt="avatar_url"/>
+			  		<img className="media-object avatar-image" src={avatar_url} alt="avatar_url"/>
 			  </span>
 			  <div className="media-body pull-left" style={mediaWidth} onClick={this.openNewTab}>
 			  		<small className="small-text created-date"><em>{pr.base.repo.full_name}</em></small>

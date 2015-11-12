@@ -10,7 +10,7 @@ var github,
 
 
 function fireItUp() {
-	Routes.render();
+	// Routes.renderComponent();
 }
 
 chromeApi.get('viewObjects', function(results) {
