@@ -1,6 +1,7 @@
 part of wChaser.src.models.models;
 
 class GitHubPullRequestConstants {
+  static final actionNeeded = 'action_needed';
   static final state = 'state';
   static final commentsUrl = 'comments_url';
   static final htmlUrl = 'html_url';
@@ -9,6 +10,7 @@ class GitHubPullRequestConstants {
   static final title = 'title';
   static final updatedAt = 'updated_at';
   static final githubUser = 'user';
+  static final merged = 'merged';
 }
 
 class GitHubPullRequest {
@@ -21,10 +23,11 @@ class GitHubPullRequest {
   String title;
   String updatedAt;
   bool actionNeeded;
+  bool merged;
 
   bool get isOpen => state == 'open';
 
-  GitHubPullRequest(json) {
+  GitHubPullRequest(Map json) {
     if (json == null) {
       return;
     }
@@ -38,27 +41,29 @@ class GitHubPullRequest {
       fullName = json['head']['repo'][GitHubPullRequestConstants.fullName];
     }
     id = json[GitHubPullRequestConstants.id];
+    merged = json[GitHubPullRequestConstants.merged];
     title = json[GitHubPullRequestConstants.title];
     updatedAt = json[GitHubPullRequestConstants.updatedAt];
     githubUser = new GitHubUser(json[GitHubPullRequestConstants.githubUser]);
-  }
 
-  setActionNeeded(bool actionNeeded) {
-    this.actionNeeded = actionNeeded;
+    // this will only come from cached data
+    if (json.containsKey(GitHubPullRequestConstants.actionNeeded)) {
+      actionNeeded = json[GitHubPullRequestConstants.actionNeeded];
+    }
   }
 
   Map toMap() => {
-    GitHubPullRequestConstants.state: state,
-    GitHubPullRequestConstants.commentsUrl: commentsUrl,
-    GitHubPullRequestConstants.htmlUrl: htmlUrl,
-    GitHubPullRequestConstants.id: id,
-    GitHubPullRequestConstants.githubUser: githubUser.toMap(),
-    'head': {
-      'repo': {
-        GitHubPullRequestConstants.fullName: fullName
-      }
-    },
-    GitHubPullRequestConstants.title: title,
-    GitHubPullRequestConstants.updatedAt: updatedAt
-  };
+        GitHubPullRequestConstants.state: state,
+        GitHubPullRequestConstants.commentsUrl: commentsUrl,
+        GitHubPullRequestConstants.htmlUrl: htmlUrl,
+        GitHubPullRequestConstants.id: id,
+        GitHubPullRequestConstants.merged: merged,
+        GitHubPullRequestConstants.githubUser: githubUser.toMap(),
+        'head': {
+          'repo': {GitHubPullRequestConstants.fullName: fullName}
+        },
+        GitHubPullRequestConstants.title: title,
+        GitHubPullRequestConstants.updatedAt: updatedAt,
+        GitHubPullRequestConstants.actionNeeded: actionNeeded,
+      };
 }

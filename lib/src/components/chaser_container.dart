@@ -33,7 +33,7 @@ class _ChaserContainer extends FluxComponent {
   getStoreHandlers() {
     return {
       atMentionStore: (_) {
-        setState({'pullRequests': atMentionStore.atMentionPullRequests});
+        setState({'pullRequests': atMentionStore.displayAtMentionPullRequests});
       }
     };
   }
@@ -41,7 +41,7 @@ class _ChaserContainer extends FluxComponent {
   render() {
     return (Dom.div())([
       Header({}),
-      AtMentions({'pullRequests': atMentionStore.atMentionPullRequests, AtMentionActions.NAME: atMentionActions}),
+      AtMentions({'pullRequests': state['pullRequests'], AtMentionActions.NAME: atMentionActions}),
       Footer({AtMentionStore.NAME: atMentionStore, AtMentionActions.NAME: atMentionActions})
     ]);
   }

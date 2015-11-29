@@ -8,6 +8,7 @@ environment:
 dependencies:
   browser_detect: ">=1.0.0 <2.0.0"
   chrome: any
+  fluri: 1.0.1
   lawndart: any
   intl: 0.12.4+2
   react: ">=0.6.0"
@@ -16,7 +17,7 @@ dependencies:
   web_skin_dart:
     git:
       url: git@github.com:Workiva/web_skin_dart.git
-      ref: 0.0.5
+      ref: 0.0.10
 
 dev_dependencies:
   coverage: "^0.7.2"
@@ -28,12 +29,15 @@ dev_dependencies:
   w_flux:
     git:
       url: git@github.com:Workiva/w_flux.git
-      ref: 0.3.0
+      ref: 1.0.1
 dependency_overrides:
   dart_style: "^0.2.0"
 
 transformers:
   - sass
+  - $dart2js:
+      minify: true
+      csp: true
 
 #transformers:
 #- chrome

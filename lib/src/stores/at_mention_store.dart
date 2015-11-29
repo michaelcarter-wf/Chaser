@@ -19,7 +19,7 @@ class AtMentionStore extends Store {
 
   GitHubService _gitHubService;
   List<GitHubPullRequest> atMentionPullRequests = [];
-  List<GitHubPullRequest> allMentionPullRequests = [];
+  List<GitHubPullRequest> displayAtMentionPullRequests= [];
   DateTime updated = new DateTime.now();
   bool showAll = true;
 
@@ -36,16 +36,19 @@ class AtMentionStore extends Store {
   _displayAll(bool displayAll) {
     showAll = displayAll;
     if (showAll == false) {
-      print('filtering');
-      atMentionPullRequests = atMentionPullRequests.where((GitHubPullRequest pr) => pr.actionNeeded).toList();
+      displayAtMentionPullRequests = displayAtMentionPullRequests.where((GitHubPullRequest pr) => pr.actionNeeded).toList();
+    } else {
+      displayAtMentionPullRequests = atMentionPullRequests;
     }
+
+    print(displayAtMentionPullRequests);
     trigger();
   }
 
   /// reset all the lists at load
   _clearPullRequests() {
     atMentionPullRequests = [];
-    allMentionPullRequests = [];
+    displayAtMentionPullRequests = [];
   }
 
   /// Big Gorilla of a method that gets PRS that need your action from gh via notifications.
@@ -62,10 +65,11 @@ class AtMentionStore extends Store {
     List<Future<GitHubPullRequest>> pullRequests = actionableNotifications
         .map((GitHubNotification notification) => getPRFromNotification(notification, _gitHubService))
         .toList();
-    // wait until all come back
+
+    // wait until PR all come back
     List<GitHubPullRequest> prs = await Future.wait(pullRequests);
 
-    atMentionPullRequests = prs.where((GitHubPullRequest pullRequest) => pullRequest.actionNeeded).toList();
+    atMentionPullRequests = prs.where((GitHubPullRequest pullRequest) => (pullRequest.isOpen)).toList();
     _displayAll(showAll);
 
     List<String> atMentionJson = atMentionPullRequests.map((GitHubPullRequest ghpr) {
@@ -89,13 +93,18 @@ class AtMentionStore extends Store {
       await _getChaserAssetsFromGithub(localStorageStore);
     }
 
+    displayAtMentionPullRequests = atMentionPullRequests;
+
     trigger();
   }
 
   Future<GitHubPullRequest> getPRFromNotification(GitHubNotification notification, GitHubService gitHubService) async {
+    bool plusOneNeeded = false;
     GitHubPullRequest pullRequest = await gitHubService.getPullRequest(notification.pullRequest);
-    List<GitHubComment> comments = await gitHubService.getPullRequestComments(pullRequest);
-    bool plusOneNeeded = isPlusOneNeeded(comments, 'bradybecker-wf');
+    if (!pullRequest.merged) {
+      List<GitHubComment> comments = await gitHubService.getPullRequestComments(pullRequest);
+      plusOneNeeded = isPlusOneNeeded(comments, 'bradybecker-wf');
+    }
     pullRequest.actionNeeded = plusOneNeeded;
     return pullRequest;
   }

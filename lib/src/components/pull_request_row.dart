@@ -26,6 +26,11 @@ class _PullRequestRow extends react.Component {
   removeThisGuy(_) {}
 
   renderImage() {
+    String actionNeededClass = '';
+    if (pullRequest.actionNeeded) {
+      actionNeededClass = 'action-needed-img';
+    }
+
     return (Dom.span()
       ..className = 'pull-left'
       ..onClick = openNewTab)((Dom.img()
@@ -42,16 +47,19 @@ class _PullRequestRow extends react.Component {
       ..onClick = openNewTab)([
       (Dom.small()..className = 'small-text create-date')((Dom.em())(pullRequest.fullName)),
       (Dom.h6()..className = 'media-heading')([
-        '${pullRequest.title} ${pullRequest.actionNeeded}',
+        pullRequest.title,
         (Dom.br())(),
-        (Dom.small()..className = 'small-text')('updated ${_formatDate()}')
+        (Dom.small()..className = 'small-text')(
+            'updated ${_formatDate()}',
+            (Dom.span()..className='red')(pullRequest.actionNeeded ? ' Action Needed': '')
+        )
       ])
     ]);
   }
 
   // TODO break this into a helper to prettify it
   _formatDate() {
-    DateTime moonLanding = DateTime.parse(pullRequest.updatedAt);  // 8:18pm
+    DateTime moonLanding = DateTime.parse(pullRequest.updatedAt); // 8:18pm
     var formatter = new DateFormat('MM.dd.yyyy');
     return formatter.format(moonLanding);
   }
@@ -71,18 +79,14 @@ class _PullRequestRow extends react.Component {
 //			</div>
 
   render() {
-    return (Dom.div()
-      ..className = 'media chaser-row')([
-      renderImage(),
-      renderTitle(),
-      (Dom.div()
-        ..className = 'pull-right'
-        ..onClick = removeThisGuy)([
-        (Icon()
+    return (Dom.div()..className = 'media chaser-row')(
+        renderImage(),
+        renderTitle(),
+        (Dom.div()
+          ..className = 'pull-right chaser-close-button'
+          ..onClick = removeThisGuy)((Icon()
           ..glyph = IconGlyph.CLOSE
           ..size = IconSize.SMALL
-          ..className = 'close-x')()
-      ])
-    ]);
+          ..className = 'close-x')()));
   }
 }

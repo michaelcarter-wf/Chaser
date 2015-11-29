@@ -13,9 +13,8 @@ class GitHubNotification {
   }
 
   Map toMap() => {
-    'reason': reason,
-    'subject': {
-      'url': pullRequest
-    },
-    'unRead': unread};
+        'reason': reason,
+        'subject': {'url': pullRequest},
+        'unRead': unread
+      };
 }
