@@ -3,6 +3,7 @@ library src.components.pull_request_row;
 import 'dart:core';
 import 'dart:html';
 
+import 'package:intl/intl.dart';
 import 'package:react/react.dart' as react;
 import 'package:web_skin_dart/ui_components.dart';
 import 'package:web_skin_dart/ui_core.dart' show Dom;
@@ -13,54 +14,46 @@ import 'package:wChaser/src/models/models.dart';
 var mediaWidth = {'width': '70%'};
 
 var PullRequestRow = react.registerComponent(() => new _PullRequestRow());
-class _PullRequestRow extends react.Component {
 
+class _PullRequestRow extends react.Component {
   GitHubPullRequest get pullRequest => props['pullRequest'];
 
   openNewTab(_) {
 //      chrome.tabs.create(new chrome.TabsCreateParams(url:pullRequest.htmlUrl));
-      window.open(pullRequest.htmlUrl, pullRequest.id.toString());
+    window.open(pullRequest.htmlUrl, pullRequest.id.toString());
   }
 
-  removeThisGuy(_) {
-
-  }
+  removeThisGuy(_) {}
 
   renderImage() {
     return (Dom.span()
       ..className = 'pull-left'
-      ..onClick = openNewTab)
-    ((Dom.img()
+      ..onClick = openNewTab)((Dom.img()
       ..className = 'media-object avatar-image'
       ..src = pullRequest.githubUser.avatarUrl
-      ..alt = 'avatar_url')()
-    );
+      ..alt = 'avatar_url')());
   }
 
   renderTitle() {
+    _formatDate();
     return (Dom.div()
       ..className = 'media-body pull-left'
       ..style = mediaWidth
-      ..onClick = openNewTab
-    )
-    ([
-        (Dom.small()..className = 'smal-text create-date')
-        ((Dom.em())(pullRequest.fullName)),
-        (Dom.h6()..className = 'media-heading')
-        ([
-            pullRequest.title,
-            (Dom.br())(),
-            (Dom.small()..className = 'small-text')
-            ('updated ${pullRequest.updatedAt}')
-        ])
+      ..onClick = openNewTab)([
+      (Dom.small()..className = 'small-text create-date')((Dom.em())(pullRequest.fullName)),
+      (Dom.h6()..className = 'media-heading')([
+        '${pullRequest.title} ${pullRequest.actionNeeded}',
+        (Dom.br())(),
+        (Dom.small()..className = 'small-text')('updated ${_formatDate()}')
+      ])
     ]);
   }
 
+  // TODO break this into a helper to prettify it
   _formatDate() {
-    var now = new DateTime.now();
-    var formatter = new DateFormat('yyyy-MM-dd');
-    String formatted = formatter.format(now);
-    print(formatted); // something like 2013-04-20
+    DateTime moonLanding = DateTime.parse(pullRequest.updatedAt);  // 8:18pm
+    var formatter = new DateFormat('MM.dd.yyyy');
+    return formatter.format(moonLanding);
   }
 
 //  <div className="media">
@@ -78,22 +71,18 @@ class _PullRequestRow extends react.Component {
 //			</div>
 
   render() {
-    return (Dom.div()..className = 'media')
-    ([
-        renderImage(),
-        renderTitle(),
-        (Dom.div()
-            ..className = 'pull-right'
-            ..onClick = removeThisGuy
-        )
-        ([
-            (Icon()
-              ..glyph = IconGlyph.CLOSE
-              ..size = IconSize.SMALL
-              ..className = 'close-x'
-            )()
-        ])
+    return (Dom.div()
+      ..className = 'media chaser-row')([
+      renderImage(),
+      renderTitle(),
+      (Dom.div()
+        ..className = 'pull-right'
+        ..onClick = removeThisGuy)([
+        (Icon()
+          ..glyph = IconGlyph.CLOSE
+          ..size = IconSize.SMALL
+          ..className = 'close-x')()
+      ])
     ]);
   }
-
 }

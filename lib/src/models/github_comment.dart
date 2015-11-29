@@ -2,12 +2,12 @@ part of wChaser.src.models.models;
 
 class GitHubComment {
   String body;
-  String userLogin;
-  GitHubUser gitHubUser;
+  GitHubUser user;
 
   GitHubComment(json) {
     body = json['body'];
-    gitHubUser = new GitHubUser(json['user']);
+    user = new GitHubUser(json['user']);
   }
 
+  Map toMap() => {'body': body, 'user': user.toMap()};
 }

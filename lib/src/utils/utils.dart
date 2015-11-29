@@ -1,6 +1,7 @@
 library wChaser.src.utils.utils;
 
 import 'package:wChaser/src/models/models.dart';
+import 'package:intl/intl.dart';
 
 // checks all comments for the current user's +1
 bool isPlusOneNeeded(List<GitHubComment> gitHubComments, String userId) {
@@ -11,10 +12,16 @@ bool isPlusOneNeeded(List<GitHubComment> gitHubComments, String userId) {
     if (gitHubComment.body.contains('@$userId')) {
       atMentionedComment = gitHubComment;
       plusOneNeeded = true;
-    } else if (plusOneNeeded && gitHubComment.userLogin == userId) {
+    } else if (plusOneNeeded && gitHubComment.user.login == userId) {
       plusOneNeeded = !gitHubComment.body.contains('+1');
     }
   });
 
   return plusOneNeeded;
+}
+
+String formatDate(DateTime dateTime) {
+  var formatter = new DateFormat('MM/dd/yyyy');
+  String formatted = formatter.format(dateTime);
+  return formatted;
 }

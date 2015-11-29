@@ -8,7 +8,6 @@ import 'package:crypto/crypto.dart';
 import 'package:wChaser/src/constants.dart' as constants;
 
 class LocationStorageService {
-
   Storage localStorage = window.localStorage;
 
   /**
@@ -38,5 +37,4 @@ class LocationStorageService {
     var base64 = CryptoUtils.bytesToBase64(bytes);
     localStorage['githubAuthorization'] = base64;
   }
-
 }

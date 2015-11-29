@@ -6,6 +6,7 @@ import 'package:web_skin_dart/ui_core.dart' show Dom;
 import 'package:w_flux/w_flux.dart';
 
 import 'package:wChaser/src/models/models.dart';
+import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/stores/at_mention_store.dart';
 import 'package:wChaser/src/components/header.dart';
 import 'package:wChaser/src/components/at_mentions.dart';
@@ -13,40 +14,35 @@ import 'package:wChaser/src/components/footer.dart';
 
 Map<String, dynamic> divStyle = {
   'height': '400px',
-  'overflowY':'scroll',
+  'overflowY': 'scroll',
   'width': '100%',
   'backgroundolor': '#FBFBFB'
 };
 
 var ChaserContainer = react.registerComponent(() => new _ChaserContainer());
-class _ChaserContainer extends FluxComponent {
 
+class _ChaserContainer extends FluxComponent {
+  AtMentionActions get atMentionActions => props[AtMentionActions.NAME];
   AtMentionStore get atMentionStore => props['atMentionStore'];
   List<GitHubPullRequest> get pullRequests => state['pullRequests'];
 
   getInitialState() {
-    return {
-      'pullRequests': atMentionStore.atMentionPullRequests
-    };
+    return {'pullRequests': atMentionStore.atMentionPullRequests};
   }
 
   getStoreHandlers() {
     return {
       atMentionStore: (_) {
-        setState({
-          'pullRequests': atMentionStore.atMentionPullRequests
-        });
+        setState({'pullRequests': atMentionStore.atMentionPullRequests});
       }
     };
   }
 
   render() {
-    return (Dom.div())
-    ([
-        Header({}),
-        AtMentions({'pullRequests':pullRequests}),
-        Footer({})
+    return (Dom.div())([
+      Header({}),
+      AtMentions({'pullRequests': atMentionStore.atMentionPullRequests, AtMentionActions.NAME: atMentionActions}),
+      Footer({AtMentionStore.NAME: atMentionStore, AtMentionActions.NAME: atMentionActions})
     ]);
   }
-
 }

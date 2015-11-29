@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+
+  "name": "PR Chaser",
+  "description": "This extension chases down github PRs where a +1 is needed",
+  "version": "3.0",
+//  "background": {
+//    "scripts": ["./chaserEvents.bundle.js"]
+//  },
+  // https://developer.chrome.com/extensions/storage
+  "permissions": [
+    "storage",
+    "https://github.com/*",
+    "tabs",
+    "alarms"
+  ],
+  "browser_action": {
+//    "default_icon": "./src/images/github.png",
+    "default_popup": "web/chaser.html"
+  }
+}

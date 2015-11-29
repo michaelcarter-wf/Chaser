@@ -7,12 +7,17 @@ environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
   browser_detect: ">=1.0.0 <2.0.0"
-  react: ">=0.6.0"
   chrome: any
+  lawndart: any
+  intl: 0.12.4+2
+  react: ">=0.6.0"
+  sass: any
+  unittest: any
   web_skin_dart:
     git:
       url: git@github.com:Workiva/web_skin_dart.git
       ref: 0.0.5
+
 dev_dependencies:
   coverage: "^0.7.2"
   dart_dev: "^1.0.0"
@@ -26,6 +31,9 @@ dev_dependencies:
       ref: 0.3.0
 dependency_overrides:
   dart_style: "^0.2.0"
+
+transformers:
+  - sass
 
 #transformers:
 #- chrome

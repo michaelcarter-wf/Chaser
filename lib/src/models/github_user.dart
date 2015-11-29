@@ -11,4 +11,6 @@ class GitHubUser {
     login = json['login'];
     avatarUrl = json['avatar_url'];
   }
+
+  Map toMap() => {'login': login, 'avatar_url': avatarUrl};
 }

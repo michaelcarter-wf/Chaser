@@ -1,0 +1,100 @@
+.avatar-image {
+	width:35px;
+	height:35px;
+	border-radius:20px;
+	margin-right:10px;
+	margin-top:8px;
+}
+
+.chaser-row:nth-child(even) {
+	background-color:#FBFBFB;
+}
+
+.chaser-row {
+	margin: 0 !important;
+}
+
+.clear {
+	clear:both;
+}
+
+.created-date {
+	margin-top:-5px;
+}
+
+.footer {
+	border-top:1px solid #E7E7E7;
+	background-color:#FFF;
+	padding:6px;
+}
+
+.github-title {
+	width:30px;
+	height:30px;
+}
+
+.header {
+	width:100%;
+	border-bottom:1px solid #F1F1F1;
+	background-color:#FBFBFB;
+	background-image:linear-gradient(#f9f9f9,#FBFBFB);
+	background-repeat:repeat-x;
+	height:50px;
+	padding:8px;
+}
+
+.hide {
+	display:none;
+}
+
+.login-page {
+	height:200px;
+	padding:10px;
+}
+
+.media {
+	cursor:pointer;
+	background-color:#FFF;
+	border-radius:5px;
+	margin:0 0 2px;
+	padding:2px 5px 10px 10px;
+	&:hover {
+		background-color: #e3e4e3;
+	}
+
+	>.pull-left {
+		margin-right:0;
+	}
+}
+
+.media-heading {
+	margin:0;
+}
+
+
+.pointer {
+	cursor:pointer;
+}
+
+.red {
+	color:red;
+}
+
+.refresh-btn {
+	margin-top:5px;
+	color:#000;
+	background-color:#FBFBFB;
+}
+
+.small-text {
+	color:#999;
+	font-size:10px;
+	margin:0;
+}
+
+.x-small-text {
+	color:#999;
+	font-size:8px;
+	top:-1px;
+	margin:0;
+}

@@ -9,28 +9,22 @@ import 'package:wChaser/src/constants.dart' as constants;
 
 String gitHubUrl = 'https://api.github.com/';
 
-
 class GitHubService {
   String accessToken = '29ed73c4694450b7b11c864484806856fd2a3490';
 
   Future<List> _requestAuthed(String httpRequestType, String url, {Map sendData}) async {
     String jsonData = JSON.encode(sendData); // convert map to String
-    Map headers = {
-      'Authorization': 'token $accessToken'
-    };
+    Map headers = {'Authorization': 'token $accessToken'};
 
-    HttpRequest req = await HttpRequest.request(url, method:httpRequestType, requestHeaders:headers);
+    HttpRequest req = await HttpRequest.request(url, method: httpRequestType, requestHeaders: headers);
     return JSON.decode(req.response.toString());
   }
 
   Future<List<GitHubNotification>> getNotifications() async {
-    int oneMonthAgo = new DateTime.now().subtract(new Duration(days:30)).millisecondsSinceEpoch;
+    int oneMonthAgo = new DateTime.now().subtract(new Duration(days: 30)).millisecondsSinceEpoch;
 
-    var data = {
-        'since': oneMonthAgo,
-        'participating': true
-    };
-    List notificationsJson = await _requestAuthed('GET', '${gitHubUrl}notifications', sendData:data);
+    var data = {'since': oneMonthAgo, 'participating': true};
+    List notificationsJson = await _requestAuthed('GET', '${gitHubUrl}notifications', sendData: data);
 
     return notificationsJson.map((notificationJson) {
       return new GitHubNotification(notificationJson);
@@ -49,5 +43,4 @@ class GitHubService {
       return new GitHubComment(pullRequestJson);
     }).toList();
   }
-
 }
