@@ -23,15 +23,20 @@ class _AtMentions extends react.Component {
   List<GitHubPullRequest> get pullRequests => props['pullRequests'];
   AtMentionActions get atMentionActions => props[AtMentionActions.NAME];
 
-  getInitialState() {
-    return {};
-  }
-
   render() {
-    var pullRequestRows = pullRequests.map((GitHubPullRequest gitHubPr) {
-      return PullRequestRow({'pullRequest': gitHubPr});
-    });
+    var content = react.div({'className': 'text-center', 'style': {'margin': '154px'}}, [
+        react.img({
+          'className': 'text-center github-title pointer',
+          'src': '/packages/wChaser/images/octocat-spinner-32.gif',
+        })
+    ]);
 
-    return (Dom.div()..style = divStyle)(pullRequestRows);
+    if (pullRequests != null) {
+      content = pullRequests.map((GitHubPullRequest gitHubPr) {
+        return PullRequestRow({'pullRequest': gitHubPr});
+      });
+    }
+
+    return (Dom.div()..style = divStyle)(content);
   }
 }

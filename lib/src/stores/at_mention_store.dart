@@ -13,13 +13,14 @@ import 'package:wChaser/src/utils/utils.dart';
 import 'package:wChaser/src/constants.dart';
 
 final String atMentionLocalStorageKey = 'chaserAtMentionStorage';
+final String atMentionUpdatedLocalStorageKey = 'atMentionUpdated';
 
 class AtMentionStore extends Store {
   static final String NAME = 'atMentionStore';
 
   GitHubService _gitHubService;
   List<GitHubPullRequest> atMentionPullRequests = [];
-  List<GitHubPullRequest> displayAtMentionPullRequests= [];
+  List<GitHubPullRequest> displayAtMentionPullRequests = null;
   DateTime updated = new DateTime.now();
   bool showAll = true;
 
@@ -29,26 +30,29 @@ class AtMentionStore extends Store {
     _gitHubService = new GitHubService();
     load();
 
-    atMentionActions.refresh.listen(load);
+    atMentionActions.refreshView.listen((e) {
+      load(force: true);
+    });
+
     triggerOnAction(atMentionActions.displayAll, _displayAll);
   }
 
   _displayAll(bool displayAll) {
     showAll = displayAll;
     if (showAll == false) {
-      displayAtMentionPullRequests = displayAtMentionPullRequests.where((GitHubPullRequest pr) => pr.actionNeeded).toList();
+      displayAtMentionPullRequests =
+          displayAtMentionPullRequests.where((GitHubPullRequest pr) => pr.actionNeeded).toList();
     } else {
       displayAtMentionPullRequests = atMentionPullRequests;
     }
 
-    print(displayAtMentionPullRequests);
     trigger();
   }
 
-  /// reset all the lists at load
+  /// Reset all the lists at load.
   _clearPullRequests() {
     atMentionPullRequests = [];
-    displayAtMentionPullRequests = [];
+    displayAtMentionPullRequests = null;
   }
 
   /// Big Gorilla of a method that gets PRS that need your action from gh via notifications.
@@ -77,19 +81,29 @@ class AtMentionStore extends Store {
     }).toList();
 
     await localStorageStore.save(JSON.encode(atMentionJson), atMentionLocalStorageKey);
+    await localStorageStore.save(updated.toIso8601String(), atMentionUpdatedLocalStorageKey);
   }
 
-  load([_]) async {
+  load({force: false}) async {
     LocalStorageStore localStorageStore = await LocalStorageStore.open();
     String atMentionJson = await localStorageStore.getByKey(atMentionLocalStorageKey);
 
-    if (atMentionJson != null && atMentionJson.isNotEmpty) {
+    if (!force && atMentionJson != null && atMentionJson.isNotEmpty) {
+      // Pull atMentioned JSON out of the cache.
       String atMentionJson = await localStorageStore.getByKey(atMentionLocalStorageKey);
       List atMentionObjects = JSON.decode(atMentionJson);
       atMentionPullRequests = atMentionObjects.map((Map aMPR) {
         return new GitHubPullRequest(aMPR);
       }).toList();
+
+      // Pull updated date out of the cache.
+      String updatedIso8601String = await localStorageStore.getByKey(atMentionUpdatedLocalStorageKey);
+      if (updatedIso8601String != null) {
+        updated = DateTime.parse(updatedIso8601String);
+      }
     } else {
+      displayAtMentionPullRequests = null;
+      trigger();
       await _getChaserAssetsFromGithub(localStorageStore);
     }
 

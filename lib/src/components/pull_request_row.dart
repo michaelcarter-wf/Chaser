@@ -31,12 +31,10 @@ class _PullRequestRow extends react.Component {
       actionNeededClass = 'action-needed-img';
     }
 
-    return (Dom.span()
-      ..className = 'pull-left'
-      ..onClick = openNewTab)((Dom.img()
-      ..className = 'media-object avatar-image'
-      ..src = pullRequest.githubUser.avatarUrl
-      ..alt = 'avatar_url')());
+    return react.span(
+        {'className': 'pull-left', 'onClick': openNewTab},
+        react.img(
+            {'className': 'media-object avatar-image', 'src': pullRequest.githubUser.avatarUrl, 'alt': 'avatar_url'}));
   }
 
   renderTitle() {
@@ -49,10 +47,8 @@ class _PullRequestRow extends react.Component {
       (Dom.h6()..className = 'media-heading')([
         pullRequest.title,
         (Dom.br())(),
-        (Dom.small()..className = 'small-text')(
-            'updated ${_formatDate()}',
-            (Dom.span()..className='red')(pullRequest.actionNeeded ? ' Action Needed': '')
-        )
+        (Dom.small()..className = 'small-text')(pullRequest.updatedAtPretty,
+            (Dom.span()..className = 'red')(pullRequest.actionNeeded ? ' Action Needed' : ''))
       ])
     ]);
   }
@@ -79,14 +75,13 @@ class _PullRequestRow extends react.Component {
 //			</div>
 
   render() {
-    return (Dom.div()..className = 'media chaser-row')(
-        renderImage(),
-        renderTitle(),
-        (Dom.div()
-          ..className = 'pull-right chaser-close-button'
-          ..onClick = removeThisGuy)((Icon()
-          ..glyph = IconGlyph.CLOSE
-          ..size = IconSize.SMALL
-          ..className = 'close-x')()));
+    return react.div({
+      'className': 'media chaser-row'
+    }, [
+      renderImage(),
+      renderTitle(),
+      react.div({'className': 'pull-right chaser-close-button', 'onClick': removeThisGuy},
+          react.i({'className': 'close-x icon icon-sm icon-close close-x',}))
+    ]);
   }
 }

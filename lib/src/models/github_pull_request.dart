@@ -22,6 +22,7 @@ class GitHubPullRequest {
   String fullName;
   String title;
   String updatedAt;
+  String updatedAtPretty;
   bool actionNeeded;
   bool merged;
 
@@ -44,6 +45,7 @@ class GitHubPullRequest {
     merged = json[GitHubPullRequestConstants.merged];
     title = json[GitHubPullRequestConstants.title];
     updatedAt = json[GitHubPullRequestConstants.updatedAt];
+    updatedAtPretty = getPrettyDates(DateTime.parse(updatedAt));
     githubUser = new GitHubUser(json[GitHubPullRequestConstants.githubUser]);
 
     // this will only come from cached data
