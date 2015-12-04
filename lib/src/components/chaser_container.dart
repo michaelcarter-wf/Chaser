@@ -39,7 +39,7 @@ class _ChaserContainer extends FluxComponent {
   }
 
   render() {
-    return (Dom.div())([
+    return (Dom.div()..className='chaser-container')([
       Header({AtMentionActions.NAME: atMentionActions, 'loading': atMentionStore.displayAtMentionPullRequests == null}),
       AtMentions({'pullRequests': state['pullRequests'], AtMentionActions.NAME: atMentionActions}),
       Footer({AtMentionStore.NAME: atMentionStore, AtMentionActions.NAME: atMentionActions})
