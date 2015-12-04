@@ -54,4 +54,20 @@ class GitHubService {
       return new GitHubComment(pullRequestJson);
     }).toList();
   }
+
+  Future <bool> setAndCheckToken(String accessToken) async {
+    this.accessToken = accessToken;
+    Fluri uri = new Fluri()
+      ..scheme = githubScheme
+      ..host = githubHost
+      ..path = 'user';
+
+    try {
+      await _requestAuthed('GET', uri.toString());
+      return true;
+    } catch(e) {
+      return false;
+    }
+
+  }
 }

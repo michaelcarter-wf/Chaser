@@ -9,6 +9,7 @@ import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/stores/at_mention_store.dart';
 import 'package:wChaser/src/components/header.dart';
+import 'package:wChaser/src/components/login.dart';
 import 'package:wChaser/src/components/at_mentions.dart';
 import 'package:wChaser/src/components/footer.dart';
 
@@ -22,7 +23,7 @@ Map<String, dynamic> divStyle = {
 var ChaserContainer = react.registerComponent(() => new _ChaserContainer());
 
 class _ChaserContainer extends FluxComponent {
-  AtMentionActions get atMentionActions => props[AtMentionActions.NAME];
+  ChaserActions get chaserActions => props['actions'];
   AtMentionStore get atMentionStore => props['atMentionStore'];
   List<GitHubPullRequest> get pullRequests => state['pullRequests'];
 
@@ -38,11 +39,21 @@ class _ChaserContainer extends FluxComponent {
     };
   }
 
+  renderChaserCore() {
+    return [
+      Header({'actions': chaserActions, 'loading': atMentionStore.displayAtMentionPullRequests == null}),
+      AtMentions({'pullRequests': state['pullRequests'], AtMentionActions.NAME: chaserActions.atMentionActions}),
+      Footer({AtMentionStore.NAME: atMentionStore, actions: chaserActions})
+    ];
+  }
+
+  onLogin(String ghToken) {
+    chaserActions.authActions.auth(ghToken);
+  }
+
   render() {
-    return (Dom.div()..className='chaser-container')([
-      Header({AtMentionActions.NAME: atMentionActions, 'loading': atMentionStore.displayAtMentionPullRequests == null}),
-      AtMentions({'pullRequests': state['pullRequests'], AtMentionActions.NAME: atMentionActions}),
-      Footer({AtMentionStore.NAME: atMentionStore, AtMentionActions.NAME: atMentionActions})
-    ]);
+    return (Dom.div()..className='chaser-container')(
+      Login({'onLogin': onLogin})
+    );
   }
 }

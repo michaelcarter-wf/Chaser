@@ -7,3 +7,14 @@ class AtMentionActions {
   Action refreshView = new Action();
   Action<bool> displayAll = new Action<bool>();
 }
+
+class AuthActions {
+  static final String NAME = 'authActions';
+  Action<String> auth = new Action<String>();
+}
+
+
+class ChaserActions {
+  AtMentionActions atMentionActions = new AtMentionActions();
+  AuthActions authActions = new AuthActions();
+}

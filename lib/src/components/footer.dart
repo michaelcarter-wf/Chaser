@@ -30,8 +30,8 @@ class _Footer extends react.Component {
 
     return (Dom.div()..className = 'footer')([
       (Dom.div()..className = 'small-text text-left col-xs-4')(leftColumn),
-      (Dom.div()..className = 'small-text text-right col-xs-4')(),
-      (Dom.div()..className = 'small-text text-right col-xs-4')(rightColumn)
+      (Dom.div()..className = 'small-text text-right col-xs-3')(),
+      (Dom.div()..className = 'small-text text-right col-xs-5')(rightColumn)
     ]);
   }
 }

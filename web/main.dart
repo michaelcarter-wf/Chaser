@@ -11,10 +11,10 @@ import 'package:wChaser/src/actions/actions.dart';
 void main() async {
   reactClient.setClientConfiguration();
 
-  AtMentionActions atMentionActions = new AtMentionActions();
+  ChaserActions chaserActions = new ChaserActions();
 
   react.render(ChaserContainer({
-      AtMentionStore.NAME: new AtMentionStore(atMentionActions),
-      AtMentionActions.NAME: atMentionActions,
+      AtMentionStore.NAME: new AtMentionStore(chaserActions.atMentionActions),
+      'actions': new ChaserActions(),
   }), querySelector('#output'));
 }
