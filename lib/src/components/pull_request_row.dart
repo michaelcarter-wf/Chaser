@@ -19,17 +19,13 @@ class _PullRequestRow extends react.Component {
   GitHubPullRequest get pullRequest => props['pullRequest'];
 
   openNewTab(_) {
-//      chrome.tabs.create(new chrome.TabsCreateParams(url:pullRequest.htmlUrl));
     window.open(pullRequest.htmlUrl, pullRequest.id.toString());
   }
 
   removeThisGuy(_) {}
 
   renderImage() {
-    String actionNeededClass = '';
-    if (pullRequest.actionNeeded) {
-      actionNeededClass = 'action-needed-img';
-    }
+    String actionNeededClass = pullRequest.actionNeeded ? 'action-needed-img' : '';
 
     return react.span(
         {'className': 'pull-left', 'onClick': openNewTab},
@@ -59,20 +55,6 @@ class _PullRequestRow extends react.Component {
     var formatter = new DateFormat('MM.dd.yyyy');
     return formatter.format(moonLanding);
   }
-
-//  <div className="media">
-//			  <div className="media-body pull-left" style={mediaWidth} onClick={this.openNewTab}>
-//			  		<small className="small-text created-date"><em>{pr.base.repo.full_name}</em></small>
-//			    	<h6 className="media-heading">
-//						{ pr.title } <br/>
-//			    		<small className="small-text">
-//			    			updated {moment.utc(pr.updated_at).fromNow()} <span style={badgeStyle}> {this.state.badgeText} {this.state.unread} </span>
-//			    		</small>
-//			    	</h6>
-//			  </div>
-//			  <div className='pull-right' onMouseOver={this.handleHover} onMouseOut={this.handleHover} onClick={this.removeThisGuy}><i className={redX}></i></div>
-//			  <div className='pull-right'><small className='small-text'>{moment.utc(pr.created_at).format('MM/DD')} </small></div>
-//			</div>
 
   render() {
     return react.div({

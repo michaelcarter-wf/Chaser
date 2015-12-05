@@ -10,6 +10,7 @@ import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/stores/chaser_stores.dart';
 import 'package:wChaser/src/components/header.dart';
 import 'package:wChaser/src/components/login.dart';
+import 'package:wChaser/src/components/loading.dart';
 import 'package:wChaser/src/components/at_mentions.dart';
 import 'package:wChaser/src/components/footer.dart';
 
@@ -51,12 +52,7 @@ class _ChaserContainer extends FluxComponent {
   renderLoading() {
     return [
       Header({'loading': true}),
-      react.div({'className': 'text-center', 'style': {'margin': '154px'}}, [
-        react.img({
-          'className': 'text-center github-title pointer',
-          'src': '/packages/wChaser/images/octocat-spinner-32.gif',
-        })
-      ])
+      Loading({})
     ];
   }
 

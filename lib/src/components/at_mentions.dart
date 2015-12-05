@@ -2,12 +2,12 @@ library src.components.at_mentions;
 
 import 'package:react/react.dart' as react;
 import 'package:web_skin_dart/ui_components.dart';
-//import 'package:chrome/chrome_app.dart' as Chrome;
 
 import 'package:web_skin_dart/ui_core.dart' show Dom;
 
 import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/models/models.dart';
+import 'package:wChaser/src/components/loading.dart';
 import 'package:wChaser/src/components/pull_request_row.dart';
 
 Map<String, dynamic> divStyle = {
@@ -24,12 +24,7 @@ class _AtMentions extends react.Component {
   AtMentionActions get atMentionActions => props[AtMentionActions.NAME];
 
   render() {
-    var content = react.div({'className': 'text-center', 'style': {'margin': '154px'}}, [
-        react.img({
-          'className': 'text-center github-title pointer',
-          'src': '/packages/wChaser/images/octocat-spinner-32.gif',
-        })
-    ]);
+    var content = Loading({});
 
     if (pullRequests != null) {
       content = pullRequests.map((GitHubPullRequest gitHubPr) {

@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 String getPrettyDates(DateTime dateToCompare) {
   Duration d = new DateTime.now().difference(dateToCompare);
-  dateLabel(length, label) => 'Upated $length $label ago';
+  dateLabel(length, label) => 'Updated $length $label ago';
 
   if (d.inDays > 0) {
   	return dateLabel(d.inDays, d.inDays == 1 ? 'day' : 'days');
