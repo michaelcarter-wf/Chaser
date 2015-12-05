@@ -13,7 +13,7 @@ var buttonStyle = {'padding': '8px 0px 0px 0px', 'fontSize': '11px'};
 var fontSize = {'fontSize': '11px'};
 
 class _Header extends react.Component {
-  AtMentionActions get atMentionActions => props[AtMentionActions.NAME];
+  ChaserActions get chaserActions => props['actions'];
   bool get loading => props['loading'];
 
   getInitialState() {
@@ -23,7 +23,7 @@ class _Header extends react.Component {
   getDefaultProps() => {'loading': false};
 
   refreshView([e]) {
-    atMentionActions.refreshView();
+    chaserActions.locationActions.refreshView();
   }
 
   render() {
@@ -41,11 +41,7 @@ class _Header extends react.Component {
     }, [
       react.div({
         'className': 'col-xs-4'
-      }, [
-        (DropdownButton()
-          ..skin = ButtonSkin.LINK
-          ..title = 'UserNAme')(dropDownMenu)
-      ]),
+      }),
       react.div({'className': 'col-xs-4 text-center'},
         react.img({'className': 'text-center github-title pointer', 'src': '/packages/wChaser/images/github.png'})
       ),

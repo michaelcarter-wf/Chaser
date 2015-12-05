@@ -7,7 +7,7 @@ import 'package:w_flux/w_flux.dart';
 
 import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/actions/actions.dart';
-import 'package:wChaser/src/stores/at_mention_store.dart';
+import 'package:wChaser/src/stores/chaser_stores.dart';
 import 'package:wChaser/src/components/header.dart';
 import 'package:wChaser/src/components/login.dart';
 import 'package:wChaser/src/components/at_mentions.dart';
@@ -24,36 +24,49 @@ var ChaserContainer = react.registerComponent(() => new _ChaserContainer());
 
 class _ChaserContainer extends FluxComponent {
   ChaserActions get chaserActions => props['actions'];
-  AtMentionStore get atMentionStore => props['atMentionStore'];
-  List<GitHubPullRequest> get pullRequests => state['pullRequests'];
+  ChaserStores get chaserStores => props['store'];
+  AtMentionStore get atMentionStore => chaserStores.atMentionStore;
+
+  redrawOn() => [chaserStores.userStore, chaserStores.atMentionStore];
 
   getInitialState() {
     return {'pullRequests': atMentionStore.atMentionPullRequests};
   }
 
-  getStoreHandlers() {
-    return {
-      atMentionStore: (_) {
-        setState({'pullRequests': atMentionStore.displayAtMentionPullRequests});
-      }
-    };
-  }
-
   renderChaserCore() {
     return [
       Header({'actions': chaserActions, 'loading': atMentionStore.displayAtMentionPullRequests == null}),
-      AtMentions({'pullRequests': state['pullRequests'], AtMentionActions.NAME: chaserActions.atMentionActions}),
-      Footer({AtMentionStore.NAME: atMentionStore, actions: chaserActions})
+      AtMentions({'pullRequests': atMentionStore.displayAtMentionPullRequests, AtMentionActions.NAME: chaserActions.atMentionActions}),
+      Footer({AtMentionStore.NAME: atMentionStore, 'actions': chaserActions})
     ];
   }
 
-  onLogin(String ghToken) {
-    chaserActions.authActions.auth(ghToken);
+  renderLogin() {
+    return [
+      Header({'loading': true}),
+      Login({'actions':chaserActions})
+    ];
+  }
+
+  renderLoading() {
+    return [
+      Header({'loading': true}),
+      react.div({'className': 'text-center', 'style': {'margin': '154px'}}, [
+        react.img({
+          'className': 'text-center github-title pointer',
+          'src': '/packages/wChaser/images/octocat-spinner-32.gif',
+        })
+      ])
+    ];
   }
 
   render() {
+    if (!chaserStores.userStore.isReady) {
+      return (Dom.div()..className='chaser-container')(renderLoading());
+    }
+
     return (Dom.div()..className='chaser-container')(
-      Login({'onLogin': onLogin})
+      chaserStores.userStore.authed ? renderChaserCore() : renderLogin()
     );
   }
 }

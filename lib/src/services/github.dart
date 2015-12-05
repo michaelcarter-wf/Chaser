@@ -12,7 +12,8 @@ final String githubScheme = 'https';
 final String githubHost = 'api.github.com';
 
 class GitHubService {
-  String accessToken = '29ed73c4694450b7b11c864484806856fd2a3490';
+//  String accessToken = '29ed73c4694450b7b11c864484806856fd2a3490';
+  String accessToken;
 
   Future<List> _requestAuthed(String httpRequestType, String url, {Map sendData}) async {
     Map headers = {'Authorization': 'token $accessToken'};

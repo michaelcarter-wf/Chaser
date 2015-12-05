@@ -1,16 +1,4 @@
-library wChaser.src.stores.at_mention_store;
-
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:w_flux/w_flux.dart';
-import 'package:lawndart/lawndart.dart' show LocalStorageStore;
-
-import 'package:wChaser/src/services/github.dart';
-import 'package:wChaser/src/models/models.dart';
-import 'package:wChaser/src/actions/actions.dart';
-import 'package:wChaser/src/utils/utils.dart';
-import 'package:wChaser/src/constants.dart';
+part of wChaser.src.stores.chaser_stores;
 
 final String atMentionLocalStorageKey = 'chaserAtMentionStorage';
 final String atMentionUpdatedLocalStorageKey = 'atMentionUpdated';
@@ -18,23 +6,21 @@ final String atMentionUpdatedLocalStorageKey = 'atMentionUpdated';
 class AtMentionStore extends Store {
   static final String NAME = 'atMentionStore';
 
+  ChaserActions _chaserActions;
   GitHubService _gitHubService;
   List<GitHubPullRequest> atMentionPullRequests = [];
   List<GitHubPullRequest> displayAtMentionPullRequests = null;
   DateTime updated = new DateTime.now();
   bool showAll = true;
 
-  // TODO Add updated date
-
-  AtMentionStore(AtMentionActions atMentionActions) {
-    _gitHubService = new GitHubService();
+  AtMentionStore(this._chaserActions, this._gitHubService) {
     load();
 
-    atMentionActions.refreshView.listen((e) {
+    _chaserActions.locationActions.refreshView.listen((e) {
       load(force: true);
     });
 
-    triggerOnAction(atMentionActions.displayAll, _displayAll);
+    triggerOnAction(_chaserActions.atMentionActions.displayAll, _displayAll);
   }
 
   _displayAll(bool displayAll) {

@@ -4,7 +4,7 @@ import 'package:react/react.dart' as react;
 import 'package:web_skin_dart/ui_components.dart';
 import 'package:web_skin_dart/ui_core.dart' show Dom;
 
-import 'package:wChaser/src/stores/at_mention_store.dart';
+import 'package:wChaser/src/stores/chaser_stores.dart';
 import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/utils/utils.dart';
 import 'package:wChaser/src/utils/dates.dart';
@@ -12,11 +12,11 @@ import 'package:wChaser/src/utils/dates.dart';
 var Footer = react.registerComponent(() => new _Footer());
 
 class _Footer extends react.Component {
-  AtMentionActions get atMentionActions => props[AtMentionActions.NAME];
+  ChaserActions get chaserActions => props['actions'];
   AtMentionStore get atMentionStore => props[AtMentionStore.NAME];
 
   showActionNeeded([_]) {
-    atMentionActions.displayAll(!atMentionStore.showAll);
+    chaserActions.atMentionActions.displayAll(!atMentionStore.showAll);
   }
 
   render() {
