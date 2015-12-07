@@ -15,7 +15,7 @@
     "alarms"
   ],
   "browser_action": {
-//    "default_icon": "./src/images/github.png",
-    "default_popup": "web/chaser.html"
+    "default_icon": "./lib/images/github.png",
+    "default_popup": "web/index.html"
   }
 }

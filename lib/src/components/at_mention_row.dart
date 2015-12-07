@@ -13,9 +13,9 @@ import 'package:wChaser/src/models/models.dart';
 
 var mediaWidth = {'width': '70%'};
 
-var PullRequestRow = react.registerComponent(() => new _PullRequestRow());
+var AtMentionRow = react.registerComponent(() => new _AtMentionRow());
 
-class _PullRequestRow extends react.Component {
+class _AtMentionRow extends react.Component {
   GitHubPullRequest get pullRequest => props['pullRequest'];
 
   openNewTab(_) {

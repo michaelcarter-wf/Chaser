@@ -1,6 +1,6 @@
 part of wChaser.src.models.models;
 
-class GitHubNotification {
+class GitHubNotification implements GithubBaseModel {
   String reason;
   String pullRequest;
   bool unread;

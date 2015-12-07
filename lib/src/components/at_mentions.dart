@@ -8,7 +8,7 @@ import 'package:web_skin_dart/ui_core.dart' show Dom;
 import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/components/loading.dart';
-import 'package:wChaser/src/components/pull_request_row.dart';
+import 'package:wChaser/src/components/at_mention_row.dart';
 
 Map<String, dynamic> divStyle = {
   'height': '400px',
@@ -28,7 +28,7 @@ class _AtMentions extends react.Component {
 
     if (pullRequests != null) {
       content = pullRequests.map((GitHubPullRequest gitHubPr) {
-        return PullRequestRow({'pullRequest': gitHubPr});
+        return AtMentionRow({'pullRequest': gitHubPr});
       });
     }
 

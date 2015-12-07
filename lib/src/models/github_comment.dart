@@ -1,6 +1,6 @@
 part of wChaser.src.models.models;
 
-class GitHubComment {
+class GitHubComment implements GithubBaseModel {
   String body;
   GitHubUser user;
 

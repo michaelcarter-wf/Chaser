@@ -1,6 +1,6 @@
 part of wChaser.src.models.models;
 
-class GitHubUser {
+class GitHubUser implements GithubBaseModel {
   String login;
   String avatarUrl;
 

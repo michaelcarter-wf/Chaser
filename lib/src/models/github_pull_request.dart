@@ -11,20 +11,22 @@ class GitHubPullRequestConstants {
   static final updatedAt = 'updated_at';
   static final githubUser = 'user';
   static final merged = 'merged';
+  static final statusesUrl = 'statuses_url';
 }
 
-class GitHubPullRequest {
-  String state;
+class GitHubPullRequest implements GithubBaseModel {
+  bool actionNeeded;
   String commentsUrl;
+  String fullName;
+  GitHubUser githubUser;
   String htmlUrl;
   int id;
-  GitHubUser githubUser;
-  String fullName;
+  bool merged;
+  String state;
+  String statusesUrl;
   String title;
   String updatedAt;
   String updatedAtPretty;
-  bool actionNeeded;
-  bool merged;
 
   bool get isOpen => state == 'open';
 
@@ -35,6 +37,7 @@ class GitHubPullRequest {
     state = json[GitHubPullRequestConstants.state];
     commentsUrl = json[GitHubPullRequestConstants.commentsUrl];
     htmlUrl = json[GitHubPullRequestConstants.htmlUrl];
+    statusesUrl = json[GitHubPullRequestConstants.statusesUrl];
     fullName = 'tester';
 
     // for some reason this can be null
@@ -55,17 +58,18 @@ class GitHubPullRequest {
   }
 
   Map toMap() => {
-        GitHubPullRequestConstants.state: state,
-        GitHubPullRequestConstants.commentsUrl: commentsUrl,
-        GitHubPullRequestConstants.htmlUrl: htmlUrl,
-        GitHubPullRequestConstants.id: id,
-        GitHubPullRequestConstants.merged: merged,
-        GitHubPullRequestConstants.githubUser: githubUser.toMap(),
-        'head': {
-          'repo': {GitHubPullRequestConstants.fullName: fullName}
-        },
-        GitHubPullRequestConstants.title: title,
-        GitHubPullRequestConstants.updatedAt: updatedAt,
-        GitHubPullRequestConstants.actionNeeded: actionNeeded,
-      };
+    GitHubPullRequestConstants.state: state,
+    GitHubPullRequestConstants.commentsUrl: commentsUrl,
+    GitHubPullRequestConstants.htmlUrl: htmlUrl,
+    GitHubPullRequestConstants.id: id,
+    GitHubPullRequestConstants.merged: merged,
+    GitHubPullRequestConstants.githubUser: githubUser.toMap(),
+    'head': {
+      'repo': {GitHubPullRequestConstants.fullName: fullName}
+    },
+    GitHubPullRequestConstants.title: title,
+    GitHubPullRequestConstants.updatedAt: updatedAt,
+    GitHubPullRequestConstants.actionNeeded: actionNeeded,
+    GitHubPullRequestConstants.statusesUrl: statusesUrl
+  };
 }
