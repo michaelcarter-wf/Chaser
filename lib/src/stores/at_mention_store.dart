@@ -6,6 +6,7 @@ final String atMentionUpdatedLocalStorageKey = 'atMentionUpdated';
 class AtMentionStore extends Store {
   static final String NAME = 'atMentionStore';
 
+  UserStore _userStore;
   ChaserActions _chaserActions;
   GitHubService _gitHubService;
   List<GitHubPullRequest> atMentionPullRequests = [];
@@ -13,14 +14,19 @@ class AtMentionStore extends Store {
   DateTime updated = new DateTime.now();
   bool showAll = true;
 
-  AtMentionStore(this._chaserActions, this._gitHubService) {
-    load();
-
+  AtMentionStore(this._chaserActions, this._gitHubService, this._userStore) {
     _chaserActions.locationActions.refreshView.listen((e) {
       load(force: true);
     });
 
     triggerOnAction(_chaserActions.atMentionActions.displayAll, _displayAll);
+    triggerOnAction(_chaserActions.authActions.authSuccessful, _authed);
+  }
+
+  _authed(bool authSuccessful) {
+    if(authSuccessful) {
+      load();
+    }
   }
 
   _displayAll(bool displayAll) {
@@ -45,29 +51,29 @@ class AtMentionStore extends Store {
   _getChaserAssetsFromGithub(LocalStorageStore localStorageStore) async {
     _clearPullRequests();
     updated = new DateTime.now();
+    atMentionPullRequests = await _gitHubService.searchForAtMentions(_userStore.githubUser.login);
 
-    // get all notifications that user is participating in
-    List<GitHubNotification> notifications = await _gitHubService.getNotifications();
-    List<GitHubNotification> actionableNotifications =
-        notifications.where((GitHubNotification notification) => notification.reason == MENTION).toList();
+    for (GitHubPullRequest pullRequest in atMentionPullRequests) {
+      List<GitHubComment> comments = await _gitHubService.getPullRequestComments(pullRequest);
+      pullRequest.actionNeeded = await isPlusOneNeeded(comments, _userStore.githubUser.login);
+    }
 
-    // get the PRs From the notifications
-    List<Future<GitHubPullRequest>> pullRequests = actionableNotifications
-        .map((GitHubNotification notification) => getPRFromNotification(notification, _gitHubService))
-        .toList();
+    atMentionPullRequests.sort((GitHubPullRequest a, GitHubPullRequest b) {
+      if (a.actionNeeded && b.actionNeeded) {
+        return 0;
+      } else {
+        return 1;
+      }
+    });
 
-    // wait until PR all come back
-    List<GitHubPullRequest> prs = await Future.wait(pullRequests);
-
-    atMentionPullRequests = prs.where((GitHubPullRequest pullRequest) => (pullRequest.isOpen)).toList();
     _displayAll(showAll);
-
     List<String> atMentionJson = atMentionPullRequests.map((GitHubPullRequest ghpr) {
       return ghpr.toMap();
     }).toList();
 
-    await localStorageStore.save(JSON.encode(atMentionJson), atMentionLocalStorageKey);
-    await localStorageStore.save(updated.toIso8601String(), atMentionUpdatedLocalStorageKey);
+    // not awaiting these, they shouldn't block
+    localStorageStore.save(JSON.encode(atMentionJson), atMentionLocalStorageKey);
+    localStorageStore.save(updated.toIso8601String(), atMentionUpdatedLocalStorageKey);
   }
 
   load({force: false}) async {
@@ -94,7 +100,6 @@ class AtMentionStore extends Store {
     }
 
     displayAtMentionPullRequests = atMentionPullRequests;
-
     trigger();
   }
 

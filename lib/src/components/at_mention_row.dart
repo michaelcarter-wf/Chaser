@@ -13,9 +13,9 @@ import 'package:wChaser/src/models/models.dart';
 
 var mediaWidth = {'width': '70%'};
 
-var AtMentionRow = react.registerComponent(() => new _AtMentionRow());
+var ChaserRow = react.registerComponent(() => new _ChaserRow());
 
-class _AtMentionRow extends react.Component {
+class _ChaserRow extends react.Component {
   GitHubPullRequest get pullRequest => props['pullRequest'];
 
   openNewTab(_) {
@@ -38,15 +38,15 @@ class _AtMentionRow extends react.Component {
     return (Dom.div()
       ..className = 'media-body pull-left'
       ..style = mediaWidth
-      ..onClick = openNewTab)([
-      (Dom.small()..className = 'small-text create-date')((Dom.em())(pullRequest.fullName)),
-      (Dom.h6()..className = 'media-heading')([
+      ..onClick = openNewTab)(
+      (Dom.small()..className = 'small-text create-date')((Dom.em())(pullRequest.githubUser.login)),
+      (Dom.h6()..className = 'media-heading')(
         pullRequest.title,
         (Dom.br())(),
         (Dom.small()..className = 'small-text')(pullRequest.updatedAtPretty,
             (Dom.span()..className = 'red')(pullRequest.actionNeeded ? ' Action Needed' : ''))
-      ])
-    ]);
+      )
+    );
   }
 
   // TODO break this into a helper to prettify it
@@ -57,13 +57,15 @@ class _AtMentionRow extends react.Component {
   }
 
   render() {
+    var removeX = react.div({'className': 'pull-right chaser-close-button', 'onClick': removeThisGuy},
+          react.i({'className': 'close-x icon icon-sm icon-close close-x',}));
+
     return react.div({
       'className': 'media chaser-row'
     }, [
       renderImage(),
       renderTitle(),
-      react.div({'className': 'pull-right chaser-close-button', 'onClick': removeThisGuy},
-          react.i({'className': 'close-x icon icon-sm icon-close close-x',}))
+      removeX
     ]);
   }
 }

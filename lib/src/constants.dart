@@ -4,7 +4,11 @@ class LocalStorageConstants {
   static final String githubTokenKey = 'github';
 }
 
-enum views { atMentions, pullRequests }
+enum ChaserViews { atMentions, pullRequests }
 
 final String localStorageKey = 'github';
-final String MENTION = 'mention';
+final String mention = 'mention';
+
+final int leftArrowKey = 37;
+final int rightArrowKey = 39;
+

@@ -10,10 +10,13 @@ class AtMentionActions {
 class AuthActions {
   static final String NAME = 'authActions';
   final Action<String> auth = new Action<String>();
+  final Action<bool> authSuccessful = new Action<bool>();
 }
 
 class LocationActions {
   final Action refreshView = new Action();
+  final Action changeViewPrevious = new Action();
+  final Action changeViewNext = new Action();
 }
 
 class ChaserActions {

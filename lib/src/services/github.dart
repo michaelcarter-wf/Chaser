@@ -3,6 +3,8 @@ library wChaser.src.services.github;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
+import 'package:intl/intl.dart';
+
 
 import 'package:fluri/fluri.dart';
 
@@ -81,31 +83,42 @@ class GitHubService {
   }
 
 //  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf&access_token=29ed73c4694450b7b11c864484806856fd2a3490&
-  Future<List<GitHubPullRequest>> searchForOpenPullRequests() async {
+  Future<List<GitHubPullRequest>> searchForOpenPullRequests(String login) async {
     Fluri uri = new Fluri()
       ..scheme = githubScheme
       ..host = githubHost
       ..path = 'search/issues';
 
-      var openPrsJson = await _requestAuthed('GET', '${uri.toString()}?q=is:open+is:pr+author:bradybecker-wf');
+      var openPrsJson = await _requestAuthed('GET', '${uri.toString()}?q=is:open+is:pr+author:$login');
       return openPrsJson['items'].map((Map openPrJson) {
         return new GitHubPullRequest(openPrJson);
       }).toList();
   }
 
-  Future <bool> setAndCheckToken(String accessToken) async {
+  //  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf&access_token=29ed73c4694450b7b11c864484806856fd2a3490&
+  Future<List<GitHubPullRequest>> searchForAtMentions(String login, {since: null}) async {
+    DateTime oneMonthAgo = since ?? new DateTime.now().subtract(new Duration(days: 30));
+    String formatted = new DateFormat('yyyy-MM-dd').format(oneMonthAgo);
+
+    Fluri uri = new Fluri()
+      ..scheme = githubScheme
+      ..host = githubHost
+      ..path = 'search/issues';
+
+      var openPrsJson = await _requestAuthed('GET', '${uri.toString()}?q=is:open+is:pr+created:>$formatted+mentions:$login');
+      return openPrsJson['items'].map((Map openPrJson) {
+        return new GitHubPullRequest(openPrJson);
+      }).toList();
+  }
+
+  Future <GitHubUser> setAndCheckToken(String accessToken) async {
     this.accessToken = accessToken;
     Fluri uri = new Fluri()
       ..scheme = githubScheme
       ..host = githubHost
       ..path = 'user';
 
-    try {
-      await _requestAuthed('GET', uri.toString());
-      return true;
-    } catch(e) {
-      return false;
-    }
-
+    var userJson = await _requestAuthed('GET', uri.toString());
+    return new GitHubUser(userJson);
   }
 }

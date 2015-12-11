@@ -17,9 +17,9 @@ Map<String, dynamic> divStyle = {
   'backgroundolor': '#FBFBFB'
 };
 
-var AtMentions = react.registerComponent(() => new _AtMentions());
+var ChaserGrid = react.registerComponent(() => new _ChaserGrid());
 
-class _AtMentions extends react.Component {
+class _ChaserGrid extends react.Component {
   List<GitHubPullRequest> get pullRequests => props['pullRequests'];
   AtMentionActions get atMentionActions => props[AtMentionActions.NAME];
 
@@ -28,7 +28,7 @@ class _AtMentions extends react.Component {
 
     if (pullRequests != null) {
       content = pullRequests.map((GitHubPullRequest gitHubPr) {
-        return AtMentionRow({'pullRequest': gitHubPr});
+        return ChaserRow({'pullRequest': gitHubPr});
       });
     }
 

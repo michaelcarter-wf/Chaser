@@ -1,11 +1,11 @@
 library src.components.chaser_container;
 
+import 'dart:html';
+
 import 'package:react/react.dart' as react;
-import 'package:web_skin_dart/ui_components.dart';
 import 'package:web_skin_dart/ui_core.dart' show Dom;
 import 'package:w_flux/w_flux.dart';
 
-import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/stores/chaser_stores.dart';
 import 'package:wChaser/src/components/header.dart';
@@ -13,6 +13,7 @@ import 'package:wChaser/src/components/login.dart';
 import 'package:wChaser/src/components/loading.dart';
 import 'package:wChaser/src/components/at_mentions.dart';
 import 'package:wChaser/src/components/footer.dart';
+import 'package:wChaser/src/constants.dart';
 
 Map<String, dynamic> divStyle = {
   'height': '400px',
@@ -28,16 +29,40 @@ class _ChaserContainer extends FluxComponent {
   ChaserStores get chaserStores => props['store'];
   AtMentionStore get atMentionStore => chaserStores.atMentionStore;
 
-  redrawOn() => [chaserStores.userStore, chaserStores.atMentionStore];
+  redrawOn() => [chaserStores.userStore, chaserStores.atMentionStore, chaserStores.locationStore, chaserStores.pullRequestsStore];
 
   getInitialState() {
     return {'pullRequests': atMentionStore.atMentionPullRequests};
   }
 
+  componentDidMount(Element rootNode) {
+    window.onKeyDown.listen((KeyboardEvent keyboardEvent) {
+      if (keyboardEvent.keyCode == leftArrowKey) {
+        chaserActions.locationActions.changeViewPrevious();
+      } else if (keyboardEvent.keyCode == rightArrowKey) {
+        chaserActions.locationActions.changeViewNext();
+      }
+    });
+  }
+
   renderChaserCore() {
+    var core = null;
+
+    if (chaserStores.locationStore.currentView == ChaserViews.pullRequests) {
+      core = ChaserGrid({
+        'pullRequests': chaserStores.pullRequestsStore.openPullRequests,
+        AtMentionActions.NAME: chaserActions.atMentionActions
+      });
+    } else {
+      core = ChaserGrid({
+        'pullRequests': atMentionStore.displayAtMentionPullRequests,
+        AtMentionActions.NAME: chaserActions.atMentionActions
+      });
+    }
+
     return [
       Header({'actions': chaserActions, 'loading': atMentionStore.displayAtMentionPullRequests == null}),
-      AtMentions({'pullRequests': atMentionStore.displayAtMentionPullRequests, AtMentionActions.NAME: chaserActions.atMentionActions}),
+        core,
       Footer({AtMentionStore.NAME: atMentionStore, 'actions': chaserActions})
     ];
   }

@@ -3,6 +3,8 @@ part of wChaser.src.stores.chaser_stores;
 class UserStore extends Store {
   static final String NAME = 'atMentionStore';
   bool authed = false;
+  GitHubUser githubUser;
+
   bool _ready = false;
   GitHubService _gitHubService;
   ChaserActions _actions;
@@ -28,10 +30,13 @@ class UserStore extends Store {
   // TODO Store User Object on the location store
   Future _authUser(String ghToken) async {
     try {
-      authed = await _gitHubService.setAndCheckToken(ghToken);
+      githubUser = await _gitHubService.setAndCheckToken(ghToken);
+      authed = true;
+      _actions.authActions.authSuccessful(true);
       await _localStorageStore.save(ghToken, LocalStorageConstants.githubTokenKey);
     } catch(e) {
-      print(e);
+      authed = false;
+      _actions.authActions.authSuccessful(false);
     }
     trigger();
   }
