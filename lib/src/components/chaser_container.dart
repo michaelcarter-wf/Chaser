@@ -8,10 +8,11 @@ import 'package:w_flux/w_flux.dart';
 
 import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/stores/chaser_stores.dart';
+import 'package:wChaser/src/stores/chaser_store.dart';
 import 'package:wChaser/src/components/header.dart';
 import 'package:wChaser/src/components/login.dart';
 import 'package:wChaser/src/components/loading.dart';
-import 'package:wChaser/src/components/at_mentions.dart';
+import 'package:wChaser/src/components/chaser_grid.dart';
 import 'package:wChaser/src/components/footer.dart';
 import 'package:wChaser/src/constants.dart';
 
@@ -46,24 +47,21 @@ class _ChaserContainer extends FluxComponent {
   }
 
   renderChaserCore() {
-    var core = null;
+    ChaserStore chaserStore = null;
 
     if (chaserStores.locationStore.currentView == ChaserViews.pullRequests) {
-      core = ChaserGrid({
-        'pullRequests': chaserStores.pullRequestsStore.openPullRequests,
-        AtMentionActions.NAME: chaserActions.atMentionActions
-      });
+      chaserStore = chaserStores.pullRequestsStore;
     } else {
-      core = ChaserGrid({
-        'pullRequests': atMentionStore.displayAtMentionPullRequests,
-        AtMentionActions.NAME: chaserActions.atMentionActions
-      });
+      chaserStore = chaserStores.atMentionStore;
     }
 
     return [
-      Header({'actions': chaserActions, 'loading': atMentionStore.displayAtMentionPullRequests == null}),
-        core,
-      Footer({AtMentionStore.NAME: atMentionStore, 'actions': chaserActions})
+      Header({'actions': chaserActions, 'loading': atMentionStore.displayPullRequests == null}),
+      ChaserGrid({
+        'chaserStore': chaserStore,
+        'actions': chaserActions
+      }),
+      Footer({'chaserStore': chaserStore, 'actions': chaserActions})
     ];
   }
 

@@ -11,6 +11,7 @@ import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/utils/utils.dart';
 import 'package:wChaser/src/constants.dart';
+import 'package:wChaser/src/stores/chaser_store.dart';
 
 part './user_store.dart';
 part './at_mention_store.dart';

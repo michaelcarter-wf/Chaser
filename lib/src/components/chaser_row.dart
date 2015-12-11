@@ -17,6 +17,7 @@ var ChaserRow = react.registerComponent(() => new _ChaserRow());
 
 class _ChaserRow extends react.Component {
   GitHubPullRequest get pullRequest => props['pullRequest'];
+  bool get hideable => props['get'];
 
   openNewTab(_) {
     window.open(pullRequest.htmlUrl, pullRequest.id.toString());
@@ -57,8 +58,8 @@ class _ChaserRow extends react.Component {
   }
 
   render() {
-    var removeX = react.div({'className': 'pull-right chaser-close-button', 'onClick': removeThisGuy},
-          react.i({'className': 'close-x icon icon-sm icon-close close-x',}));
+    var removeX = hideable ? react.div({'className': 'pull-right chaser-close-button', 'onClick': removeThisGuy},
+          react.i({'className': 'close-x icon icon-sm icon-close close-x',})) : null;
 
     return react.div({
       'className': 'media chaser-row'

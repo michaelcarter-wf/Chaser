@@ -3,9 +3,8 @@ library wChaser.src.services.github;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
+
 import 'package:intl/intl.dart';
-
-
 import 'package:fluri/fluri.dart';
 
 import 'package:wChaser/src/models/models.dart';
@@ -14,8 +13,7 @@ final String githubScheme = 'https';
 final String githubHost = 'api.github.com';
 
 class GitHubService {
-  String accessToken = '29ed73c4694450b7b11c864484806856fd2a3490';
-//  String accessToken;
+  String accessToken;
 
   Future<List> _requestAuthed(String httpRequestType, String url, {Map sendData}) async {
     Map headers = {'Authorization': 'token $accessToken'};
@@ -82,7 +80,7 @@ class GitHubService {
     }).toList();
   }
 
-//  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf&access_token=29ed73c4694450b7b11c864484806856fd2a3490&
+//  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf
   Future<List<GitHubPullRequest>> searchForOpenPullRequests(String login) async {
     Fluri uri = new Fluri()
       ..scheme = githubScheme
@@ -95,7 +93,7 @@ class GitHubService {
       }).toList();
   }
 
-  //  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf&access_token=29ed73c4694450b7b11c864484806856fd2a3490&
+  //  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf
   Future<List<GitHubPullRequest>> searchForAtMentions(String login, {since: null}) async {
     DateTime oneMonthAgo = since ?? new DateTime.now().subtract(new Duration(days: 30));
     String formatted = new DateFormat('yyyy-MM-dd').format(oneMonthAgo);

@@ -8,7 +8,8 @@ import 'package:web_skin_dart/ui_core.dart' show Dom;
 import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/components/loading.dart';
-import 'package:wChaser/src/components/at_mention_row.dart';
+import 'package:wChaser/src/components/chaser_row.dart';
+import 'package:wChaser/src/stores/chaser_store.dart';
 
 Map<String, dynamic> divStyle = {
   'height': '400px',
@@ -20,15 +21,17 @@ Map<String, dynamic> divStyle = {
 var ChaserGrid = react.registerComponent(() => new _ChaserGrid());
 
 class _ChaserGrid extends react.Component {
-  List<GitHubPullRequest> get pullRequests => props['pullRequests'];
-  AtMentionActions get atMentionActions => props[AtMentionActions.NAME];
+  ChaserStore get chaserStore => props['chaserStore'];
 
   render() {
     var content = Loading({});
 
-    if (pullRequests != null) {
-      content = pullRequests.map((GitHubPullRequest gitHubPr) {
-        return ChaserRow({'pullRequest': gitHubPr});
+    if (chaserStore.displayPullRequests != null) {
+      content = chaserStore.displayPullRequests.map((GitHubPullRequest gitHubPr) {
+        return ChaserRow({
+          'pullRequest': gitHubPr,
+          'hideable': chaserStore.rowsHideable
+        });
       });
     }
 

@@ -3,16 +3,17 @@ part of wChaser.src.stores.chaser_stores;
 final String atMentionLocalStorageKey = 'chaserAtMentionStorage';
 final String atMentionUpdatedLocalStorageKey = 'atMentionUpdated';
 
-class AtMentionStore extends Store {
+class AtMentionStore extends Store implements ChaserStore {
   static final String NAME = 'atMentionStore';
 
   UserStore _userStore;
   ChaserActions _chaserActions;
   GitHubService _gitHubService;
   List<GitHubPullRequest> atMentionPullRequests = [];
-  List<GitHubPullRequest> displayAtMentionPullRequests = null;
+  List<GitHubPullRequest> displayPullRequests = null;
   DateTime updated = new DateTime.now();
   bool showAll = true;
+  bool rowsHideable = true;
 
   AtMentionStore(this._chaserActions, this._gitHubService, this._userStore) {
     _chaserActions.locationActions.refreshView.listen((e) {
@@ -32,10 +33,10 @@ class AtMentionStore extends Store {
   _displayAll(bool displayAll) {
     showAll = displayAll;
     if (showAll == false) {
-      displayAtMentionPullRequests =
-          displayAtMentionPullRequests.where((GitHubPullRequest pr) => pr.actionNeeded).toList();
+      displayPullRequests =
+          displayPullRequests.where((GitHubPullRequest pr) => pr.actionNeeded).toList();
     } else {
-      displayAtMentionPullRequests = atMentionPullRequests;
+      displayPullRequests = atMentionPullRequests;
     }
 
     trigger();
@@ -44,7 +45,7 @@ class AtMentionStore extends Store {
   /// Reset all the lists at load.
   _clearPullRequests() {
     atMentionPullRequests = [];
-    displayAtMentionPullRequests = null;
+    displayPullRequests = null;
   }
 
   /// Big Gorilla of a method that gets PRS that need your action from gh via notifications.
@@ -94,12 +95,12 @@ class AtMentionStore extends Store {
         updated = DateTime.parse(updatedIso8601String);
       }
     } else {
-      displayAtMentionPullRequests = null;
+      displayPullRequests = null;
       trigger();
       await _getChaserAssetsFromGithub(localStorageStore);
     }
 
-    displayAtMentionPullRequests = atMentionPullRequests;
+    displayPullRequests = atMentionPullRequests;
     trigger();
   }
 

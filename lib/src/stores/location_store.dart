@@ -8,7 +8,7 @@ class LocationStore extends Store {
   ChaserActions _chaserActions;
 
   LocationStore(this._chaserActions) {
-    currentView = ChaserViews.pullRequests;
+    currentView = ChaserViews.atMentions;
 
     _chaserActions.locationActions.changeViewNext.listen((e) {
       int newIndex = ChaserViews.values.indexOf(currentView) + 1;
