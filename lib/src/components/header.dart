@@ -39,12 +39,9 @@ class _Header extends react.Component {
     return (react.div({
       'className': 'header'
     }, [
-      react.div({
-        'className': 'col-xs-4'
-      }),
+      react.div({'className': 'col-xs-4'}),
       react.div({'className': 'col-xs-4 text-center'},
-        react.img({'className': 'text-center github-title pointer', 'src': '/packages/wChaser/images/github.png'})
-      ),
+          react.img({'className': 'text-center github-title pointer', 'src': '/packages/wChaser/images/github.png'})),
       react.div({'className': 'col-xs-4 text-center'}, refresh)
     ]));
   }

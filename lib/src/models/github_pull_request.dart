@@ -27,6 +27,7 @@ class GitHubPullRequest implements GithubBaseModel {
   String title;
   String updatedAt;
   String updatedAtPretty;
+  String repoFullName;
 
   bool get isOpen => state == 'open';
 
@@ -58,18 +59,18 @@ class GitHubPullRequest implements GithubBaseModel {
   }
 
   Map toMap() => {
-    GitHubPullRequestConstants.state: state,
-    GitHubPullRequestConstants.commentsUrl: commentsUrl,
-    GitHubPullRequestConstants.htmlUrl: htmlUrl,
-    GitHubPullRequestConstants.id: id,
-    GitHubPullRequestConstants.merged: merged,
-    GitHubPullRequestConstants.githubUser: githubUser.toMap(),
-    'head': {
-      'repo': {GitHubPullRequestConstants.fullName: fullName}
-    },
-    GitHubPullRequestConstants.title: title,
-    GitHubPullRequestConstants.updatedAt: updatedAt,
-    GitHubPullRequestConstants.actionNeeded: actionNeeded,
-    GitHubPullRequestConstants.statusesUrl: statusesUrl
-  };
+        GitHubPullRequestConstants.state: state,
+        GitHubPullRequestConstants.commentsUrl: commentsUrl,
+        GitHubPullRequestConstants.htmlUrl: htmlUrl,
+        GitHubPullRequestConstants.id: id,
+        GitHubPullRequestConstants.merged: merged,
+        GitHubPullRequestConstants.githubUser: githubUser.toMap(),
+        'head': {
+          'repo': {GitHubPullRequestConstants.fullName: fullName}
+        },
+        GitHubPullRequestConstants.title: title,
+        GitHubPullRequestConstants.updatedAt: updatedAt,
+        GitHubPullRequestConstants.actionNeeded: actionNeeded,
+        GitHubPullRequestConstants.statusesUrl: statusesUrl
+      };
 }

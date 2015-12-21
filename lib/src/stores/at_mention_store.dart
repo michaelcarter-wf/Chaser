@@ -1,8 +1,5 @@
 part of wChaser.src.stores.chaser_stores;
 
-final String atMentionLocalStorageKey = 'chaserAtMentionStorage';
-final String atMentionUpdatedLocalStorageKey = 'atMentionUpdated';
-
 class AtMentionStore extends Store implements ChaserStore {
   static final String NAME = 'atMentionStore';
 
@@ -12,7 +9,7 @@ class AtMentionStore extends Store implements ChaserStore {
   List<GitHubPullRequest> atMentionPullRequests = [];
   List<GitHubPullRequest> displayPullRequests = null;
   DateTime updated = new DateTime.now();
-  bool showAll = true;
+  bool showAll = false;
   bool rowsHideable = true;
 
   AtMentionStore(this._chaserActions, this._gitHubService, this._userStore) {
@@ -25,7 +22,7 @@ class AtMentionStore extends Store implements ChaserStore {
   }
 
   _authed(bool authSuccessful) {
-    if(authSuccessful) {
+    if (authSuccessful) {
       load();
     }
   }
@@ -33,8 +30,7 @@ class AtMentionStore extends Store implements ChaserStore {
   _displayAll(bool displayAll) {
     showAll = displayAll;
     if (showAll == false) {
-      displayPullRequests =
-          displayPullRequests.where((GitHubPullRequest pr) => pr.actionNeeded).toList();
+      displayPullRequests = displayPullRequests.where((GitHubPullRequest pr) => pr.actionNeeded).toList();
     } else {
       displayPullRequests = atMentionPullRequests;
     }
@@ -73,24 +69,25 @@ class AtMentionStore extends Store implements ChaserStore {
     }).toList();
 
     // not awaiting these, they shouldn't block
-    localStorageStore.save(JSON.encode(atMentionJson), atMentionLocalStorageKey);
-    localStorageStore.save(updated.toIso8601String(), atMentionUpdatedLocalStorageKey);
+    localStorageStore.save(JSON.encode(atMentionJson), LocalStorageConstants.atMentionLocalStorageKey);
+    localStorageStore.save(updated.toIso8601String(), LocalStorageConstants.atMentionUpdatedLocalStorageKey);
   }
 
   load({force: false}) async {
     LocalStorageStore localStorageStore = await LocalStorageStore.open();
-    String atMentionJson = await localStorageStore.getByKey(atMentionLocalStorageKey);
+    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
 
     if (!force && atMentionJson != null && atMentionJson.isNotEmpty) {
       // Pull atMentioned JSON out of the cache.
-      String atMentionJson = await localStorageStore.getByKey(atMentionLocalStorageKey);
+      String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
       List atMentionObjects = JSON.decode(atMentionJson);
       atMentionPullRequests = atMentionObjects.map((Map aMPR) {
         return new GitHubPullRequest(aMPR);
       }).toList();
 
       // Pull updated date out of the cache.
-      String updatedIso8601String = await localStorageStore.getByKey(atMentionUpdatedLocalStorageKey);
+      String updatedIso8601String =
+          await localStorageStore.getByKey(LocalStorageConstants.atMentionUpdatedLocalStorageKey);
       if (updatedIso8601String != null) {
         updated = DateTime.parse(updatedIso8601String);
       }
@@ -101,7 +98,7 @@ class AtMentionStore extends Store implements ChaserStore {
     }
 
     displayPullRequests = atMentionPullRequests;
-    trigger();
+    _displayAll(showAll);
   }
 
   Future<GitHubPullRequest> getPRFromNotification(GitHubNotification notification, GitHubService gitHubService) async {
@@ -109,7 +106,7 @@ class AtMentionStore extends Store implements ChaserStore {
     GitHubPullRequest pullRequest = await gitHubService.getPullRequest(notification.pullRequest);
     if (!pullRequest.merged) {
       List<GitHubComment> comments = await gitHubService.getPullRequestComments(pullRequest);
-      plusOneNeeded = isPlusOneNeeded(comments, 'bradybecker-wf');
+      plusOneNeeded = isPlusOneNeeded(comments, _userStore.githubUser.login);
     }
     pullRequest.actionNeeded = plusOneNeeded;
     return pullRequest;

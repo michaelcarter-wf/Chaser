@@ -22,7 +22,7 @@ dependencies:
 dev_dependencies:
   coverage: "^0.7.2"
   dart_dev: "^1.0.0"
-  dart_style: "^0.2.0"
+  dart_style: "0.2.0"
   dartdoc: "^0.4.0"
   source_gen: "^0.4.1"
   test: "^0.12.0"
@@ -30,14 +30,11 @@ dev_dependencies:
     git:
       url: git@github.com:Workiva/w_flux.git
       ref: 1.0.1
-dependency_overrides:
-  dart_style: "^0.2.0"
 
 transformers:
-  - sass
   - $dart2js:
-      minify: true
+      minify: false
       csp: true
+  - sass
+  - chrome
 
-#transformers:
-#- chrome

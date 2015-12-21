@@ -3,8 +3,8 @@ library wChaser.src.stores.chaser_stores;
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:w_flux/w_flux.dart';
 import 'package:lawndart/lawndart.dart' show LocalStorageStore;
+import 'package:w_flux/w_flux.dart';
 
 import 'package:wChaser/src/services/github.dart';
 import 'package:wChaser/src/models/models.dart';

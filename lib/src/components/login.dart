@@ -15,7 +15,7 @@ var Login = react.registerComponent(() => new _Login());
 class _Login extends react.Component {
   ChaserActions get chaserActions => props['actions'];
 
-  getInitialState() => {'attempts':0};
+  getInitialState() => {'attempts': 0};
 
   submitToken(react.SyntheticEvent e) {
     var inputRef = ref(ghInput);
@@ -23,24 +23,21 @@ class _Login extends react.Component {
     chaserActions.authActions.auth(input.value);
 
     int attempts = state['attempts'];
-    setState({
-      'attempts': attempts + 1
-    });
+    setState({'attempts': attempts + 1});
   }
 
   render() {
-    return (Dom.div()..style={'padding': '15px'})(
+    return (Dom.div()..style = {'padding': '15px'})(
         react.h6({}, 'GitHub Access Token: '),
         react.input({
-          'className':'form-control',
+          'className': 'form-control',
           'ref': ghInput,
-          'style': state['attempts'] > 0 ? {'border': '1px solid red'}: {}
+          'style': state['attempts'] > 0 ? {'border': '1px solid red'} : {}
         }),
         react.br({}),
         (Button()
-          ..className ='pull-right'
-          ..skin= ButtonSkin.LIGHT
-          ..onClick= submitToken)('Submit')
-    );
+          ..className = 'pull-right'
+          ..skin = ButtonSkin.LIGHT
+          ..onClick = submitToken)('Submit'));
   }
 }

@@ -30,7 +30,8 @@ class _ChaserContainer extends FluxComponent {
   ChaserStores get chaserStores => props['store'];
   AtMentionStore get atMentionStore => chaserStores.atMentionStore;
 
-  redrawOn() => [chaserStores.userStore, chaserStores.atMentionStore, chaserStores.locationStore, chaserStores.pullRequestsStore];
+  redrawOn() =>
+      [chaserStores.userStore, chaserStores.atMentionStore, chaserStores.locationStore, chaserStores.pullRequestsStore];
 
   getInitialState() {
     return {'pullRequests': atMentionStore.atMentionPullRequests};
@@ -57,10 +58,7 @@ class _ChaserContainer extends FluxComponent {
 
     return [
       Header({'actions': chaserActions, 'loading': atMentionStore.displayPullRequests == null}),
-      ChaserGrid({
-        'chaserStore': chaserStore,
-        'actions': chaserActions
-      }),
+      ChaserGrid({'chaserStore': chaserStore, 'actions': chaserActions}),
       Footer({'chaserStore': chaserStore, 'actions': chaserActions})
     ];
   }
@@ -68,7 +66,7 @@ class _ChaserContainer extends FluxComponent {
   renderLogin() {
     return [
       Header({'loading': true}),
-      Login({'actions':chaserActions})
+      Login({'actions': chaserActions})
     ];
   }
 
@@ -81,11 +79,10 @@ class _ChaserContainer extends FluxComponent {
 
   render() {
     if (!chaserStores.userStore.isReady) {
-      return (Dom.div()..className='chaser-container')(renderLoading());
+      return (Dom.div()..className = 'chaser-container')(renderLoading());
     }
 
-    return (Dom.div()..className='chaser-container')(
-      chaserStores.userStore.authed ? renderChaserCore() : renderLogin()
-    );
+    return (Dom.div()
+      ..className = 'chaser-container')(chaserStores.userStore.authed ? renderChaserCore() : renderLogin());
   }
 }

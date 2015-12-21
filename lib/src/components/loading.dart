@@ -6,11 +6,12 @@ var Loading = react.registerComponent(() => new _Loading());
 
 class _Loading extends react.Component {
   render() {
-    return react.div({'className': 'text-center', 'style': {'margin': '154px'}}, [
-        react.img({
-          'className': 'text-center github-title pointer',
-          'src': '/packages/wChaser/images/octocat-spinner-32.gif',
-        })
-      ]);
+    return react.div({
+      'className': 'text-center',
+      'style': {'margin': '154px'}
+    }, [
+      react.img(
+          {'className': 'text-center github-title pointer', 'src': '/packages/wChaser/images/octocat-spinner-32.gif',})
+    ]);
   }
 }

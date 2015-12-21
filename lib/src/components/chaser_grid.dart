@@ -28,10 +28,7 @@ class _ChaserGrid extends react.Component {
 
     if (chaserStore.displayPullRequests != null) {
       content = chaserStore.displayPullRequests.map((GitHubPullRequest gitHubPr) {
-        return ChaserRow({
-          'pullRequest': gitHubPr,
-          'hideable': chaserStore.rowsHideable
-        });
+        return ChaserRow({'pullRequest': gitHubPr, 'hideable': chaserStore.rowsHideable});
       });
     }
 

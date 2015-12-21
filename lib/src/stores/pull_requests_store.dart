@@ -19,7 +19,7 @@ class PullRequestsStore extends Store implements ChaserStore {
   }
 
   /// Big Gorilla of a method that gets PRS that need your action from gh via notifications.
-  _getChaserAssetsFromGithub(LocalStorageStore localStorageStore) async {
+  _getChaserAssetsFromGithub() async {
     updated = new DateTime.now();
 
     // TODO Can take the status from the PR and get the smithy goodies
@@ -27,14 +27,13 @@ class PullRequestsStore extends Store implements ChaserStore {
   }
 
   _authed(bool authSuccessful) {
-    if(authSuccessful) {
+    if (authSuccessful) {
       load();
     }
   }
 
   load({force: false}) async {
-    await _getChaserAssetsFromGithub(null);
+    await _getChaserAssetsFromGithub();
     trigger();
   }
-
 }

@@ -8,7 +8,7 @@ String getPrettyDates(DateTime dateToCompare) {
   dateLabel(length, label) => 'Updated $length $label ago';
 
   if (d.inDays > 0) {
-  	return dateLabel(d.inDays, d.inDays == 1 ? 'day' : 'days');
+    return dateLabel(d.inDays, d.inDays == 1 ? 'day' : 'days');
   } else if (d.inHours >= 1) {
     return dateLabel(d.inHours, d.inHours == 1 ? 'hour' : 'hours');
   } else if (d.inMinutes >= 1) {

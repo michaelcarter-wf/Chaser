@@ -7,9 +7,8 @@ import 'package:wChaser/src/utils/utils.dart';
 
 void main() {
   group('Comments: Action Needed', () {
-
     test('should say action is needed', () {
-      List <GitHubComment> comments = commentResponse.map((comment) {
+      List<GitHubComment> comments = commentResponse.map((comment) {
         return new GitHubComment(comment);
       }).toList();
 
@@ -17,14 +16,13 @@ void main() {
       expect(plusOneNeeded, true);
     });
 
-     test('should say is NOT needed', () {
-      List <GitHubComment> comments = commentResponse.map((comment) {
+    test('should say is NOT needed', () {
+      List<GitHubComment> comments = commentResponse.map((comment) {
         return new GitHubComment(comment);
       }).toList();
 
       bool plusOneNeeded = isPlusOneNeeded(comments, 'mikekeil-wf');
       expect(plusOneNeeded, false);
     });
-
   });
 }

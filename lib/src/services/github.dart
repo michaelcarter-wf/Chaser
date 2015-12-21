@@ -70,9 +70,7 @@ class GitHubService {
       ..scheme = githubScheme
       ..host = githubHost
       ..path = 'user/repos'
-      ..queryParameters = {
-        'affiliation':'owner'
-      };
+      ..queryParameters = {'affiliation': 'owner'};
 
     List<Map> usersReposJson = await _requestAuthed('GET', uri.toString());
     return usersReposJson.map((Map userRepoJson) {
@@ -87,10 +85,10 @@ class GitHubService {
       ..host = githubHost
       ..path = 'search/issues';
 
-      var openPrsJson = await _requestAuthed('GET', '${uri.toString()}?q=is:open+is:pr+author:$login');
-      return openPrsJson['items'].map((Map openPrJson) {
-        return new GitHubPullRequest(openPrJson);
-      }).toList();
+    var openPrsJson = await _requestAuthed('GET', '${uri.toString()}?q=is:open+is:pr+author:$login');
+    return openPrsJson['items'].map((Map openPrJson) {
+      return new GitHubPullRequest(openPrJson);
+    }).toList();
   }
 
   //  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf
@@ -103,13 +101,14 @@ class GitHubService {
       ..host = githubHost
       ..path = 'search/issues';
 
-      var openPrsJson = await _requestAuthed('GET', '${uri.toString()}?q=is:open+is:pr+created:>$formatted+mentions:$login');
-      return openPrsJson['items'].map((Map openPrJson) {
-        return new GitHubPullRequest(openPrJson);
-      }).toList();
+    var openPrsJson =
+        await _requestAuthed('GET', '${uri.toString()}?q=is:open+is:pr+created:>$formatted+mentions:$login');
+    return openPrsJson['items'].map((Map openPrJson) {
+      return new GitHubPullRequest(openPrJson);
+    }).toList();
   }
 
-  Future <GitHubUser> setAndCheckToken(String accessToken) async {
+  Future<GitHubUser> setAndCheckToken(String accessToken) async {
     this.accessToken = accessToken;
     Fluri uri = new Fluri()
       ..scheme = githubScheme

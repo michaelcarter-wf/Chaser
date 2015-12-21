@@ -501,7 +501,8 @@ final List commentResponse = [
     },
     "created_at": "2015-11-11T14:01:39Z",
     "updated_at": "2015-11-11T14:01:39Z",
-    "body": "Dev QA +10:\r\n- [x] Tested in IE10\r\n- [x] Tested in IE11\r\n- [x] Tested in Firefox\r\n- [x] APE Button opens APE App\r\n- [x] Content admin always gets permission to edit, even if viewer on doc.\r\n- [x] Non-content admin sees button when is a creator and own's doc\r\n- [x] Non-content admin - ape button disappears if a change is made removing owner permission for self\r\n- [x] Non-content admin - doesn’t see button if not owner of doc."
+    "body":
+        "Dev QA +10:\r\n- [x] Tested in IE10\r\n- [x] Tested in IE11\r\n- [x] Tested in Firefox\r\n- [x] APE Button opens APE App\r\n- [x] Content admin always gets permission to edit, even if viewer on doc.\r\n- [x] Non-content admin sees button when is a creator and own's doc\r\n- [x] Non-content admin - ape button disappears if a change is made removing owner permission for self\r\n- [x] Non-content admin - doesn’t see button if not owner of doc."
   },
   {
     "url": "https://api.github.com/repos/michaelcarter-wf/dart-permissions-editor/issues/comments/155791166",
@@ -669,6 +670,7 @@ final List commentResponse = [
     },
     "created_at": "2015-11-12T14:47:30Z",
     "updated_at": "2015-11-12T14:47:30Z",
-    "body": "Dev QA +10 Round 2 :bell: \r\n\r\n- [x] Tested in IE10\r\n- [x] Tested in IE11\r\n- [x] Tested in Firefox\r\n- [x] APE Button opens APE App\r\n- [x] Content admin always gets permission to edit, even if viewer on doc.\r\n- [x] Non-content admin sees button when is a creator and own's doc\r\n- [x] Non-content admin - ape button disappears if a change is made removing owner permission for self\r\n- [x] Non-content admin - doesn’t see button if not owner of doc."
+    "body":
+        "Dev QA +10 Round 2 :bell: \r\n\r\n- [x] Tested in IE10\r\n- [x] Tested in IE11\r\n- [x] Tested in Firefox\r\n- [x] APE Button opens APE App\r\n- [x] Content admin always gets permission to edit, even if viewer on doc.\r\n- [x] Non-content admin sees button when is a creator and own's doc\r\n- [x] Non-content admin - ape button disappears if a change is made removing owner permission for self\r\n- [x] Non-content admin - doesn’t see button if not owner of doc."
   }
 ];

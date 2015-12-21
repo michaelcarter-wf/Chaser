@@ -19,7 +19,7 @@ class _Footer extends react.Component {
 
   renderLeftColumn() {
     if (chaserStore.showAll == null) {
-      return react.span({}, 'nadda');
+      return react.span({});
     }
 
     String buttonText = chaserStore.showAll ? 'Show Few' : 'Show All';
@@ -38,7 +38,8 @@ class _Footer extends react.Component {
     return (Dom.div()..className = 'footer')([
       (Dom.div()..className = 'small-text text-left col-xs-4')(renderLeftColumn()),
       (Dom.div()..className = 'small-text text-right col-xs-3')(),
-      (Dom.div()..className = 'small-text text-right col-xs-5')(rightColumn)
+      (Dom.div()..className = 'small-text text-right col-xs-5')(rightColumn),
+      (Dom.div()..className = 'clear')()
     ]);
   }
 }

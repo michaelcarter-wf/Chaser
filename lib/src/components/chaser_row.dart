@@ -35,38 +35,25 @@ class _ChaserRow extends react.Component {
   }
 
   renderTitle() {
-    _formatDate();
     return (Dom.div()
       ..className = 'media-body pull-left'
       ..style = mediaWidth
       ..onClick = openNewTab)(
-      (Dom.small()..className = 'small-text create-date')((Dom.em())(pullRequest.githubUser.login)),
-      (Dom.h6()..className = 'media-heading')(
-        pullRequest.title,
-        (Dom.br())(),
-        (Dom.small()..className = 'small-text')(pullRequest.updatedAtPretty,
-            (Dom.span()..className = 'red')(pullRequest.actionNeeded ? ' Action Needed' : ''))
-      )
-    );
-  }
-
-  // TODO break this into a helper to prettify it
-  _formatDate() {
-    DateTime moonLanding = DateTime.parse(pullRequest.updatedAt); // 8:18pm
-    var formatter = new DateFormat('MM.dd.yyyy');
-    return formatter.format(moonLanding);
+        (Dom.small()..className = 'small-text create-date')(
+            (Dom.em())(pullRequest.htmlUrl.replaceAll('https://github.com/', ''))),
+        (Dom.h6()..className = 'media-heading')(
+            pullRequest.title,
+            (Dom.br())(),
+            (Dom.small()..className = 'small-text')(pullRequest.updatedAtPretty,
+                (Dom.span()..className = 'red')(pullRequest.actionNeeded ? ' Action Needed' : ''))));
   }
 
   render() {
-    var removeX = hideable ? react.div({'className': 'pull-right chaser-close-button', 'onClick': removeThisGuy},
-          react.i({'className': 'close-x icon icon-sm icon-close close-x',})) : null;
+    var removeX = hideable
+        ? react.div({'className': 'pull-right chaser-close-button', 'onClick': removeThisGuy},
+            react.i({'className': 'close-x icon icon-sm icon-close close-x',}))
+        : null;
 
-    return react.div({
-      'className': 'media chaser-row'
-    }, [
-      renderImage(),
-      renderTitle(),
-      removeX
-    ]);
+    return react.div({'className': 'media chaser-row'}, [renderImage(), renderTitle(), removeX]);
   }
 }

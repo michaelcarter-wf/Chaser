@@ -34,11 +34,10 @@ class UserStore extends Store {
       authed = true;
       _actions.authActions.authSuccessful(true);
       await _localStorageStore.save(ghToken, LocalStorageConstants.githubTokenKey);
-    } catch(e) {
+    } catch (e) {
       authed = false;
       _actions.authActions.authSuccessful(false);
     }
     trigger();
   }
-
 }

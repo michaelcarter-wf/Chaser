@@ -21,7 +21,5 @@ class LocationStore extends Store {
       currentView = newIndex < 0 ? ChaserViews.values[ChaserViews.values.length - 1] : ChaserViews.values[newIndex];
       trigger();
     });
-
   }
-
 }
