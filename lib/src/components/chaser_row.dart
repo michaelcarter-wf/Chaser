@@ -37,9 +37,9 @@ class _ChaserRow extends react.Component {
         }
       });
 
-      return react.div({'className': 'status-container pull-left'}, statuses);
+      return react.div({'className': 'status-container show-slide pull-left'}, statuses);
     } else {
-      return null;
+      return react.div({'className': 'status-container hide-slide pull-left'});
     }
   }
 

@@ -10,7 +10,7 @@ $hover-color: #e3e4e3;
 	width:35px;
 	height:35px;
 	border-radius:20px;
-	margin-right:10px;
+	margin-left: 3px;
 	margin-top:8px;
 	transition: all .5s ease-in-out;
 }
@@ -89,6 +89,18 @@ $hover-color: #e3e4e3;
 	display:none;
 }
 
+.hide-slide {
+	opacity: 0;
+}
+
+.show-slide {
+	opacity: 1;
+	transition: opacity 0.4s ease-in;
+	-ms-transition: opacity 0.4s ease-in;
+	-moz-transition: opacity 0.4s ease-in;
+	-webkit-transition: opacity 0.4s ease-in;
+}
+
 .login-page {
 	height:200px;
 	padding:10px;
@@ -130,9 +142,9 @@ $hover-color: #e3e4e3;
 }
 
 .status-container {
-	padding: 3px;
-	width:20px;
+	width: 15px;
 	height: 100%;
+	transition: all .5s ease-in-out;
 
 	.circle {
 		border-radius: 50%;
