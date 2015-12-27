@@ -1,4 +1,6 @@
 $red: #ED1212;
+$header-bg: #FBFBFB;
+$hover-color: #e3e4e3;
 
 .action-needed-img {
 	border: 3px solid $red;
@@ -29,8 +31,29 @@ $red: #ED1212;
 	background-color:#FBFBFB;
 }
 
+.row-passed {
+	border-left: solid 5px green;
+	transition: all .1s ease-in-out;
+	&:hover {
+		border-left: solid 5px green;
+	}
+}
+
 .chaser-row {
 	margin: 0 !important;
+	&:hover {
+		background-color: $hover-color !important;
+		.chaser-close-button {
+			-webkit-transform: scale(1.2);
+        	-ms-transform: scale(1.2);
+        	transform: scale(1.2);
+			color: $red;
+		}
+
+		.action-needed-img {
+			border: 0px;
+		}
+	}
 }
 
 .clear {
@@ -55,7 +78,7 @@ $red: #ED1212;
 .header {
 	width:100%;
 	border-bottom:1px solid #F1F1F1;
-	background-color:#FBFBFB;
+	background-color:$header-bg;
 	background-image:linear-gradient(#f9f9f9,#FBFBFB);
 	background-repeat:repeat-x;
 	height:50px;
@@ -73,23 +96,7 @@ $red: #ED1212;
 
 .media {
 	cursor:pointer;
-	background-color:#FFF;
-	border-radius:5px;
-	margin:0 0 2px;
-	padding:2px 5px 10px 10px;
-	&:hover {
-		background-color: #e3e4e3;
-		.chaser-close-button {
-			-webkit-transform: scale(1.2);
-        	-ms-transform: scale(1.2);
-        	transform: scale(1.2);
-			color: $red;
-		}
-
-		.action-needed-img {
-			border: 0px;
-		}
-	}
+	padding: 3px;
 
 	>.pull-left {
 		margin-right:0;
@@ -119,7 +126,41 @@ $red: #ED1212;
 .refresh-btn {
 	margin-top:5px;
 	color:#000;
-	background-color:#FBFBFB;
+	background-color:$header-bg;
+}
+
+.status-container {
+	padding: 3px;
+	width:20px;
+	height: 100%;
+
+	.circle {
+		border-radius: 50%;
+		width: 10px;
+		height: 10px;
+		margin-top: 4px;
+	}
+
+	.passed {
+		background-color: green;
+	}
+
+	.loading {
+		//background-color: yellow;
+		background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, yellow 0%, orange 100%, red 95%);
+		background-image: -webkit-radial-gradient(45px 45px, circle cover, yellow, orange);
+		background-image: radial-gradient(45px 45px 45deg, circle cover, yellow 0%, orange 100%, red 95%);
+
+		animation-name: spin;
+		animation-duration: 3s; /* 3 seconds */
+		animation-iteration-count: infinite;
+		animation-timing-function: linear;
+	}
+
+	.failed {
+		background-color: $red;
+		/* width and height can be anything, as long as they're equal */
+	}
 }
 
 .small-text {

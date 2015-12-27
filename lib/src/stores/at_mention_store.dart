@@ -6,8 +6,8 @@ class AtMentionStore extends Store implements ChaserStore {
   UserStore _userStore;
   ChaserActions _chaserActions;
   GitHubService _gitHubService;
-  List<GitHubPullRequest> atMentionPullRequests = [];
-  List<GitHubPullRequest> displayPullRequests = null;
+  List<GitHubSearchResult> atMentionPullRequests = [];
+  List<GitHubSearchResult> displayPullRequests = null;
   DateTime updated = new DateTime.now();
   bool showAll = false;
   bool rowsHideable = true;
@@ -30,7 +30,7 @@ class AtMentionStore extends Store implements ChaserStore {
   _displayAll(bool displayAll) {
     showAll = displayAll;
     if (showAll == false) {
-      displayPullRequests = displayPullRequests.where((GitHubPullRequest pr) => pr.actionNeeded).toList();
+      displayPullRequests = displayPullRequests?.where((GitHubSearchResult pr) => pr.actionNeeded).toList();
     } else {
       displayPullRequests = atMentionPullRequests;
     }
@@ -41,7 +41,7 @@ class AtMentionStore extends Store implements ChaserStore {
   /// Reset all the lists at load.
   _clearPullRequests() {
     atMentionPullRequests = [];
-    displayPullRequests = null;
+    displayPullRequests = [];
   }
 
   /// Big Gorilla of a method that gets PRS that need your action from gh via notifications.
@@ -55,7 +55,7 @@ class AtMentionStore extends Store implements ChaserStore {
       pullRequest.actionNeeded = await isPlusOneNeeded(comments, _userStore.githubUser.login);
     }
 
-    atMentionPullRequests.sort((GitHubPullRequest a, GitHubPullRequest b) {
+    atMentionPullRequests.sort((GitHubSearchResult a, GitHubSearchResult b) {
       if (a.actionNeeded && b.actionNeeded) {
         return 0;
       } else {
@@ -64,7 +64,7 @@ class AtMentionStore extends Store implements ChaserStore {
     });
 
     _displayAll(showAll);
-    List<String> atMentionJson = atMentionPullRequests.map((GitHubPullRequest ghpr) {
+    List<String> atMentionJson = atMentionPullRequests?.map((GitHubSearchResult ghpr) {
       return ghpr.toMap();
     }).toList();
 
@@ -82,7 +82,7 @@ class AtMentionStore extends Store implements ChaserStore {
       String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
       List atMentionObjects = JSON.decode(atMentionJson);
       atMentionPullRequests = atMentionObjects.map((Map aMPR) {
-        return new GitHubPullRequest(aMPR);
+        return new GitHubSearchResult(aMPR);
       }).toList();
 
       // Pull updated date out of the cache.
@@ -97,8 +97,25 @@ class AtMentionStore extends Store implements ChaserStore {
       await _getChaserAssetsFromGithub(localStorageStore);
     }
 
+    // don't need to wait for these, they'll updated once they come in.
+    _getPullRequestsStatus();
+
     displayPullRequests = atMentionPullRequests;
     _displayAll(showAll);
+  }
+
+  _getPullRequestsStatus() async {
+    for (GitHubSearchResult gsr in atMentionPullRequests) {
+      gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
+      List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.githubPullRequest);
+
+      // first one in the list should be the current
+      githubStatuses.forEach((GitHubStatus ghStatus) {
+        gsr.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
+      });
+    }
+
+    trigger();
   }
 
   Future<GitHubPullRequest> getPRFromNotification(GitHubNotification notification, GitHubService gitHubService) async {

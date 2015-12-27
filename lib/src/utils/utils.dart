@@ -2,6 +2,7 @@ library wChaser.src.utils.utils;
 
 import 'package:wChaser/src/models/models.dart';
 import 'package:intl/intl.dart';
+import 'package:wChaser/src/services/github.dart' as github;
 
 // checks all comments for the current user's +1
 bool isPlusOneNeeded(List<GitHubComment> gitHubComments, String userId) {

@@ -3,11 +3,8 @@ library src.components.pull_request_row;
 import 'dart:core';
 import 'dart:html';
 
-import 'package:intl/intl.dart';
 import 'package:react/react.dart' as react;
-import 'package:web_skin_dart/ui_components.dart';
 import 'package:web_skin_dart/ui_core.dart' show Dom;
-import 'package:chrome/chrome_ext.dart' as chrome;
 
 import 'package:wChaser/src/models/models.dart';
 
@@ -16,7 +13,7 @@ var mediaWidth = {'width': '70%'};
 var ChaserRow = react.registerComponent(() => new _ChaserRow());
 
 class _ChaserRow extends react.Component {
-  GitHubPullRequest get pullRequest => props['pullRequest'];
+  GitHubSearchResult get pullRequest => props['pullRequest'];
   bool get hideable => props['get'];
 
   openNewTab(_) {
@@ -24,6 +21,27 @@ class _ChaserRow extends react.Component {
   }
 
   removeThisGuy(_) {}
+
+  renderStatus() {
+    if (pullRequest.githubPullRequest?.githubStatus != null) {
+
+      List statuses = [];
+
+      pullRequest.githubPullRequest?.githubStatus.forEach((String key, GitHubStatus ghs) {
+        if (ghs.state == 'success') {
+          statuses.add(react.div({'className': 'circle passed'}));
+        } else if (ghs.state == 'failure') {
+          statuses.add(react.div({'className': 'circle failed'}));
+        } else {
+          statuses.add(react.div({'className': 'circle loading'}));
+        }
+      });
+
+      return react.div({'className': 'status-container pull-left'}, statuses);
+    } else {
+      return null;
+    }
+  }
 
   renderImage() {
     String actionNeededClass = pullRequest.actionNeeded ? 'action-needed-img' : '';
@@ -54,6 +72,10 @@ class _ChaserRow extends react.Component {
             react.i({'className': 'close-x icon icon-sm icon-close close-x',}))
         : null;
 
-    return react.div({'className': 'media chaser-row'}, [renderImage(), renderTitle(), removeX]);
+    return
+      react.div({'className':'chaser-row'}, [
+        renderImage(),
+        react.div({'className': 'media'}, [renderStatus(), renderTitle(), removeX])
+      ]);
   }
 }

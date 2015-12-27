@@ -7,7 +7,7 @@ class PullRequestsStore extends Store implements ChaserStore {
   ChaserActions _chaserActions;
   GitHubService _gitHubService;
   DateTime updated = new DateTime.now();
-  List<GitHubPullRequest> displayPullRequests;
+  List<GitHubSearchResult> displayPullRequests;
   bool showAll = null;
   bool rowsHideable = false;
 
@@ -22,8 +22,24 @@ class PullRequestsStore extends Store implements ChaserStore {
   _getChaserAssetsFromGithub() async {
     updated = new DateTime.now();
 
-    // TODO Can take the status from the PR and get the smithy goodies
+
     displayPullRequests = await _gitHubService.searchForOpenPullRequests(_userStore.githubUser.login);
+
+    _getPullRequestsStatus();
+  }
+
+  _getPullRequestsStatus() async {
+    for (GitHubSearchResult gsr in displayPullRequests) {
+      gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
+      List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.githubPullRequest);
+
+      // first one in the list should be the current
+      githubStatuses.forEach((GitHubStatus ghStatus) {
+        gsr.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
+      });
+    }
+
+    trigger();
   }
 
   _authed(bool authSuccessful) {

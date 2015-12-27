@@ -19,6 +19,7 @@ class GitHubPullRequest implements GithubBaseModel {
   String commentsUrl;
   String fullName;
   GitHubUser githubUser;
+  Map<String, GitHubStatus> githubStatus;
   String htmlUrl;
   int id;
   bool merged;
@@ -51,6 +52,7 @@ class GitHubPullRequest implements GithubBaseModel {
     updatedAt = json[GitHubPullRequestConstants.updatedAt];
     updatedAtPretty = getPrettyDates(DateTime.parse(updatedAt));
     githubUser = new GitHubUser(json[GitHubPullRequestConstants.githubUser]);
+    githubStatus = {};
 
     // this will only come from cached data
     if (json.containsKey(GitHubPullRequestConstants.actionNeeded)) {

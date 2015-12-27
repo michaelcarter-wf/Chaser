@@ -79,7 +79,7 @@ class GitHubService {
   }
 
 //  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf
-  Future<List<GitHubPullRequest>> searchForOpenPullRequests(String login) async {
+  Future<List<GitHubSearchResult>> searchForOpenPullRequests(String login) async {
     Fluri uri = new Fluri()
       ..scheme = githubScheme
       ..host = githubHost
@@ -87,12 +87,12 @@ class GitHubService {
 
     var openPrsJson = await _requestAuthed('GET', '${uri.toString()}?q=is:open+is:pr+author:$login');
     return openPrsJson['items'].map((Map openPrJson) {
-      return new GitHubPullRequest(openPrJson);
+      return new GitHubSearchResult(openPrJson);
     }).toList();
   }
 
   //  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf
-  Future<List<GitHubPullRequest>> searchForAtMentions(String login, {since: null}) async {
+  Future<List<GitHubSearchResult>> searchForAtMentions(String login, {since: null}) async {
     DateTime oneMonthAgo = since ?? new DateTime.now().subtract(new Duration(days: 30));
     String formatted = new DateFormat('yyyy-MM-dd').format(oneMonthAgo);
 
@@ -104,7 +104,7 @@ class GitHubService {
     var openPrsJson =
         await _requestAuthed('GET', '${uri.toString()}?q=is:open+is:pr+created:>$formatted+mentions:$login');
     return openPrsJson['items'].map((Map openPrJson) {
-      return new GitHubPullRequest(openPrJson);
+      return new GitHubSearchResult(openPrJson);
     }).toList();
   }
 
@@ -117,5 +117,13 @@ class GitHubService {
 
     var userJson = await _requestAuthed('GET', uri.toString());
     return new GitHubUser(userJson);
+  }
+
+  Future<List<GitHubStatus>> getPullRequestStatus(GitHubPullRequest githubPullReqeust) async {
+    var statusJson = await _requestAuthed('GET', githubPullReqeust.statusesUrl);
+
+    return statusJson.map((Map openPrJson) {
+      return new GitHubStatus(openPrJson);
+    }).toList();
   }
 }
