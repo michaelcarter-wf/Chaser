@@ -27,11 +27,26 @@ class _ChaserRow extends react.Component {
 
       pullRequest.githubPullRequest?.githubStatus.forEach((String key, GitHubStatus ghs) {
         if (ghs.state == 'success') {
-          statuses.add(react.div({'className': 'circle passed'}));
+          statuses.add(react.div({
+            'className': 'circle passed',
+            'onClick': (e) {
+              window.open(ghs.targetUrl, pullRequest.id.toString());
+            }
+          }));
         } else if (ghs.state == 'failure') {
-          statuses.add(react.div({'className': 'circle failed'}));
+          statuses.add(react.div({
+            'className': 'circle failed',
+            'onClick': (e) {
+              window.open(ghs.targetUrl, pullRequest.id.toString());
+            }
+          }));
         } else {
-          statuses.add(react.div({'className': 'circle loading'}));
+          statuses.add(react.div({
+            'className': 'circle loading',
+            'onClick': (e) {
+              window.open(ghs.targetUrl, pullRequest.id.toString());
+            }
+          }));
         }
       });
 
