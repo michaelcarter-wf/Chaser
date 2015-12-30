@@ -111,7 +111,6 @@ class AtMentionStore extends Store implements ChaserStore {
   Future _getPullRequestsStatus() async {
     for (GitHubSearchResult gsr in atMentionPullRequests) {
       gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
-      print(gsr.githubPullRequest);
       List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.githubPullRequest);
 
       // first one in the list should be the current

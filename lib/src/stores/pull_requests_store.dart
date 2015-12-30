@@ -35,7 +35,6 @@ class PullRequestsStore extends Store implements ChaserStore {
   }
 
   _getPullRequestsStatus() async {
-    print('GETTING PR STATUS');
     for (GitHubSearchResult gsr in displayPullRequests) {
       gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
       List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.githubPullRequest);

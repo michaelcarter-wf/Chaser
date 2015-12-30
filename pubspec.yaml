@@ -25,7 +25,7 @@ dev_dependencies:
   w_flux:
     git:
       url: git@github.com:Workiva/w_flux.git
-      ref: 1.0.1
+      ref: 2.0.0
 
 transformers:
   - $dart2js:
