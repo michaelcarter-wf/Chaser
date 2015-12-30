@@ -55,19 +55,25 @@ class _ChaserRow extends react.Component {
 
   renderTitle() {
     return react.div({
-      'className':'media-body pull-left',
+      'className': 'media-body pull-left',
       'style': mediaWidth,
-      'onClick': openNewTab}, [
-        react.small({'className':'small-text create-date'}, react.em({}, pullRequest.htmlUrl.replaceAll('https://github.com/', ''))),
-        react.h6({'className':'media-heading'}, [
-            pullRequest.title,
-            react.br({}),
-            react.small({'className':'small-text'}, [
-              pullRequest.updatedAtPretty,
-              react.span({'className': 'red'}, pullRequest.actionNeeded ? ' Action Needed' : '')
-            ])
+      'onClick': openNewTab
+    }, [
+      react.small({'className': 'small-text create-date'},
+          react.em({}, pullRequest.htmlUrl.replaceAll('https://github.com/', ''))),
+      react.h6({
+        'className': 'media-heading'
+      }, [
+        pullRequest.title,
+        react.br({}),
+        react.small({
+          'className': 'small-text'
+        }, [
+          pullRequest.updatedAtPretty,
+          react.span({'className': 'red'}, pullRequest.actionNeeded ? ' Action Needed' : '')
         ])
-      ]);
+      ])
+    ]);
   }
 
   render() {

@@ -71,9 +71,10 @@ class _ChaserContainer extends FluxComponent {
 
   render() {
     if (!chaserStores.userStore.isReady) {
-      return react.div({'className':'chaser-container'}, renderLoading());
+      return react.div({'className': 'chaser-container'}, renderLoading());
     }
 
-    return react.div({'className':'chaser-container'}, chaserStores.userStore.authed ? renderChaserCore() : renderLogin());
+    return react.div(
+        {'className': 'chaser-container'}, chaserStores.userStore.authed ? renderChaserCore() : renderLogin());
   }
 }

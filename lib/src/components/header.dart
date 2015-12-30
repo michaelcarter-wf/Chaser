@@ -22,8 +22,11 @@ class _Header extends react.Component {
   }
 
   render() {
-    var refresh = loading ? null : react.button({'onClick':refreshView, 'className': 'btn btn-default btn-xs refresh-btn pull-right', 'type':'submit'}, react.img(
-          {'className': 'text-center pointer', 'src': '/packages/wChaser/images/refresh.png'}));
+    var refresh = loading
+        ? null
+        : react.button(
+            {'onClick': refreshView, 'className': 'btn btn-default btn-xs refresh-btn pull-right', 'type': 'submit'},
+            react.img({'className': 'text-center pointer', 'src': '/packages/wChaser/images/refresh.png'}));
 
     return (react.div({
       'className': 'header'

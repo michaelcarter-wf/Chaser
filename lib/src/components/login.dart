@@ -25,15 +25,17 @@ class _Login extends react.Component {
   }
 
   render() {
-    return react.div({'style':{'padding': '15px'}}, [
-        react.h6({}, 'GitHub Access Token: '),
-        react.input({
-          'className': 'form-control',
-          'ref': ghInput,
-          'style': state['attempts'] > 0 ? {'border': '1px solid red'} : {}
-        }),
-        react.br({}),
-        react.button({'onClick':submitToken, 'className': 'btn btn-default pull-right', 'type':'submit'}, 'Submit')
+    return react.div({
+      'style': {'padding': '15px'}
+    }, [
+      react.h6({}, 'GitHub Access Token: '),
+      react.input({
+        'className': 'form-control',
+        'ref': ghInput,
+        'style': state['attempts'] > 0 ? {'border': '1px solid red'} : {}
+      }),
+      react.br({}),
+      react.button({'onClick': submitToken, 'className': 'btn btn-default pull-right', 'type': 'submit'}, 'Submit')
     ]);
   }
 }
