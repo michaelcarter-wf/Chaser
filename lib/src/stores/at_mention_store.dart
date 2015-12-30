@@ -12,12 +12,13 @@ class AtMentionStore extends Store implements ChaserStore {
   DateTime updated = new DateTime.now();
   bool showAll = false;
   bool rowsHideable = true;
+  bool loading = true;
 
   AtMentionStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore) {
     _chaserActions.locationActions.refreshView.listen((e) {
-      if (_locationStore.currentView == ChaserViews.atMentions) {
-        load(force: true);
-      }
+      loading = true;
+      trigger();
+      load(force: true);
     });
 
     triggerOnAction(_chaserActions.atMentionActions.displayAll, _displayAll);
@@ -65,15 +66,17 @@ class AtMentionStore extends Store implements ChaserStore {
         return 1;
       }
     });
-
-    _displayAll(showAll);
   }
 
   load({force: false}) async {
+    if (_locationStore.currentView != ChaserViews.atMentions) {
+      return;
+    }
+
     LocalStorageStore localStorageStore = await LocalStorageStore.open();
     String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
 
-    if (!force && atMentionJson != null && atMentionJson.isNotEmpty) {
+    if (!force && atMentionJson?.isNotEmpty) {
       // Pull atMentioned JSON out of the cache.
       String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
       List atMentionObjects = JSON.decode(atMentionJson);
@@ -88,10 +91,11 @@ class AtMentionStore extends Store implements ChaserStore {
         updated = DateTime.parse(updatedIso8601String);
       }
     } else {
-      displayPullRequests = null;
-      trigger();
       await _getChaserAssetsFromGithub(localStorageStore);
     }
+
+    loading = false;
+    trigger();
 
     // don't need to wait for these, they'll updated once they come in.
     _getPullRequestsStatus().then((_) {
@@ -106,10 +110,17 @@ class AtMentionStore extends Store implements ChaserStore {
 
     displayPullRequests = atMentionPullRequests;
     _displayAll(showAll);
+
+    chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(
+        text: atMentionPullRequests?.where((GitHubSearchResult pr) => pr.actionNeeded).length.toString()));
   }
 
   Future _getPullRequestsStatus() async {
     for (GitHubSearchResult gsr in atMentionPullRequests) {
+      if (gsr.pullRequestUrl == null) {
+        print('url is null ${gsr.fullName}');
+        continue;
+      }
       gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
       List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.githubPullRequest);
 
@@ -119,16 +130,5 @@ class AtMentionStore extends Store implements ChaserStore {
       });
     }
     trigger();
-  }
-
-  Future<GitHubPullRequest> getPRFromNotification(GitHubNotification notification, GitHubService gitHubService) async {
-    bool plusOneNeeded = false;
-    GitHubPullRequest pullRequest = await gitHubService.getPullRequest(notification.pullRequest);
-    if (!pullRequest.merged) {
-      List<GitHubComment> comments = await gitHubService.getPullRequestComments(pullRequest);
-      plusOneNeeded = isPlusOneNeeded(comments, _userStore.githubUser.login);
-    }
-    pullRequest.actionNeeded = plusOneNeeded;
-    return pullRequest;
   }
 }

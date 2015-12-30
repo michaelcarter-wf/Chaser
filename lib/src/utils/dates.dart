@@ -1,8 +1,5 @@
 library wChaser.src.utils.dates;
 
-import 'package:wChaser/src/models/models.dart';
-import 'package:intl/intl.dart';
-
 String getPrettyDates(DateTime dateToCompare) {
   Duration d = new DateTime.now().difference(dateToCompare);
   dateLabel(length, label) => 'Updated $length $label ago';

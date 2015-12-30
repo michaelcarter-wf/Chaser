@@ -26,6 +26,7 @@ checkForPrs() async {
   String accessToken = await _localStorageStore.getByKey(LocalStorageConstants.githubTokenKey);
   DateTime updated = new DateTime.now();
 
+  print(accessToken);
   GitHubUser githubUser = await _authUser(accessToken);
   if (githubUser == null) {
     print('NO gh user found');
