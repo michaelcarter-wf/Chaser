@@ -3,7 +3,6 @@ library src.components.chaser_container;
 import 'dart:html';
 
 import 'package:react/react.dart' as react;
-import 'package:web_skin_dart/ui_core.dart' show Dom;
 import 'package:w_flux/w_flux.dart';
 
 import 'package:wChaser/src/actions/actions.dart';
@@ -72,10 +71,9 @@ class _ChaserContainer extends FluxComponent {
 
   render() {
     if (!chaserStores.userStore.isReady) {
-      return (Dom.div()..className = 'chaser-container')(renderLoading());
+      return react.div({'className':'chaser-container'}, renderLoading());
     }
 
-    return (Dom.div()
-      ..className = 'chaser-container')(chaserStores.userStore.authed ? renderChaserCore() : renderLogin());
+    return react.div({'className':'chaser-container'}, chaserStores.userStore.authed ? renderChaserCore() : renderLogin());
   }
 }

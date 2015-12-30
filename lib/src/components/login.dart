@@ -4,7 +4,6 @@ import 'dart:html';
 
 import 'package:react/react.dart' as react;
 import 'package:web_skin_dart/ui_components.dart';
-import 'package:web_skin_dart/ui_core.dart' show Dom;
 
 import 'package:wChaser/src/actions/actions.dart';
 
@@ -27,7 +26,7 @@ class _Login extends react.Component {
   }
 
   render() {
-    return (Dom.div()..style = {'padding': '15px'})(
+    return react.div({'style':{'padding': '15px'}}, [
         react.h6({}, 'GitHub Access Token: '),
         react.input({
           'className': 'form-control',
@@ -38,6 +37,7 @@ class _Login extends react.Component {
         (Button()
           ..className = 'pull-right'
           ..skin = ButtonSkin.LIGHT
-          ..onClick = submitToken)('Submit'));
+          ..onClick = submitToken)('Submit')
+    ]);
   }
 }
