@@ -19,7 +19,7 @@ class PullRequestsStore extends Store implements ChaserStore {
 
     // listen for location changes
     _locationStore.listen((_) {
-      load(force:false);
+      load(force: false);
     });
 
     // listen for successful auth

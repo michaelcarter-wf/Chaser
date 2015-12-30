@@ -24,7 +24,6 @@ class _ChaserRow extends react.Component {
 
   renderStatus() {
     if (pullRequest.githubPullRequest?.githubStatus != null) {
-
       List statuses = [];
 
       pullRequest.githubPullRequest?.githubStatus.forEach((String key, GitHubStatus ghs) {
@@ -77,10 +76,11 @@ class _ChaserRow extends react.Component {
             react.i({'className': 'close-x icon icon-sm icon-close close-x',}))
         : null;
 
-    return
-      react.div({'className':'chaser-row'}, [
-        renderImage(),
-        react.div({'className': 'media'}, [renderStatus(), renderTitle(), removeX])
-      ]);
+    return react.div({
+      'className': 'chaser-row'
+    }, [
+      renderImage(),
+      react.div({'className': 'media'}, [renderStatus(), renderTitle(), removeX])
+    ]);
   }
 }

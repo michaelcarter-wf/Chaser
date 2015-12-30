@@ -11,12 +11,7 @@ import 'package:wChaser/src/components/loading.dart';
 import 'package:wChaser/src/components/chaser_row.dart';
 import 'package:wChaser/src/stores/chaser_store.dart';
 
-Map<String, dynamic> divStyle = {
-  'height': '400px',
-  'overflowY': 'auto',
-  'width': '100%',
-  'backgroundolor': '#FBFBFB'
-};
+Map<String, dynamic> divStyle = {'height': '400px', 'overflowY': 'auto', 'width': '100%', 'backgroundolor': '#FBFBFB'};
 
 var ChaserGrid = react.registerComponent(() => new _ChaserGrid());
 
