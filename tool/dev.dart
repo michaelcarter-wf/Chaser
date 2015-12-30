@@ -14,7 +14,7 @@ main(List<String> args) async {
   // config.docs
   // config.examples
   config.format
-    ..directories = ['lib/', 'test/', 'tool/']
+    ..directories = ['lib/', 'test/', 'tool/', 'web/']
     ..lineLength = 120;
   // config.test
 
