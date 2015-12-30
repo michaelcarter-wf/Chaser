@@ -111,8 +111,10 @@ class AtMentionStore extends Store implements ChaserStore {
     displayPullRequests = atMentionPullRequests;
     _displayAll(showAll);
 
-    chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(
-        text: atMentionPullRequests?.where((GitHubSearchResult pr) => pr.actionNeeded).length.toString()));
+    if (chrome.browserAction.available) {
+      chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(
+          text: atMentionPullRequests?.where((GitHubSearchResult pr) => pr.actionNeeded).length.toString()));
+    }
   }
 
   Future _getPullRequestsStatus() async {
