@@ -51,7 +51,7 @@ checkForPrs() async {
 
   if (chrome.browserAction.available) {
     chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(text: actionNeeded.length.toString()));
-    chrome.alarms.create(new chrome.AlarmCreateInfo(delayInMinutes: 1), 'refresh');
+    chrome.alarms.create(new chrome.AlarmCreateInfo(delayInMinutes: 15), 'refresh');
   }
 }
 
