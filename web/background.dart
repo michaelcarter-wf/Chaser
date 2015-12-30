@@ -14,10 +14,10 @@ GitHubService _gitHubService = new GitHubService();
 
 main() {
   chrome.alarms.onAlarm.listen((chrome.Alarm alarm) {
-    print('new ALARM $alarm');
     checkForPrs();
   });
 
+//  checkForStatusUpdates();
   checkForPrs();
 }
 
@@ -39,26 +39,31 @@ checkForPrs() async {
     pullRequest.actionNeeded = await isPlusOneNeeded(comments, githubUser.login);
   }
 
-  List<GitHubSearchResult> actionNeeded = atMentionPullRequests.where((GitHubSearchResult gpr) => gpr.actionNeeded).toList();
+  List<GitHubSearchResult> actionNeeded =
+      atMentionPullRequests.where((GitHubSearchResult gpr) => gpr.actionNeeded).toList();
 
-  chrome.browserAction
-      .setBadgeText(new chrome.BrowserActionSetBadgeTextParams(text: actionNeeded.length.toString()));
-
-      List<String> atMentionJson = atMentionPullRequests.map((GitHubSearchResult ghpr) {
-      return ghpr.toMap();
-    }).toList();
+  List<String> atMentionJson = atMentionPullRequests.map((GitHubSearchResult ghpr) {
+    return ghpr.toMap();
+  }).toList();
 
   _localStorageStore.save(JSON.encode(atMentionJson), LocalStorageConstants.atMentionLocalStorageKey);
   _localStorageStore.save(updated.toIso8601String(), LocalStorageConstants.atMentionUpdatedLocalStorageKey);
 
-  chrome.alarms.create(new chrome.AlarmCreateInfo(delayInMinutes:1), 'refresh');
+  if (chrome.browserAction.available) {
+    chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(text: actionNeeded.length.toString()));
+    chrome.alarms.create(new chrome.AlarmCreateInfo(delayInMinutes: 15), 'refresh');
+  }
 }
 
+checkForStatusUpdates() {
+  //    chrome.NotificationOptions no = new chrome.NotificationOptions(title:'Testing', message: 'Baller!', iconUrl: './packages/wChaser/images/github.png', type: chrome.TemplateType.BASIC);
+//    chrome.notifications.create(no);
+}
 
 Future<GitHubUser> _authUser(String ghToken) async {
   try {
     return await _gitHubService.setAndCheckToken(ghToken);
-  } catch(e) {
+  } catch (e) {
     return null;
   }
 }

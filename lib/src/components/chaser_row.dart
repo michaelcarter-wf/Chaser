@@ -7,7 +7,7 @@ import 'package:react/react.dart' as react;
 
 import 'package:wChaser/src/models/models.dart';
 
-var mediaWidth = {'width': '70%'};
+var mediaWidth = {'width': '80%'};
 
 var ChaserRow = react.registerComponent(() => new _ChaserRow());
 

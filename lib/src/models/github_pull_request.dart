@@ -34,7 +34,7 @@ class GitHubPullRequest implements GithubBaseModel {
 
   bool get isOpen => state == 'open';
 
-  GitHubPullRequest(Map json) {
+  GitHubPullRequest(json) {
     if (json == null) {
       return;
     }

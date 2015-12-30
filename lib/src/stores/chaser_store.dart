@@ -7,6 +7,7 @@ abstract class ChaserStore {
   DateTime updated;
   bool showAll;
   bool rowsHideable;
+  bool loading;
 
   load({force: false});
 }

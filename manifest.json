@@ -11,6 +11,7 @@
   // https://developer.chrome.com/extensions/storage
   "permissions": [
     "storage",
+    "notifications",
     "https://github.com/*",
     "https://api.github.com/*",
     "tabs",

@@ -44,7 +44,7 @@ class GitHubService {
   }
 
   Future<GitHubPullRequest> getPullRequest(String url) async {
-    var pullRequestJson = await _requestAuthed('GET', url);
+    List pullRequestJson = await _requestAuthed('GET', url);
     return new GitHubPullRequest(pullRequestJson);
   }
 

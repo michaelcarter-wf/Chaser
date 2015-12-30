@@ -79,7 +79,8 @@ class GitHubSearchResult implements GithubBaseModel {
         'head': {
           'repo': {GitHubSearchResultConstants.fullName: fullName}
         },
-        GitHubSearchResultConstants.pullRequest: githubPullRequest?.toMap(),
+        // if there's no pullRequest present at least put the url in the cache
+        GitHubSearchResultConstants.pullRequest: githubPullRequest?.toMap() ?? {'url': pullRequestUrl},
         GitHubSearchResultConstants.title: title,
         GitHubSearchResultConstants.updatedAt: updatedAt,
         GitHubSearchResultConstants.actionNeeded: actionNeeded,

@@ -11,9 +11,11 @@ class PullRequestsStore extends Store implements ChaserStore {
   List<GitHubSearchResult> displayPullRequests;
   bool showAll = null;
   bool rowsHideable = false;
+  bool loading = true;
 
   PullRequestsStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore) {
     _chaserActions.locationActions.refreshView.listen((e) {
+      loading = true;
       load(force: true);
     });
 
@@ -57,6 +59,7 @@ class PullRequestsStore extends Store implements ChaserStore {
   load({force: false}) async {
     if (_locationStore.currentView == ChaserViews.pullRequests) {
       await _getChaserAssetsFromGithub();
+      loading = false;
       trigger();
     }
   }
