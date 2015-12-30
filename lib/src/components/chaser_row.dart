@@ -4,7 +4,6 @@ import 'dart:core';
 import 'dart:html';
 
 import 'package:react/react.dart' as react;
-import 'package:web_skin_dart/ui_core.dart' show Dom;
 
 import 'package:wChaser/src/models/models.dart';
 
@@ -24,7 +23,6 @@ class _ChaserRow extends react.Component {
 
   renderStatus() {
     if (pullRequest.githubPullRequest?.githubStatus != null) {
-
       List statuses = [];
 
       pullRequest.githubPullRequest?.githubStatus.forEach((String key, GitHubStatus ghs) {
@@ -49,8 +47,6 @@ class _ChaserRow extends react.Component {
   }
 
   renderImage() {
-    String actionNeededClass = pullRequest.actionNeeded ? 'action-needed-img' : '';
-
     return react.span(
         {'className': 'pull-left', 'onClick': openNewTab},
         react.img(
@@ -58,17 +54,26 @@ class _ChaserRow extends react.Component {
   }
 
   renderTitle() {
-    return (Dom.div()
-      ..className = 'media-body pull-left'
-      ..style = mediaWidth
-      ..onClick = openNewTab)(
-        (Dom.small()..className = 'small-text create-date')(
-            (Dom.em())(pullRequest.htmlUrl.replaceAll('https://github.com/', ''))),
-        (Dom.h6()..className = 'media-heading')(
-            pullRequest.title,
-            (Dom.br())(),
-            (Dom.small()..className = 'small-text')(pullRequest.updatedAtPretty,
-                (Dom.span()..className = 'red')(pullRequest.actionNeeded ? ' Action Needed' : ''))));
+    return react.div({
+      'className': 'media-body pull-left',
+      'style': mediaWidth,
+      'onClick': openNewTab
+    }, [
+      react.small({'className': 'small-text create-date'},
+          react.em({}, pullRequest.htmlUrl.replaceAll('https://github.com/', ''))),
+      react.h6({
+        'className': 'media-heading'
+      }, [
+        pullRequest.title,
+        react.br({}),
+        react.small({
+          'className': 'small-text'
+        }, [
+          pullRequest.updatedAtPretty,
+          react.span({'className': 'red'}, pullRequest.actionNeeded ? ' Action Needed' : '')
+        ])
+      ])
+    ]);
   }
 
   render() {
@@ -77,10 +82,11 @@ class _ChaserRow extends react.Component {
             react.i({'className': 'close-x icon icon-sm icon-close close-x',}))
         : null;
 
-    return
-      react.div({'className':'chaser-row'}, [
-        renderImage(),
-        react.div({'className': 'media'}, [renderStatus(), renderTitle(), removeX])
-      ]);
+    return react.div({
+      'className': 'chaser-row'
+    }, [
+      renderImage(),
+      react.div({'className': 'media'}, [renderStatus(), renderTitle(), removeX])
+    ]);
   }
 }

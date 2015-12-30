@@ -14,10 +14,6 @@ dependencies:
   react: ">=0.6.0"
   sass: any
   unittest: any
-  web_skin_dart:
-    git:
-      url: git@github.com:Workiva/web_skin_dart.git
-      ref: 0.0.10
 
 dev_dependencies:
   coverage: "^0.7.2"
@@ -26,10 +22,7 @@ dev_dependencies:
   dartdoc: "^0.4.0"
   source_gen: "^0.4.1"
   test: "^0.12.0"
-  w_flux:
-    git:
-      url: git@github.com:Workiva/w_flux.git
-      ref: 1.0.1
+  w_flux: 2.0.0
 
 transformers:
   - $dart2js:

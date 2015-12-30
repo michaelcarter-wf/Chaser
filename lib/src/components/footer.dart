@@ -1,7 +1,6 @@
 library src.components.footer;
 
 import 'package:react/react.dart' as react;
-import 'package:web_skin_dart/ui_core.dart' show Dom;
 
 import 'package:wChaser/src/stores/chaser_store.dart';
 import 'package:wChaser/src/actions/actions.dart';
@@ -23,23 +22,21 @@ class _Footer extends react.Component {
     }
 
     String buttonText = chaserStore.showAll ? 'Show Few' : 'Show All';
-
-    var leftColumn = (Dom.a()
-      ..href = '#'
-      ..onClick = showActionNeeded)(buttonText);
+    var leftColumn = react.a({'href': '#', 'onClick': showActionNeeded}, buttonText);
 
     return leftColumn;
   }
 
   render() {
-    print('Updated ${getPrettyDates(chaserStore.updated)}');
-    var rightColumn = (Dom.em())(getPrettyDates(chaserStore.updated));
+    var rightColumn = react.em({}, getPrettyDates(chaserStore.updated));
 
-    return (Dom.div()..className = 'footer')([
-      (Dom.div()..className = 'small-text text-left col-xs-4')(renderLeftColumn()),
-      (Dom.div()..className = 'small-text text-right col-xs-3')(),
-      (Dom.div()..className = 'small-text text-right col-xs-5')(rightColumn),
-      (Dom.div()..className = 'clear')()
+    return react.div({
+      'className': 'footer'
+    }, [
+      react.div({'className': 'small-text text-left col-xs-4'}, renderLeftColumn()),
+      react.div({'className': 'small-text text-right col-xs-3'}),
+      react.div({'className': 'small-text text-right col-xs-5'}, rightColumn),
+      react.div({'className': 'clear'})
     ]);
   }
 }

@@ -1,22 +1,13 @@
 library src.components.at_mentions;
 
 import 'package:react/react.dart' as react;
-import 'package:web_skin_dart/ui_components.dart';
 
-import 'package:web_skin_dart/ui_core.dart' show Dom;
-
-import 'package:wChaser/src/actions/actions.dart';
-import 'package:wChaser/src/models/models.dart';
-import 'package:wChaser/src/components/loading.dart';
 import 'package:wChaser/src/components/chaser_row.dart';
+import 'package:wChaser/src/components/loading.dart';
+import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/stores/chaser_store.dart';
 
-Map<String, dynamic> divStyle = {
-  'height': '400px',
-  'overflowY': 'auto',
-  'width': '100%',
-  'backgroundolor': '#FBFBFB'
-};
+Map<String, dynamic> divStyle = {'height': '400px', 'overflowY': 'auto', 'width': '100%', 'backgroundolor': '#FBFBFB'};
 
 var ChaserGrid = react.registerComponent(() => new _ChaserGrid());
 
@@ -32,6 +23,6 @@ class _ChaserGrid extends react.Component {
       });
     }
 
-    return (Dom.div()..style = divStyle)(content);
+    return react.div({'style': divStyle}, content);
   }
 }

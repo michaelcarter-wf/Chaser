@@ -1,15 +1,10 @@
 library src.components.header;
 
 import 'package:react/react.dart' as react;
-import 'package:web_skin_dart/ui_components.dart';
-import 'package:web_skin_dart/ui_core.dart' show Dom;
-
 import 'package:wChaser/src/actions/actions.dart';
 
 var Header = react.registerComponent(() => new _Header());
-
 var buttonStyle = {'padding': '8px 0px 0px 0px', 'fontSize': '11px'};
-
 var fontSize = {'fontSize': '11px'};
 
 class _Header extends react.Component {
@@ -27,14 +22,11 @@ class _Header extends react.Component {
   }
 
   render() {
-    var dropDownMenu = DropdownMenu()(
-        MenuItem()('Binders'), MenuItem()('Certifications'), MenuItem()('Section 16'), MenuItem()('XBRL'));
-
-    var refresh = loading ? null : (Button()
-      ..skin = ButtonSkin.DEFAULT
-      ..size = ButtonSize.XSMALL
-      ..onClick = refreshView
-      ..className = 'pull-right refresh-btn')((Icon()..glyph = IconGlyph.REFRESH)());
+    var refresh = loading
+        ? null
+        : react.button(
+            {'onClick': refreshView, 'className': 'btn btn-default btn-xs refresh-btn pull-right', 'type': 'submit'},
+            react.img({'className': 'text-center pointer', 'src': '/packages/wChaser/images/refresh.png'}));
 
     return (react.div({
       'className': 'header'

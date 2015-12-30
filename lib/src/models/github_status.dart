@@ -31,11 +31,11 @@ class GitHubStatus implements GithubBaseModel {
   }
 
   Map toMap() => {
-    GitHubStatusConstants.updatedAt: updatedAt,
-    GitHubStatusConstants.createdAt: createdAt,
-    GitHubStatusConstants.state: state,
-    GitHubStatusConstants.targetUrl: targetUrl,
-    GitHubStatusConstants.description: description,
-    GitHubStatusConstants.context: context
-  };
+        GitHubStatusConstants.updatedAt: updatedAt,
+        GitHubStatusConstants.createdAt: createdAt,
+        GitHubStatusConstants.state: state,
+        GitHubStatusConstants.targetUrl: targetUrl,
+        GitHubStatusConstants.description: description,
+        GitHubStatusConstants.context: context
+      };
 }

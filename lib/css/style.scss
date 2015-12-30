@@ -125,7 +125,8 @@ $hover-color: #e3e4e3;
 
 .media {
 	cursor:pointer;
-	padding: 3px;
+	padding: 5px;
+	margin: 0px;
 
 	>.pull-left {
 		margin-right:0;
@@ -156,6 +157,10 @@ $hover-color: #e3e4e3;
 	margin-top:5px;
 	color:#000;
 	background-color:$header-bg;
+	img {
+		width:20px;
+		height:20px;
+	}
 }
 
 .status-container {

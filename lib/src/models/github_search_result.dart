@@ -13,7 +13,6 @@ class GitHubSearchResultConstants {
   static final merged = 'merged';
   static final statusesUrl = 'statuses_url';
   static final pullRequest = 'pull_request';
-
 }
 
 class GitHubSearchResult implements GithubBaseModel {

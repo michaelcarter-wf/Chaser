@@ -19,7 +19,7 @@ class PullRequestsStore extends Store implements ChaserStore {
 
     // listen for location changes
     _locationStore.listen((_) {
-      load(force:false);
+      load(force: false);
     });
 
     // listen for successful auth
@@ -35,7 +35,6 @@ class PullRequestsStore extends Store implements ChaserStore {
   }
 
   _getPullRequestsStatus() async {
-    print('GETTING PR STATUS');
     for (GitHubSearchResult gsr in displayPullRequests) {
       gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
       List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.githubPullRequest);

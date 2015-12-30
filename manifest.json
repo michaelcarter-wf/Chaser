@@ -12,6 +12,7 @@
   "permissions": [
     "storage",
     "https://github.com/*",
+    "https://api.github.com/*",
     "tabs",
     "alarms"
   ],

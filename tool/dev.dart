@@ -8,7 +8,7 @@ main(List<String> args) async {
   // Perform task configuration here as necessary.
 
   // Available task configurations:
-  config.analyze.entryPoints = ['web/home.dart'];
+  config.analyze.entryPoints = ['web/main.dart'];
   // config.copyLicense
   // config.coverage
   // config.docs
