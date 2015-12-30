@@ -19,8 +19,6 @@ class _ChaserRow extends react.Component {
     window.open(pullRequest.htmlUrl, pullRequest.id.toString());
   }
 
-
-
   removeThisGuy(_) {}
 
   renderStatus() {
@@ -29,24 +27,32 @@ class _ChaserRow extends react.Component {
 
       pullRequest.githubPullRequest?.githubStatus.forEach((String key, GitHubStatus ghs) {
         if (ghs.state == 'success') {
-          statuses.add(react.div({'className': 'circle passed', 'onClick':(e) {
-            window.open(ghs.targetUrl, pullRequest.id.toString());
-          }}));
+          statuses.add(react.div({
+            'className': 'circle passed',
+            'onClick': (e) {
+              window.open(ghs.targetUrl, pullRequest.id.toString());
+            }
+          }));
         } else if (ghs.state == 'failure') {
-          statuses.add(react.div({'className': 'circle failed', 'onClick':(e) {
-            window.open(ghs.targetUrl, pullRequest.id.toString());
-          }}));
+          statuses.add(react.div({
+            'className': 'circle failed',
+            'onClick': (e) {
+              window.open(ghs.targetUrl, pullRequest.id.toString());
+            }
+          }));
         } else {
-          statuses.add(react.div({'className': 'circle loading', 'onClick':(e) {
-            window.open(ghs.targetUrl, pullRequest.id.toString());
-          }}));
+          statuses.add(react.div({
+            'className': 'circle loading',
+            'onClick': (e) {
+              window.open(ghs.targetUrl, pullRequest.id.toString());
+            }
+          }));
         }
       });
 
       return react.div({'className': 'status-container show-slide pull-left'}, statuses);
     } else {
       var loading = [
-
         react.div({'className': 'circle passed blink-fast'}),
         react.div({'className': 'circle loading blink'}),
         react.div({'className': 'circle failed blink-slow'})
