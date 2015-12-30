@@ -49,7 +49,7 @@ class _ChaserContainer extends FluxComponent {
     }
 
     return [
-      Header({'actions': chaserActions, 'loading': atMentionStore.displayPullRequests == null}),
+      Header({'actions': chaserActions, 'loading': chaserStore.loading}),
       ChaserGrid({'chaserStore': chaserStore, 'actions': chaserActions}),
       Footer({'chaserStore': chaserStore, 'actions': chaserActions})
     ];
