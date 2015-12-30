@@ -21,6 +21,7 @@ main() {
   checkForPrs();
 }
 
+
 checkForPrs() async {
   LocalStorageStore _localStorageStore = await LocalStorageStore.open();
   String accessToken = await _localStorageStore.getByKey(LocalStorageConstants.githubTokenKey);
