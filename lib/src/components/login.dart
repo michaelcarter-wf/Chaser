@@ -3,7 +3,6 @@ library src.components.login;
 import 'dart:html';
 
 import 'package:react/react.dart' as react;
-import 'package:web_skin_dart/ui_components.dart';
 
 import 'package:wChaser/src/actions/actions.dart';
 
@@ -34,10 +33,7 @@ class _Login extends react.Component {
           'style': state['attempts'] > 0 ? {'border': '1px solid red'} : {}
         }),
         react.br({}),
-        (Button()
-          ..className = 'pull-right'
-          ..skin = ButtonSkin.LIGHT
-          ..onClick = submitToken)('Submit')
+        react.button({'onClick':submitToken, 'className': 'btn btn-default pull-right', 'type':'submit'}, 'Submit')
     ]);
   }
 }
