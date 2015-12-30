@@ -13,7 +13,7 @@ import 'package:wChaser/src/stores/chaser_store.dart';
 
 Map<String, dynamic> divStyle = {
   'height': '400px',
-  'overflowY': 'scroll',
+  'overflowY': 'auto',
   'width': '100%',
   'backgroundolor': '#FBFBFB'
 };

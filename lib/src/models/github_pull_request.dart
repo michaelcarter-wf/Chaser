@@ -4,6 +4,7 @@ class GitHubPullRequestConstants {
   static final actionNeeded = 'action_needed';
   static final state = 'state';
   static final commentsUrl = 'comments_url';
+  static final url = 'url';
   static final htmlUrl = 'html_url';
   static final fullName = 'full_name';
   static final id = 'id';
@@ -22,6 +23,7 @@ class GitHubPullRequest implements GithubBaseModel {
   Map<String, GitHubStatus> githubStatus;
   String htmlUrl;
   int id;
+  String url;
   bool merged;
   String state;
   String statusesUrl;
@@ -41,6 +43,7 @@ class GitHubPullRequest implements GithubBaseModel {
     htmlUrl = json[GitHubPullRequestConstants.htmlUrl];
     statusesUrl = json[GitHubPullRequestConstants.statusesUrl];
     fullName = 'tester';
+    url = json[GitHubPullRequestConstants.url];
 
     // for some reason this can be null
     if (json['head'] != null) {
@@ -71,6 +74,7 @@ class GitHubPullRequest implements GithubBaseModel {
           'repo': {GitHubPullRequestConstants.fullName: fullName}
         },
         GitHubPullRequestConstants.title: title,
+        GitHubPullRequestConstants.url: url,
         GitHubPullRequestConstants.updatedAt: updatedAt,
         GitHubPullRequestConstants.actionNeeded: actionNeeded,
         GitHubPullRequestConstants.statusesUrl: statusesUrl

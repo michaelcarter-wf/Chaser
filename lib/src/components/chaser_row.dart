@@ -39,7 +39,12 @@ class _ChaserRow extends react.Component {
 
       return react.div({'className': 'status-container show-slide pull-left'}, statuses);
     } else {
-      return react.div({'className': 'status-container hide-slide pull-left'});
+      var loading = [
+        react.div({'className': 'circle passed blink-fast'}),
+        react.div({'className': 'circle loading blink'}),
+        react.div({'className': 'circle failed blink-slow'})
+      ];
+      return react.div({'className': 'status-container hide-slide pull-left'}, loading);
     }
   }
 

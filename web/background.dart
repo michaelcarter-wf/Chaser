@@ -3,8 +3,6 @@ import 'dart:convert';
 
 import 'package:chrome/chrome_ext.dart' as chrome;
 
-import 'package:react/react_client.dart' as reactClient;
-import 'package:react/react.dart' as react;
 import 'package:lawndart/lawndart.dart' show LocalStorageStore;
 
 import 'package:wChaser/src/constants.dart';
@@ -34,19 +32,19 @@ checkForPrs() async {
     return;
   }
 
-  List<GitHubPullRequest> atMentionPullRequests = await _gitHubService.searchForAtMentions(githubUser.login);
+  List<GitHubSearchResult> atMentionPullRequests = await _gitHubService.searchForAtMentions(githubUser.login);
 
-  for (GitHubPullRequest pullRequest in atMentionPullRequests) {
+  for (GitHubSearchResult pullRequest in atMentionPullRequests) {
     List<GitHubComment> comments = await _gitHubService.getPullRequestComments(pullRequest);
     pullRequest.actionNeeded = await isPlusOneNeeded(comments, githubUser.login);
   }
 
-  List<GitHubPullRequest> actionNeeded = atMentionPullRequests.where((GitHubPullRequest gpr) => gpr.actionNeeded).toList();
+  List<GitHubSearchResult> actionNeeded = atMentionPullRequests.where((GitHubSearchResult gpr) => gpr.actionNeeded).toList();
 
   chrome.browserAction
       .setBadgeText(new chrome.BrowserActionSetBadgeTextParams(text: actionNeeded.length.toString()));
 
-      List<String> atMentionJson = atMentionPullRequests.map((GitHubPullRequest ghpr) {
+      List<String> atMentionJson = atMentionPullRequests.map((GitHubSearchResult ghpr) {
       return ghpr.toMap();
     }).toList();
 

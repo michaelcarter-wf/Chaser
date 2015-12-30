@@ -5,6 +5,7 @@ class AtMentionStore extends Store implements ChaserStore {
 
   UserStore _userStore;
   ChaserActions _chaserActions;
+  LocationStore _locationStore;
   GitHubService _gitHubService;
   List<GitHubSearchResult> atMentionPullRequests = [];
   List<GitHubSearchResult> displayPullRequests = null;
@@ -12,9 +13,11 @@ class AtMentionStore extends Store implements ChaserStore {
   bool showAll = false;
   bool rowsHideable = true;
 
-  AtMentionStore(this._chaserActions, this._gitHubService, this._userStore) {
+  AtMentionStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore) {
     _chaserActions.locationActions.refreshView.listen((e) {
-      load(force: true);
+      if (_locationStore.currentView == ChaserViews.atMentions) {
+        load(force: true);
+      }
     });
 
     triggerOnAction(_chaserActions.atMentionActions.displayAll, _displayAll);
@@ -64,13 +67,6 @@ class AtMentionStore extends Store implements ChaserStore {
     });
 
     _displayAll(showAll);
-    List<String> atMentionJson = atMentionPullRequests?.map((GitHubSearchResult ghpr) {
-      return ghpr.toMap();
-    }).toList();
-
-    // not awaiting these, they shouldn't block
-    localStorageStore.save(JSON.encode(atMentionJson), LocalStorageConstants.atMentionLocalStorageKey);
-    localStorageStore.save(updated.toIso8601String(), LocalStorageConstants.atMentionUpdatedLocalStorageKey);
   }
 
   load({force: false}) async {
@@ -98,15 +94,24 @@ class AtMentionStore extends Store implements ChaserStore {
     }
 
     // don't need to wait for these, they'll updated once they come in.
-    _getPullRequestsStatus();
+    _getPullRequestsStatus().then((_) {
+      List<String> atMentionJson = atMentionPullRequests?.map((GitHubSearchResult ghpr) {
+        return ghpr.toMap();
+      }).toList();
+
+      // not awaiting these, they shouldn't block
+      localStorageStore.save(JSON.encode(atMentionJson), LocalStorageConstants.atMentionLocalStorageKey);
+      localStorageStore.save(updated.toIso8601String(), LocalStorageConstants.atMentionUpdatedLocalStorageKey);
+    });
 
     displayPullRequests = atMentionPullRequests;
     _displayAll(showAll);
   }
 
-  _getPullRequestsStatus() async {
+  Future _getPullRequestsStatus() async {
     for (GitHubSearchResult gsr in atMentionPullRequests) {
       gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
+      print(gsr.githubPullRequest);
       List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.githubPullRequest);
 
       // first one in the list should be the current
@@ -114,7 +119,6 @@ class AtMentionStore extends Store implements ChaserStore {
         gsr.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
       });
     }
-
     trigger();
   }
 

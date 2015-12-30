@@ -53,7 +53,7 @@ class GitHubService {
     return [];
   }
 
-  Future<List<GitHubComment>> getPullRequestComments(GitHubPullRequest pullRequest) async {
+  Future<List<GitHubComment>> getPullRequestComments(GitHubSearchResult pullRequest) async {
     var pullRequestsCommentsJson = await _requestAuthed('GET', pullRequest.commentsUrl);
 
     return pullRequestsCommentsJson.map((pullRequestJson) {

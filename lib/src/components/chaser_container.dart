@@ -16,13 +16,6 @@ import 'package:wChaser/src/components/chaser_grid.dart';
 import 'package:wChaser/src/components/footer.dart';
 import 'package:wChaser/src/constants.dart';
 
-Map<String, dynamic> divStyle = {
-  'height': '400px',
-  'overflowY': 'scroll',
-  'width': '100%',
-  'backgroundolor': '#FBFBFB'
-};
-
 var ChaserContainer = react.registerComponent(() => new _ChaserContainer());
 
 class _ChaserContainer extends FluxComponent {

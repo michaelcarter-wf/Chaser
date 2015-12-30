@@ -13,6 +13,7 @@ class GitHubSearchResultConstants {
   static final merged = 'merged';
   static final statusesUrl = 'statuses_url';
   static final pullRequest = 'pull_request';
+
 }
 
 class GitHubSearchResult implements GithubBaseModel {
@@ -61,7 +62,7 @@ class GitHubSearchResult implements GithubBaseModel {
     githubUser = new GitHubUser(json[GitHubSearchResultConstants.githubUser]);
 
     // make a call to get this later
-    githubPullRequest = null;
+    githubPullRequest = json['githubPullRequest'] ?? null;
 
     // this will only come from cached data
     if (json.containsKey(GitHubSearchResultConstants.actionNeeded)) {
@@ -79,6 +80,7 @@ class GitHubSearchResult implements GithubBaseModel {
         'head': {
           'repo': {GitHubSearchResultConstants.fullName: fullName}
         },
+        GitHubSearchResultConstants.pullRequest: githubPullRequest?.toMap(),
         GitHubSearchResultConstants.title: title,
         GitHubSearchResultConstants.updatedAt: updatedAt,
         GitHubSearchResultConstants.actionNeeded: actionNeeded,

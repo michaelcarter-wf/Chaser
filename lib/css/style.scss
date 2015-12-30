@@ -15,6 +15,23 @@ $hover-color: #e3e4e3;
 	transition: all .5s ease-in-out;
 }
 
+@keyframes blinker {
+  50% { opacity: 0.0; }
+}
+
+.blink {
+  animation: blinker 1.5s linear infinite;
+}
+
+.blink-slow {
+  animation: blinker 1.7s linear infinite;
+}
+
+.blink-fast {
+  animation: blinker 1.3s linear infinite;
+}
+
+
 .chaser-close-button {
 	margin-right: 4px;
 	margin-top: 4px;
@@ -144,6 +161,7 @@ $hover-color: #e3e4e3;
 .status-container {
 	width: 15px;
 	height: 100%;
+	opacity: .7;
 	transition: all .5s ease-in-out;
 
 	.circle {
@@ -158,20 +176,11 @@ $hover-color: #e3e4e3;
 	}
 
 	.loading {
-		//background-color: yellow;
-		background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, yellow 0%, orange 100%, red 95%);
-		background-image: -webkit-radial-gradient(45px 45px, circle cover, yellow, orange);
-		background-image: radial-gradient(45px 45px 45deg, circle cover, yellow 0%, orange 100%, red 95%);
-
-		animation-name: spin;
-		animation-duration: 3s; /* 3 seconds */
-		animation-iteration-count: infinite;
-		animation-timing-function: linear;
+		background-color: orange;
 	}
 
 	.failed {
 		background-color: $red;
-		/* width and height can be anything, as long as they're equal */
 	}
 }
 
