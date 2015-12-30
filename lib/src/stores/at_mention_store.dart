@@ -53,7 +53,7 @@ class AtMentionStore extends Store implements ChaserStore {
     updated = new DateTime.now();
     atMentionPullRequests = await _gitHubService.searchForAtMentions(_userStore.githubUser.login);
 
-    for (GitHubPullRequest pullRequest in atMentionPullRequests) {
+    for (GitHubSearchResult pullRequest in atMentionPullRequests) {
       List<GitHubComment> comments = await _gitHubService.getPullRequestComments(pullRequest);
       pullRequest.actionNeeded = await isPlusOneNeeded(comments, _userStore.githubUser.login);
     }

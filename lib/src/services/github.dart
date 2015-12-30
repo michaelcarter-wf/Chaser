@@ -93,7 +93,7 @@ class GitHubService {
 
   //  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf
   Future<List<GitHubSearchResult>> searchForAtMentions(String login, {since: null}) async {
-    DateTime oneMonthAgo = since ?? new DateTime.now().subtract(new Duration(days: 30));
+    DateTime oneMonthAgo = since ?? new DateTime.now().subtract(new Duration(days: 60));
     String formatted = new DateFormat('yyyy-MM-dd').format(oneMonthAgo);
 
     Fluri uri = new Fluri()
