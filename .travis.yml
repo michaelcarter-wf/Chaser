@@ -9,4 +9,4 @@ before_install:
 script:
   - pub run dart_dev format --check
   - pub run dart_dev analyze
-  - pub run dart_dev test -p content-shell
+  - pub run test -p content-shell
