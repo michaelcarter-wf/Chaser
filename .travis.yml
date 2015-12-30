@@ -4,4 +4,4 @@ dart:
 script:
   - pub run dart_dev format --check
   - pub run dart_dev analyze
-  - pub run dart_dev test -p content-shell
+  - xvfb-run -s '-screen 0 1024x768x24' pub run dart_dev test -p content-shell
