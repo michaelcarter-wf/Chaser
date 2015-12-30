@@ -1,4 +1,4 @@
-wChaser
+wChaser ![travis-ci](https://travis-ci.org/bradybecker-wf/wChaser.svg?branch=master)
 ==========
 > wChaser is a chrome extension that finds Pull Requests that you have opened or be AtMentioned in. Also pulls in travis-ci build statuses and others of the like.
 
