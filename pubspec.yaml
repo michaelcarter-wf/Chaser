@@ -24,6 +24,9 @@ dev_dependencies:
   test: "^0.12.0"
 
 transformers:
+  - $dart2js:
+      minify: false
+      csp: true
   - sass
   - chrome
 

@@ -4,7 +4,7 @@ import 'package:react/react.dart' as react;
 
 import 'package:wChaser/src/components/chaser_row.dart';
 import 'package:wChaser/src/components/loading.dart';
-//import 'package:wChaser/src/components/pop_over.dart';
+import 'package:wChaser/src/components/pop_over.dart';
 import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/stores/chaser_store.dart';
@@ -21,16 +21,17 @@ class _ChaserGrid extends react.Component {
     var content = Loading({});
 
     if (!chaserStore.loading) {
-      bool hideable = chaserStore.rowsHideable;
-      ChaserActions ca = props['chaserActions'];
       content = chaserStore.displayPullRequests.map((GitHubSearchResult gitHubSearchResult) {
-        return ChaserRow({'pullRequest': gitHubSearchResult, 'hideable': hideable, 'actions': ca});
-      });
+        return ChaserRow(
+            {'pullRequest': gitHubSearchResult, 'hideable': chaserStore.rowsHideable, 'actions': chaserActions});
+      }).toList();
     }
 
-    return react.div({'style': divStyle}, [
-//        PopOver({'actions': chaserActions}),
-        content
+    return react.div({
+      'style': divStyle
+    }, [
+      PopOver({'actions': chaserActions}),
+      content
     ]);
   }
 }

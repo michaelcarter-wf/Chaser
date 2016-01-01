@@ -4,6 +4,7 @@ class GitHubStatusState {
   static final success = 'success';
   static final failure = 'failure';
 }
+
 class GitHubStatusConstants {
   static final updatedAt = 'updated_at';
   static final createdAt = 'created_at';

@@ -59,11 +59,11 @@ class _ChaserRow extends react.Component {
             react.i({'className': 'close-x icon icon-sm icon-close close-x',}))
         : null;
 
-//    PullRequestStatus({'gitHubPullRequest': pullRequest.githubPullRequest, 'actions': actions}),
     return react.div({
       'className': 'chaser-row'
     }, [
       renderImage(),
+      PullRequestStatus({'gitHubPullRequest': pullRequest.githubPullRequest, 'actions': actions}),
       react.div({'className': 'media'}, [renderTitle(), removeX])
     ]);
   }

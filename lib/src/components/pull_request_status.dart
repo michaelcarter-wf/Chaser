@@ -4,10 +4,8 @@ import 'dart:html';
 
 import 'package:react/react.dart' as react;
 
-import 'package:wChaser/src/stores/chaser_store.dart';
 import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/models/models.dart';
-import 'package:wChaser/src/utils/dates.dart';
 
 var PullRequestStatus = react.registerComponent(() => new _PullRequestStatus());
 
@@ -15,8 +13,14 @@ class _PullRequestStatus extends react.Component {
   GitHubPullRequest get gitHubPullRequest => props['gitHubPullRequest'];
   ChaserActions get actions => props['actions'];
 
-  onMouseOver(react.SyntheticMouseEvent mouseEvent) {
-    actions.popoverActions.showPopover(new PopoverProps(mouseEvent.pageX, mouseEvent.pageY, gitHubPullRequest.id));
+  onMouseOver(react.SyntheticMouseEvent mouseEvent, String context, String description) {
+    var content = react.div({}, [
+      react.small({'className': 'text-small'}, context),
+      react.br({}),
+      react.em({},react.small({'className': 'text-small'}, description)),
+    ]);
+
+    actions.popoverActions.showPopover(new PopoverProps(mouseEvent.pageX, mouseEvent.pageY, context, content));
   }
 
   render() {
@@ -27,7 +31,10 @@ class _PullRequestStatus extends react.Component {
       gitHubPullRequest?.githubStatus.forEach((String key, GitHubStatus ghs) {
         if (ghs.state == GitHubStatusState.success) {
           statuses.add(react.div({
-            'onMouseOver': onMouseOver,
+            'onMouseOver': (react.SyntheticMouseEvent me) {
+              onMouseOver(me, ghs.context, ghs.description);
+            },
+            'onMouseOut': actions.popoverActions.closePopover,
             'className': 'circle passed',
             'onClick': (e) {
               window.open(ghs.targetUrl, gitHubPullRequest.id.toString());
@@ -35,7 +42,10 @@ class _PullRequestStatus extends react.Component {
           }));
         } else if (ghs.state == GitHubStatusState.failure) {
           statuses.add(react.div({
-            'onMouseOver': onMouseOver,
+            'onMouseOver': (react.SyntheticMouseEvent me) {
+              onMouseOver(me, ghs.context, ghs.description);
+            },
+            'onMouseOut': actions.popoverActions.closePopover,
             'className': 'circle failed',
             'onClick': (e) {
               window.open(ghs.targetUrl, gitHubPullRequest.id.toString());
@@ -43,7 +53,10 @@ class _PullRequestStatus extends react.Component {
           }));
         } else {
           statuses.add(react.div({
-            'onMouseOver': onMouseOver,
+            'onMouseOver': (react.SyntheticMouseEvent me) {
+              onMouseOver(me, ghs.context, ghs.description);
+            },
+            'onMouseOut': actions.popoverActions.closePopover,
             'className': 'circle loading',
             'onClick': (e) {
               window.open(ghs.targetUrl, gitHubPullRequest.id.toString());
@@ -55,7 +68,9 @@ class _PullRequestStatus extends react.Component {
       return react.div({'className': 'status-container show-slide pull-left'}, statuses);
     } else {
       // render default loading
-      return react.div({'className': 'status-container hide-slide pull-left'}, [
+      return react.div({
+        'className': 'status-container hide-slide pull-left'
+      }, [
         react.div({'className': 'circle passed blink-fast'}),
         react.div({'className': 'circle loading blink'}),
         react.div({'className': 'circle failed blink-slow'})

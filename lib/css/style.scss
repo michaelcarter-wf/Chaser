@@ -2,6 +2,24 @@ $red: #ED1212;
 $header-bg: #FBFBFB;
 $hover-color: #e3e4e3;
 
+$black-bg: rgb(82, 82, 82);
+
+$popup-width: 400px;
+
+
+#output {
+	width: $popup-width;
+	overflow-x: hidden;
+	min-height: 200px;
+}
+.login-page {
+	padding: 10px;
+	height: 100px;
+}
+#app {
+	background-color: #FBFBFB;
+}
+
 .action-needed-img {
 	border: 3px solid $red;
 }
@@ -45,6 +63,13 @@ $hover-color: #e3e4e3;
 
 .chaser-popover {
 	position: absolute;
+	box-shadow: 1px 2px 3px;
+	border-radius: 3px;
+	background-color: $black-bg;
+	color: $header-bg;
+	padding:7px;
+	opacity: .9;
+	max-width: $popup-width * .75	;
 }
 
 .chaser-row:nth-child(even) {
@@ -173,6 +198,7 @@ $hover-color: #e3e4e3;
 	height: 100%;
 	opacity: .7;
 	transition: all .5s ease-in-out;
+	padding: 0px 4px;
 
 	.circle {
 		border-radius: 50%;
@@ -183,14 +209,17 @@ $hover-color: #e3e4e3;
 
 	.passed {
 		background-color: green;
+		cursor: pointer;
 	}
 
 	.loading {
 		background-color: orange;
+		cursor: pointer;
 	}
 
 	.failed {
 		background-color: $red;
+		cursor: pointer;
 	}
 }
 

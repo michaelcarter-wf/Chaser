@@ -12,7 +12,6 @@
   "permissions": [
     "storage",
     "notifications",
-    "https://github.com/*",
     "https://api.github.com/*",
     "tabs",
     "alarms"
