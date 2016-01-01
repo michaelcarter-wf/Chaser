@@ -2,6 +2,24 @@ $red: #ED1212;
 $header-bg: #FBFBFB;
 $hover-color: #e3e4e3;
 
+$black-bg: rgb(82, 82, 82);
+$popup-width: 400px;
+$gray: #999;
+
+
+#output {
+	width: $popup-width;
+	overflow-x: hidden;
+	min-height: 200px;
+}
+.login-page {
+	padding: 10px;
+	height: 100px;
+}
+#app {
+	background-color: $header-bg;
+}
+
 .action-needed-img {
 	border: 3px solid $red;
 }
@@ -31,7 +49,6 @@ $hover-color: #e3e4e3;
   animation: blinker 1.3s linear infinite;
 }
 
-
 .chaser-close-button {
 	margin-right: 4px;
 	margin-top: 4px;
@@ -44,16 +61,19 @@ $hover-color: #e3e4e3;
 	}
 }
 
-.chaser-row:nth-child(even) {
-	background-color:#FBFBFB;
+.chaser-popover {
+	position: absolute;
+	box-shadow: 1px 2px 3px;
+	border-radius: 3px;
+	background-color: $black-bg;
+	color: $header-bg;
+	padding:7px;
+	opacity: .9;
+	max-width: $popup-width * .75	;
 }
 
-.row-passed {
-	border-left: solid 5px green;
-	transition: all .1s ease-in-out;
-	&:hover {
-		border-left: solid 5px green;
-	}
+.chaser-row:nth-child(even) {
+	background-color:$header-bg;
 }
 
 .chaser-row {
@@ -83,8 +103,9 @@ $hover-color: #e3e4e3;
 
 .footer {
 	border-top:1px solid #E7E7E7;
-	background-color:#FFF;
+	background-color:$header-bg;
 	padding:6px;
+	min-height:30px;
 }
 
 .github-title {
@@ -96,10 +117,10 @@ $hover-color: #e3e4e3;
 	width:100%;
 	border-bottom:1px solid #F1F1F1;
 	background-color:$header-bg;
-	background-image:linear-gradient(#f9f9f9,#FBFBFB);
+	background-image:linear-gradient(#f9f9f9,$header-bg);
 	background-repeat:repeat-x;
-	height:50px;
-	padding:8px;
+    height: 40px;
+    padding: 4px 0px;
 }
 
 .hide {
@@ -155,7 +176,7 @@ $hover-color: #e3e4e3;
 
 .refresh-btn {
 	margin-top:5px;
-	color:#000;
+	color:$black-bg;
 	background-color:$header-bg;
 	img {
 		width:20px;
@@ -163,11 +184,21 @@ $hover-color: #e3e4e3;
 	}
 }
 
+.row-passed {
+	border-left: solid 5px green;
+	transition: all .1s ease-in-out;
+	&:hover {
+		border-left: solid 5px green;
+	}
+}
+
+
 .status-container {
 	width: 15px;
 	height: 100%;
 	opacity: .7;
 	transition: all .5s ease-in-out;
+	padding: 0px 4px;
 
 	.circle {
 		border-radius: 50%;
@@ -178,26 +209,29 @@ $hover-color: #e3e4e3;
 
 	.passed {
 		background-color: green;
+		cursor: pointer;
 	}
 
 	.loading {
 		background-color: orange;
+		cursor: pointer;
 	}
 
 	.failed {
 		background-color: $red;
+		cursor: pointer;
 	}
 }
 
 .small-text {
-	color:#999;
+	color:$gray;
 	font-size:10px;
 	margin:0;
 	text-indent: 0;
 }
 
 .x-small-text {
-	color:#999;
+	color:$gray;
 	font-size:8px;
 	top:-1px;
 	margin:0;

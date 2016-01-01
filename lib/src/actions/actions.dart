@@ -19,8 +19,22 @@ class LocationActions {
   final Action changeViewNext = new Action();
 }
 
+class PopoverProps {
+  PopoverProps(this.pageX, this.pageY, this.id, this.content);
+  int pageX;
+  int pageY;
+  String id;
+  dynamic content;
+}
+
+class PopoverActions {
+  final Action<PopoverProps> showPopover = new Action<PopoverProps>();
+  final Action closePopover = new Action();
+}
+
 class ChaserActions {
   AtMentionActions atMentionActions = new AtMentionActions();
   AuthActions authActions = new AuthActions();
   LocationActions locationActions = new LocationActions();
+  PopoverActions popoverActions = new PopoverActions();
 }

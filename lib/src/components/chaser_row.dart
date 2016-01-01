@@ -1,11 +1,12 @@
-library src.components.pull_request_row;
+library src.components.chaser_row;
 
-import 'dart:core';
 import 'dart:html';
 
 import 'package:react/react.dart' as react;
 
+import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/models/models.dart';
+import 'package:wChaser/src/components/pull_request_status.dart';
 
 var mediaWidth = {'width': '80%'};
 
@@ -13,53 +14,14 @@ var ChaserRow = react.registerComponent(() => new _ChaserRow());
 
 class _ChaserRow extends react.Component {
   GitHubSearchResult get pullRequest => props['pullRequest'];
-  bool get hideable => props['get'];
+  bool get hideable => props['hideable'];
+  ChaserActions get actions => props['actions'];
 
   openNewTab(_) {
     window.open(pullRequest.htmlUrl, pullRequest.id.toString());
   }
 
   removeThisGuy(_) {}
-
-  renderStatus() {
-    if (pullRequest.githubPullRequest?.githubStatus != null) {
-      List statuses = [];
-
-      pullRequest.githubPullRequest?.githubStatus.forEach((String key, GitHubStatus ghs) {
-        if (ghs.state == 'success') {
-          statuses.add(react.div({
-            'className': 'circle passed',
-            'onClick': (e) {
-              window.open(ghs.targetUrl, pullRequest.id.toString());
-            }
-          }));
-        } else if (ghs.state == 'failure') {
-          statuses.add(react.div({
-            'className': 'circle failed',
-            'onClick': (e) {
-              window.open(ghs.targetUrl, pullRequest.id.toString());
-            }
-          }));
-        } else {
-          statuses.add(react.div({
-            'className': 'circle loading',
-            'onClick': (e) {
-              window.open(ghs.targetUrl, pullRequest.id.toString());
-            }
-          }));
-        }
-      });
-
-      return react.div({'className': 'status-container show-slide pull-left'}, statuses);
-    } else {
-      var loading = [
-        react.div({'className': 'circle passed blink-fast'}),
-        react.div({'className': 'circle loading blink'}),
-        react.div({'className': 'circle failed blink-slow'})
-      ];
-      return react.div({'className': 'status-container hide-slide pull-left'}, loading);
-    }
-  }
 
   renderImage() {
     return react.span(
@@ -101,7 +63,8 @@ class _ChaserRow extends react.Component {
       'className': 'chaser-row'
     }, [
       renderImage(),
-      react.div({'className': 'media'}, [renderStatus(), renderTitle(), removeX])
+      PullRequestStatus({'gitHubPullRequest': pullRequest.githubPullRequest, 'actions': actions}),
+      react.div({'className': 'media'}, [renderTitle(), removeX])
     ]);
   }
 }

@@ -16,8 +16,6 @@ class AtMentionStore extends Store implements ChaserStore {
 
   AtMentionStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore) {
     _chaserActions.locationActions.refreshView.listen((e) {
-      loading = true;
-      trigger();
       load(force: true);
     });
 
@@ -72,6 +70,8 @@ class AtMentionStore extends Store implements ChaserStore {
     if (_locationStore.currentView != ChaserViews.atMentions) {
       return;
     }
+    loading = true;
+    trigger();
 
     LocalStorageStore localStorageStore = await LocalStorageStore.open();
     String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
