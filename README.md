@@ -1,15 +1,24 @@
 wChaser ![travis-ci](https://travis-ci.org/bradybecker-wf/wChaser.svg?branch=master)
 ==========
-> wChaser is a chrome extension that finds Pull Requests that you have opened or be AtMentioned in. Also pulls in travis-ci build statuses and others of the like.
+> wChaser is a chrome extension that:
+* finds Pull Requests that you've been [at mentioned in](https://github.com/pulls/mentioned)
+* finds Pull Requests that you've [created](https://github.com/pulls)
+* Displays and links build statuses of that repo. 
 
-![wChaser Screen Shot](https://cloud.githubusercontent.com/assets/6053448/12057898/aa011408-af0b-11e5-8789-e1d8e1e7f27d.png)
+![wChaser Screen Shot](https://cloud.githubusercontent.com/assets/6053448/12072320/a4cc05d0-b09e-11e5-9685-26cf97393ed8.png)
 
 #### Installing wChaser *(until it's out on the chrome store)*
 * The [Dart SDK](https://www.dartlang.org/downloads/) is required.
 * `pub get`
 * `pub build`
+* `./build.sh`
 * In Chrome navigate to: `chrome://extensions/`
 * Make sure `Developer Mode` is checked
 * Click `Load Unpacked Extension` and select your wChaser repo
-* Happy Chasing.
+* Happy Chasing
+
+#### Protips: 
+* Use the arrow keys to switch views
+* `Alt+Shift+K` Is a hot key to open the extension
+* Click on the build status circle to take you to the passed/failed/loading build
 
