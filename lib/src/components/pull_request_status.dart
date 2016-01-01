@@ -17,7 +17,7 @@ class _PullRequestStatus extends react.Component {
     var content = react.div({}, [
       react.small({'className': 'text-small'}, context),
       react.br({}),
-      react.em({},react.small({'className': 'text-small'}, description)),
+      react.em({}, react.small({'className': 'text-small'}, description)),
     ]);
 
     actions.popoverActions.showPopover(new PopoverProps(mouseEvent.pageX, mouseEvent.pageY, context, content));

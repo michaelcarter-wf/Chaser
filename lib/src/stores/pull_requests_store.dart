@@ -13,8 +13,6 @@ class PullRequestsStore extends Store implements ChaserStore {
   bool rowsHideable = false;
   bool loading = true;
 
-  bool get isHideable => rowsHideable;
-
   PullRequestsStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore) {
     updated = new DateTime.now();
     _chaserActions.locationActions.refreshView.listen((e) {

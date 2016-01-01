@@ -1,4 +1,4 @@
-library src.components.pull_request_row_eee;
+library src.components.chaser_row;
 
 import 'dart:html';
 

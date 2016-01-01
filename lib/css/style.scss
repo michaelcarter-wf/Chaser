@@ -3,8 +3,8 @@ $header-bg: #FBFBFB;
 $hover-color: #e3e4e3;
 
 $black-bg: rgb(82, 82, 82);
-
 $popup-width: 400px;
+$gray: #999;
 
 
 #output {
@@ -17,7 +17,7 @@ $popup-width: 400px;
 	height: 100px;
 }
 #app {
-	background-color: #FBFBFB;
+	background-color: $header-bg;
 }
 
 .action-needed-img {
@@ -73,7 +73,7 @@ $popup-width: 400px;
 }
 
 .chaser-row:nth-child(even) {
-	background-color:#FBFBFB;
+	background-color:$header-bg;
 }
 
 .chaser-row {
@@ -103,7 +103,7 @@ $popup-width: 400px;
 
 .footer {
 	border-top:1px solid #E7E7E7;
-	background-color:#FFF;
+	background-color:$header-bg;
 	padding:6px;
 	min-height:30px;
 }
@@ -117,7 +117,7 @@ $popup-width: 400px;
 	width:100%;
 	border-bottom:1px solid #F1F1F1;
 	background-color:$header-bg;
-	background-image:linear-gradient(#f9f9f9,#FBFBFB);
+	background-image:linear-gradient(#f9f9f9,$header-bg);
 	background-repeat:repeat-x;
     height: 40px;
     padding: 4px 0px;
@@ -176,7 +176,7 @@ $popup-width: 400px;
 
 .refresh-btn {
 	margin-top:5px;
-	color:#000;
+	color:$black-bg;
 	background-color:$header-bg;
 	img {
 		width:20px;
@@ -224,14 +224,14 @@ $popup-width: 400px;
 }
 
 .small-text {
-	color:#999;
+	color:$gray;
 	font-size:10px;
 	margin:0;
 	text-indent: 0;
 }
 
 .x-small-text {
-	color:#999;
+	color:$gray;
 	font-size:8px;
 	top:-1px;
 	margin:0;
