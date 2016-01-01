@@ -31,7 +31,6 @@ $hover-color: #e3e4e3;
   animation: blinker 1.3s linear infinite;
 }
 
-
 .chaser-close-button {
 	margin-right: 4px;
 	margin-top: 4px;
@@ -44,16 +43,12 @@ $hover-color: #e3e4e3;
 	}
 }
 
-.chaser-row:nth-child(even) {
-	background-color:#FBFBFB;
+.chaser-popover {
+	position: absolute;
 }
 
-.row-passed {
-	border-left: solid 5px green;
-	transition: all .1s ease-in-out;
-	&:hover {
-		border-left: solid 5px green;
-	}
+.chaser-row:nth-child(even) {
+	background-color:#FBFBFB;
 }
 
 .chaser-row {
@@ -85,6 +80,7 @@ $hover-color: #e3e4e3;
 	border-top:1px solid #E7E7E7;
 	background-color:#FFF;
 	padding:6px;
+	min-height:30px;
 }
 
 .github-title {
@@ -98,8 +94,8 @@ $hover-color: #e3e4e3;
 	background-color:$header-bg;
 	background-image:linear-gradient(#f9f9f9,#FBFBFB);
 	background-repeat:repeat-x;
-	height:50px;
-	padding:8px;
+    height: 40px;
+    padding: 4px 0px;
 }
 
 .hide {
@@ -162,6 +158,15 @@ $hover-color: #e3e4e3;
 		height:20px;
 	}
 }
+
+.row-passed {
+	border-left: solid 5px green;
+	transition: all .1s ease-in-out;
+	&:hover {
+		border-left: solid 5px green;
+	}
+}
+
 
 .status-container {
 	width: 15px;

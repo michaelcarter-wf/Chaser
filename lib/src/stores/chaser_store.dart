@@ -9,5 +9,6 @@ abstract class ChaserStore {
   bool rowsHideable;
   bool loading;
 
+  bool get isHideable;
   load({force: false});
 }

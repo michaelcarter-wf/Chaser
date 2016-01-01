@@ -22,7 +22,6 @@ class _Header extends react.Component {
   }
 
   render() {
-    String blink = loading ? 'blink-slow' : '';
     var refresh = loading
         ? null
         : react.button(
@@ -36,7 +35,7 @@ class _Header extends react.Component {
       react.div(
           {'className': 'col-xs-4 text-center'},
           react.img(
-              {'className': 'text-center github-title pointer $blink', 'src': '/packages/wChaser/images/chaser.png'})),
+              {'className': 'text-center github-title pointer', 'src': '/packages/wChaser/images/chaser.png'})),
       react.div({'className': 'col-xs-4 text-center'}, refresh)
     ]));
   }

@@ -25,6 +25,7 @@ class ChaserStores {
   AtMentionStore atMentionStore;
   LocationStore locationStore;
   PullRequestsStore pullRequestsStore;
+  DateTime updated;
 
   ChaserStores(ChaserActions chaserActions, GitHubService gitHubService) {
     userStore = new UserStore(chaserActions, gitHubService);

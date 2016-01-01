@@ -7,15 +7,17 @@ class PullRequestsStore extends Store implements ChaserStore {
   LocationStore _locationStore;
   ChaserActions _chaserActions;
   GitHubService _gitHubService;
-  DateTime updated = new DateTime.now();
+  DateTime updated;
   List<GitHubSearchResult> displayPullRequests;
   bool showAll = null;
   bool rowsHideable = false;
   bool loading = true;
 
+  bool get isHideable => rowsHideable;
+
   PullRequestsStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore) {
+    updated = new DateTime.now();
     _chaserActions.locationActions.refreshView.listen((e) {
-      loading = true;
       load(force: true);
     });
 
@@ -30,9 +32,10 @@ class PullRequestsStore extends Store implements ChaserStore {
 
   /// Big Gorilla of a method that gets PRS that need your action from gh via notifications.
   _getChaserAssetsFromGithub() async {
+    displayPullRequests = [];
     updated = new DateTime.now();
     displayPullRequests = await _gitHubService.searchForOpenPullRequests(_userStore.githubUser.login);
-
+    trigger();
     _getPullRequestsStatus();
   }
 
@@ -46,7 +49,6 @@ class PullRequestsStore extends Store implements ChaserStore {
         gsr.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
       });
     }
-
     trigger();
   }
 
@@ -58,6 +60,9 @@ class PullRequestsStore extends Store implements ChaserStore {
 
   load({force: false}) async {
     if (_locationStore.currentView == ChaserViews.pullRequests) {
+      loading = true;
+      trigger();
+
       await _getChaserAssetsFromGithub();
       loading = false;
       trigger();
