@@ -58,11 +58,7 @@ class AtMentionStore extends Store implements ChaserStore {
     }
 
     atMentionPullRequests.sort((GitHubSearchResult a, GitHubSearchResult b) {
-      if (a.actionNeeded && b.actionNeeded) {
-        return 0;
-      } else {
-        return 1;
-      }
+      return b.actionNeeded.toString().compareTo(a.actionNeeded.toString());
     });
   }
 
