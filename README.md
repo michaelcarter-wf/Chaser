@@ -12,12 +12,12 @@ Chaser ![travis-ci](https://travis-ci.org/bradybecker-wf/wChaser.svg?branch=mast
 * `Alt+Shift+K` Is a hot key to open the extension
 * Click on the build status circle to take you to the passed/failed/loading build
 
-#### Installing wChaser *(until it's out on the chrome store)*
+#### Installing Chaser *(until it's out on the chrome store)*
 * The [Dart SDK](https://www.dartlang.org/downloads/) is required.
 * `pub get`
 * `pub build`
 * `./build.sh`
 * In Chrome navigate to: `chrome://extensions/`
 * Make sure `Developer Mode` is checked
-* Click `Load Unpacked Extension` and select your wChaser repo
+* Click `Load Unpacked Extension` and select your Chaser repo
 * Happy Chasing
