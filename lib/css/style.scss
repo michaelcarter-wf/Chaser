@@ -67,7 +67,7 @@ $gray: #999;
 	border-radius: 3px;
 	background-color: $black-bg;
 	color: $header-bg;
-	padding:7px;
+	padding: 3px 7px;
 	opacity: .9;
 	max-width: $popup-width * .75	;
 }
@@ -146,7 +146,7 @@ $gray: #999;
 
 .media {
 	cursor:pointer;
-	padding: 5px;
+	padding: 0px 5px 7px 5px;
 	margin: 0px;
 
 	>.pull-left {
@@ -198,13 +198,13 @@ $gray: #999;
 	height: 100%;
 	opacity: .7;
 	transition: all .5s ease-in-out;
-	padding: 0px 4px;
+	padding: 3px 0px 0px 4px;
 
 	.circle {
 		border-radius: 50%;
 		width: 10px;
 		height: 10px;
-		margin-top: 4px;
+		margin-top: 2px;
 	}
 
 	.passed {
