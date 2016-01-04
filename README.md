@@ -1,4 +1,4 @@
-Chaser ![travis-ci](https://travis-ci.org/bradybecker-wf/wChaser.svg?branch=master)
+Chaser [![Build Status](https://travis-ci.org/bradybecker-wf/Chaser.svg)](https://travis-ci.org/bradybecker-wf/Chaser)
 ==========
 > Chaser is a chrome extension that:
 * finds Pull Requests that you've been [at mentioned in](https://github.com/pulls/mentioned)
