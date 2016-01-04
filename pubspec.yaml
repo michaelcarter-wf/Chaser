@@ -7,9 +7,11 @@ environment:
 dependencies:
   browser_detect: ">=1.0.0 <2.0.0"
   chrome: any
+  dart_coveralls: 0.4.0
   fluri: 1.0.1
-  lawndart: any
+  grinder: "^0.8.0+1"
   intl: 0.12.4+2
+  lawndart: any
   react: ">=0.6.0"
   sass: any
   unittest: any
@@ -27,6 +29,5 @@ transformers:
   - $dart2js:
       minify: false
       csp: true
-  - sass
   - chrome
 
