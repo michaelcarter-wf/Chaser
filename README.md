@@ -1,4 +1,4 @@
-wChaser ![travis-ci](https://travis-ci.org/bradybecker-wf/wChaser.svg?branch=master)
+wChaser ![travis-ci](https://travis-ci.org/bradybecker-wf/wChaser.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/bradybecker-wf/Chaser/badge.svg?branch=master&service=github)](https://coveralls.io/github/bradybecker-wf/Chaser?branch=master)
 ==========
 > wChaser is a chrome extension that:
 * finds Pull Requests that you've been [at mentioned in](https://github.com/pulls/mentioned)
