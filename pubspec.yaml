@@ -30,4 +30,5 @@ transformers:
       minify: false
       csp: true
   - chrome
+  - sass
 

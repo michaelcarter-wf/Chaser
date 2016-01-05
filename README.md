@@ -16,7 +16,6 @@ Chaser [![Build Status](https://travis-ci.org/bradybecker-wf/Chaser.svg)](https:
 * The [Dart SDK](https://www.dartlang.org/downloads/) is required.
 * `pub get`
 * `pub build`
-* `./build.sh`
 * In Chrome navigate to: `chrome://extensions/`
 * Make sure `Developer Mode` is checked
 * Click `Load Unpacked Extension` and select your Chaser repo
