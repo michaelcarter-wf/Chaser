@@ -19,4 +19,7 @@ Chaser [![Build Status](https://travis-ci.org/bradybecker-wf/Chaser.svg)](https:
 * In Chrome navigate to: `chrome://extensions/`
 * Make sure `Developer Mode` is checked
 * Click `Load Unpacked Extension` and select your Chaser repo
+* Required Scopes
+
+![image](https://cloud.githubusercontent.com/assets/6053448/12988579/ff4fd818-d0c6-11e5-93d3-a762d15103bd.png)
 * Happy Chasing
