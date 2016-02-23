@@ -7,6 +7,7 @@ import 'package:chrome/chrome_ext.dart' as chrome;
 import 'package:lawndart/lawndart.dart' show LocalStorageStore;
 import 'package:w_flux/w_flux.dart';
 
+import 'package:wChaser/src/services/status_service.dart';
 import 'package:wChaser/src/services/github.dart';
 import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/actions/actions.dart';

@@ -1,4 +1,4 @@
-library src.components.chaser_container;
+library src.components.chaser_app;
 
 import 'dart:html';
 
@@ -6,6 +6,8 @@ import 'package:react/react.dart' as react;
 import 'package:w_flux/w_flux.dart';
 
 import 'package:wChaser/src/actions/actions.dart';
+import 'package:wChaser/src/components/alert.dart';
+import 'package:wChaser/src/services/status_service.dart';
 import 'package:wChaser/src/stores/chaser_stores.dart';
 import 'package:wChaser/src/stores/chaser_store.dart';
 import 'package:wChaser/src/components/header.dart';
@@ -15,11 +17,13 @@ import 'package:wChaser/src/components/chaser_grid.dart';
 import 'package:wChaser/src/components/footer.dart';
 import 'package:wChaser/src/constants.dart';
 
-var ChaserContainer = react.registerComponent(() => new _ChaserContainer());
+var ChaserApp = react.registerComponent(() => new _ChaserApp());
 
-class _ChaserContainer extends FluxComponent {
+class _ChaserApp extends FluxComponent {
   ChaserActions get chaserActions => props['actions'];
   ChaserStores get chaserStores => props['store'];
+
+  StatusService get statusService => props['statusService'];
   AtMentionStore get atMentionStore => chaserStores.atMentionStore;
 
   redrawOn() =>
@@ -50,6 +54,7 @@ class _ChaserContainer extends FluxComponent {
 
     return [
       Header({'actions': chaserActions, 'loading': chaserStore.loading}),
+      Alert({'statusService': statusService}),
       ChaserGrid({'chaserStore': chaserStore, 'actions': chaserActions}),
       Footer({'chaserStore': chaserStore, 'actions': chaserActions})
     ];

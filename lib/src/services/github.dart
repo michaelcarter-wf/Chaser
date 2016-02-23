@@ -7,50 +7,35 @@ import 'dart:html';
 import 'package:intl/intl.dart';
 import 'package:fluri/fluri.dart';
 
+import 'package:wChaser/src/services/status_service.dart';
 import 'package:wChaser/src/models/models.dart';
 
 final String githubScheme = 'https';
 final String githubHost = 'api.github.com';
 
 class GitHubService {
-  String accessToken;
+  String _accessToken;
+  StatusService _statusService;
 
-  Future<List> _requestAuthed(String httpRequestType, String url, {Map sendData}) async {
-    Map headers = {'Authorization': 'token $accessToken'};
-    HttpRequest req = await HttpRequest.request(url, method: httpRequestType, requestHeaders: headers);
-    return JSON.decode(req.response.toString());
+  GitHubService({StatusService statusService}) {
+    _statusService = statusService;
   }
 
-  Future<List<GitHubNotification>> getNotifications({since: null}) async {
-    DateTime oneMonthAgo = since ?? new DateTime.now().subtract(new Duration(days: 30));
-    Map<String, String> data = {
-      'since': oneMonthAgo.toIso8601String(),
-      'participating': 'true',
-      'reason': 'mention',
-      'all': 'true'
-    };
-
-    Fluri uri = new Fluri()
-      ..scheme = githubScheme
-      ..host = githubHost
-      ..path = 'notifications'
-      ..queryParameters = data;
-
-    List notificationsJson = await _requestAuthed('GET', uri.toString());
-
-    return notificationsJson.map((notificationJson) {
-      return new GitHubNotification(notificationJson);
-    }).toList();
+  Future<List> _requestAuthed(String httpRequestType, String url, {Map sendData}) async {
+    Map headers = {'Authorization': 'token $_accessToken'};
+    try {
+      HttpRequest req = await HttpRequest.request(url, method: httpRequestType, requestHeaders: headers);
+      _statusService.authed = true;
+      return JSON.decode(req.response.toString());
+    } catch (e) {
+      _statusService.authed = false;
+      print(e);
+    }
   }
 
   Future<GitHubPullRequest> getPullRequest(String url) async {
     List pullRequestJson = await _requestAuthed('GET', url);
     return new GitHubPullRequest(pullRequestJson);
-  }
-
-  Future<List<GitHubPullRequest>> getPullRequests(String url) async {
-    var pullRequestsJson = await _requestAuthed('GET', url);
-    return [];
   }
 
   Future<List<GitHubComment>> getPullRequestComments(GitHubSearchResult pullRequest) async {
@@ -109,7 +94,7 @@ class GitHubService {
   }
 
   Future<GitHubUser> setAndCheckToken(String accessToken) async {
-    this.accessToken = accessToken;
+    this._accessToken = accessToken;
     Fluri uri = new Fluri()
       ..scheme = githubScheme
       ..host = githubHost

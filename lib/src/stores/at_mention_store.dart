@@ -3,6 +3,7 @@ part of wChaser.src.stores.chaser_stores;
 class AtMentionStore extends Store implements ChaserStore {
   static final String NAME = 'atMentionStore';
 
+  StreamController alertsController;
   UserStore _userStore;
   ChaserActions _chaserActions;
   LocationStore _locationStore;
