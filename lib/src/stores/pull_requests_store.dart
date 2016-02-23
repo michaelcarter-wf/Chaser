@@ -1,6 +1,6 @@
 part of wChaser.src.stores.chaser_stores;
 
-class PullRequestsStore extends Store implements ChaserStore {
+class PullRequestsStore extends ChaserStore {
   static final String NAME = 'pullRequestsStore';
 
   UserStore _userStore;
@@ -13,7 +13,7 @@ class PullRequestsStore extends Store implements ChaserStore {
   bool rowsHideable = false;
   bool loading = true;
 
-  PullRequestsStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore) {
+  PullRequestsStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore, StatusService statusService) : super(statusService) {
     updated = new DateTime.now();
     _chaserActions.locationActions.refreshView.listen((e) {
       load(force: true);
@@ -56,6 +56,7 @@ class PullRequestsStore extends Store implements ChaserStore {
     }
   }
 
+  @override
   load({force: false}) async {
     if (_locationStore.currentView == ChaserViews.pullRequests) {
       loading = true;

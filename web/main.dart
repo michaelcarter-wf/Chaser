@@ -13,10 +13,7 @@ main() {
   reactClient.setClientConfiguration();
 
   ChaserActions chaserActions = new ChaserActions();
-  StatusService statusService = new StatusService();
-  GitHubService gitHubService = new GitHubService(statusService: statusService);
-  ChaserStores chaserStores = new ChaserStores(chaserActions, gitHubService);
+  ChaserStores chaserStores = new ChaserStores(chaserActions);
 
-  react.render(ChaserApp({'store': chaserStores, 'actions': chaserActions, 'statusService': statusService}),
-      querySelector('#output'));
+  react.render(ChaserApp({'store': chaserStores, 'actions': chaserActions}), querySelector('#output'));
 }

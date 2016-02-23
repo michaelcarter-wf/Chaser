@@ -28,10 +28,12 @@ class ChaserStores {
   PullRequestsStore pullRequestsStore;
   DateTime updated;
 
-  ChaserStores(ChaserActions chaserActions, GitHubService gitHubService) {
+  ChaserStores(ChaserActions chaserActions) {
+    StatusService statusService = new StatusService();
+    GitHubService gitHubService = new GitHubService(statusService: statusService);
     userStore = new UserStore(chaserActions, gitHubService);
     locationStore = new LocationStore(chaserActions);
-    atMentionStore = new AtMentionStore(chaserActions, gitHubService, userStore, locationStore);
-    pullRequestsStore = new PullRequestsStore(chaserActions, gitHubService, userStore, locationStore);
+    atMentionStore = new AtMentionStore(chaserActions, gitHubService, userStore, locationStore, statusService);
+    pullRequestsStore = new PullRequestsStore(chaserActions, gitHubService, userStore, locationStore, statusService);
   }
 }

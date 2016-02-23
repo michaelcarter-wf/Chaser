@@ -1,6 +1,6 @@
 part of wChaser.src.stores.chaser_stores;
 
-class AtMentionStore extends Store implements ChaserStore {
+class AtMentionStore extends ChaserStore {
   static final String NAME = 'atMentionStore';
 
   StreamController alertsController;
@@ -8,6 +8,7 @@ class AtMentionStore extends Store implements ChaserStore {
   ChaserActions _chaserActions;
   LocationStore _locationStore;
   GitHubService _gitHubService;
+
   List<GitHubSearchResult> atMentionPullRequests = [];
   List<GitHubSearchResult> displayPullRequests = null;
   DateTime updated = new DateTime.now();
@@ -15,7 +16,7 @@ class AtMentionStore extends Store implements ChaserStore {
   bool rowsHideable = true;
   bool loading = true;
 
-  AtMentionStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore) {
+  AtMentionStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore, StatusService statusService) : super(statusService) {
     _chaserActions.locationActions.refreshView.listen((e) {
       load(force: true);
     });
@@ -63,6 +64,7 @@ class AtMentionStore extends Store implements ChaserStore {
     });
   }
 
+  @override
   load({force: false}) async {
     if (_locationStore.currentView != ChaserViews.atMentions) {
       return;

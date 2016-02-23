@@ -1,9 +1,11 @@
 library wChaser.src.stores.chaser_store;
 
+import 'package:w_flux/w_flux.dart';
+
 import 'package:wChaser/src/services/status_service.dart';
 import 'package:wChaser/src/models/models.dart';
 
-abstract class ChaserStore {
+class ChaserStore extends Store {
   List<GitHubSearchResult> displayPullRequests;
   DateTime updated;
   bool showAll;
@@ -18,5 +20,6 @@ abstract class ChaserStore {
     });
   }
 
-  load({force: false});
+  // to be overridden
+  load({force: false}) {}
 }
