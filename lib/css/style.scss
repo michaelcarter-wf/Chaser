@@ -3,6 +3,7 @@ $header-bg: #FBFBFB;
 $hover-color: #e3e4e3;
 
 $black-bg: rgb(82, 82, 82);
+$orange: orange;
 $popup-width: 400px;
 $gray: #999;
 
@@ -49,15 +50,33 @@ $gray: #999;
   animation: blinker 1.3s linear infinite;
 }
 
+.chaser-alert {
+	cursor: default;
+	font-size: 11px;
+	font-style: italic;
+	text-align: center;
+	padding: 2px;
+	background-color: $orange;
+	color: white;
+}
+
 .chaser-close-button {
 	margin-right: 4px;
 	margin-top: 4px;
 	transition: all .2s ease-in-out;
 	.icon {
-		font-Size: 12px;
+		font-size: 12px;
 	}
 	&:hover {
 		color:$red;
+	}
+}
+
+.chaser-grid-empty {
+	text-align: center;
+	margin-top: 100px;
+	.refresh {
+		font-size: 11px;
 	}
 }
 
@@ -99,6 +118,13 @@ $gray: #999;
 
 .created-date {
 	margin-top:-5px;
+}
+
+.comment-icon {
+	color: $gray;
+	font-size: 9px;
+	padding-top: 7px;
+	padding-right: 3px;
 }
 
 .footer {

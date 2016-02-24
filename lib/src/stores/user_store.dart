@@ -32,11 +32,9 @@ class UserStore extends Store {
     try {
       githubUser = await _gitHubService.setAndCheckToken(ghToken);
       authed = true;
-      _actions.authActions.authSuccessful(true);
       await _localStorageStore.save(ghToken, LocalStorageConstants.githubTokenKey);
     } catch (e) {
       authed = false;
-      _actions.authActions.authSuccessful(false);
     }
     trigger();
   }

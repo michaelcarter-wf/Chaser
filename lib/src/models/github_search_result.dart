@@ -13,6 +13,7 @@ class GitHubSearchResultConstants {
   static final merged = 'merged';
   static final statusesUrl = 'statuses_url';
   static final pullRequest = 'pull_request';
+  static final numberOfComments = 'num_of_comments';
 }
 
 class GitHubSearchResult implements GithubBaseModel {
@@ -31,6 +32,7 @@ class GitHubSearchResult implements GithubBaseModel {
   String updatedAt;
   String updatedAtPretty;
   String repoFullName;
+  int numberOfComments = 0;
 
   bool get isOpen => state == 'open';
 
@@ -67,6 +69,10 @@ class GitHubSearchResult implements GithubBaseModel {
     if (json.containsKey(GitHubSearchResultConstants.actionNeeded)) {
       actionNeeded = json[GitHubSearchResultConstants.actionNeeded];
     }
+
+    if (json.containsKey(GitHubSearchResultConstants.numberOfComments)) {
+      numberOfComments = json[GitHubSearchResultConstants.numberOfComments];
+    }
   }
 
   Map toMap() => {
@@ -84,6 +90,7 @@ class GitHubSearchResult implements GithubBaseModel {
         GitHubSearchResultConstants.title: title,
         GitHubSearchResultConstants.updatedAt: updatedAt,
         GitHubSearchResultConstants.actionNeeded: actionNeeded,
-        GitHubSearchResultConstants.statusesUrl: statusesUrl
+        GitHubSearchResultConstants.statusesUrl: statusesUrl,
+        GitHubSearchResultConstants.numberOfComments: numberOfComments
       };
 }
