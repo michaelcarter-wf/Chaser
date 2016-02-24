@@ -59,7 +59,6 @@ class AtMentionStore extends ChaserStore {
       List<GitHubComment> comments = await _gitHubService.getPullRequestComments(pullRequest);
       pullRequest.numberOfComments = comments.length;
       pullRequest.actionNeeded = await isPlusOneNeeded(comments, _userStore.githubUser.login);
-
     }
 
     atMentionPullRequests.sort((GitHubSearchResult a, GitHubSearchResult b) {

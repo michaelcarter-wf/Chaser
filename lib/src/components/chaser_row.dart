@@ -52,6 +52,7 @@ class _ChaserRow extends react.Component {
       ])
     ]);
   }
+
 // fa fa-comments-o
   render() {
     var removeX = hideable
@@ -59,10 +60,14 @@ class _ChaserRow extends react.Component {
             react.i({'className': 'close-x icon icon-sm icon-close close-x',}))
         : null;
 
-    var comments = pullRequest.numberOfComments > 0 ? react.div({'className': 'pull-right comment-icon'}, [
-        '${pullRequest.numberOfComments.toString()} ',
-        react.i({'className': 'glyphicon glyphicon-comment icon icon-sm'})
-    ]) : null;
+    var comments = pullRequest.numberOfComments > 0
+        ? react.div({
+            'className': 'pull-right comment-icon'
+          }, [
+            '${pullRequest.numberOfComments.toString()} ',
+            react.i({'className': 'glyphicon glyphicon-comment icon icon-sm'})
+          ])
+        : null;
 
     return react.div({
       'className': 'chaser-row'
