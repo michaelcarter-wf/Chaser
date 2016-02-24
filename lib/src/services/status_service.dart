@@ -4,18 +4,21 @@ import 'dart:async';
 
 class StatusService {
   StreamController _authStream;
-  StreamController alertStream;
+  StreamController _alertStream;
   StreamController updateStreams;
 
   Stream<bool> auth;
+  Stream<dynamic> alerts;
 
   String currentAlert;
   bool _authed = false;
 
   StatusService() {
-    alertStream = new StreamController<String>();
+    _alertStream = new StreamController<String>();
     _authStream = new StreamController<bool>();
+
     auth = _authStream.stream.asBroadcastStream();
+    alerts = _alertStream.stream.asBroadcastStream();
   }
 
   bool get authed => _authed;
@@ -30,7 +33,7 @@ class StatusService {
   throwAlert(dynamic alertContent) {
     if (currentAlert != alertContent) {
       currentAlert = alertContent;
-      alertStream.add(currentAlert);
+      _alertStream.add(currentAlert);
     }
   }
 }

@@ -20,11 +20,20 @@ class _ChaserGrid extends react.Component {
   render() {
     var content = Loading({});
 
-    if (!chaserStore.loading) {
+    if (!chaserStore.loading && chaserStore.displayPullRequests.length > 0) {
       content = chaserStore.displayPullRequests.map((GitHubSearchResult gitHubSearchResult) {
         return ChaserRow(
             {'pullRequest': gitHubSearchResult, 'hideable': chaserStore.rowsHideable, 'actions': chaserActions});
       }).toList();
+    } else if (!chaserStore.loading) {
+      content = react.div({
+        'className': 'chaser-grid-empty'
+      }, [
+        'I got nothing for ya',
+        react.br({}),
+        react.a({'href': '#', 'className': 'refresh', 'onClick': (_) => chaserActions.locationActions.refreshView()},
+            'refresh')
+      ]);
     }
 
     return react.div({

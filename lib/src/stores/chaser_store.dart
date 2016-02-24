@@ -15,7 +15,7 @@ class ChaserStore extends Store {
 
   ChaserStore(StatusService statusService) {
     _statusService = statusService;
-    _statusService.authStream.stream.listen((_) {
+    _statusService.auth.listen((_) {
       load();
     });
   }

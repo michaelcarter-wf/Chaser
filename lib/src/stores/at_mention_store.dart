@@ -16,7 +16,9 @@ class AtMentionStore extends ChaserStore {
   bool rowsHideable = true;
   bool loading = true;
 
-  AtMentionStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore, StatusService statusService) : super(statusService) {
+  AtMentionStore(
+      this._chaserActions, this._gitHubService, this._userStore, this._locationStore, StatusService statusService)
+      : super(statusService) {
     _chaserActions.locationActions.refreshView.listen((e) {
       load(force: true);
     });

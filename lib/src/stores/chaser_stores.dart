@@ -27,9 +27,10 @@ class ChaserStores {
   LocationStore locationStore;
   PullRequestsStore pullRequestsStore;
   DateTime updated;
+  StatusService statusService;
 
   ChaserStores(ChaserActions chaserActions) {
-    StatusService statusService = new StatusService();
+    statusService = new StatusService();
     GitHubService gitHubService = new GitHubService(statusService: statusService);
     userStore = new UserStore(chaserActions, gitHubService);
     locationStore = new LocationStore(chaserActions);

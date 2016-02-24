@@ -54,7 +54,7 @@ class _ChaserApp extends FluxComponent {
 
     return [
       Header({'actions': chaserActions, 'loading': chaserStore.loading}),
-      Alert({'statusService': statusService}),
+      Alert({'statusService': chaserStores.statusService}),
       ChaserGrid({'chaserStore': chaserStore, 'actions': chaserActions}),
       Footer({'chaserStore': chaserStore, 'actions': chaserActions})
     ];
@@ -80,6 +80,6 @@ class _ChaserApp extends FluxComponent {
     }
 
     return react.div(
-        {'className': 'chaser-container'}, chaserStores.userStore.authed ? renderChaserCore() : renderLogin());
+        {'className': 'chaser-container'}, chaserStores.statusService.authed ? renderChaserCore() : renderLogin());
   }
 }
