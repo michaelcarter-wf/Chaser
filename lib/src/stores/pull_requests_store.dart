@@ -25,9 +25,6 @@ class PullRequestsStore extends ChaserStore {
     _locationStore.listen((_) {
       load(force: false);
     });
-
-    // listen for successful auth
-    triggerOnAction(_chaserActions.authActions.authSuccessful, _authed);
   }
 
   /// Big Gorilla of a method that gets PRS that need your action from gh via notifications.
@@ -50,12 +47,6 @@ class PullRequestsStore extends ChaserStore {
       });
     }
     trigger();
-  }
-
-  _authed(bool authSuccessful) {
-    if (authSuccessful) {
-      load();
-    }
   }
 
   @override

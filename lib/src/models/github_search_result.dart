@@ -31,6 +31,7 @@ class GitHubSearchResult implements GithubBaseModel {
   String updatedAt;
   String updatedAtPretty;
   String repoFullName;
+  int numberOfComments = 0;
 
   bool get isOpen => state == 'open';
 

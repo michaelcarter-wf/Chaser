@@ -24,7 +24,6 @@ class AtMentionStore extends ChaserStore {
     });
 
     triggerOnAction(_chaserActions.atMentionActions.displayAll, _displayAll);
-    triggerOnAction(_chaserActions.authActions.authSuccessful, _authed);
   }
 
   _authed(bool authSuccessful) {
@@ -58,7 +57,9 @@ class AtMentionStore extends ChaserStore {
 
     for (GitHubSearchResult pullRequest in atMentionPullRequests) {
       List<GitHubComment> comments = await _gitHubService.getPullRequestComments(pullRequest);
+      pullRequest.numberOfComments = comments.length;
       pullRequest.actionNeeded = await isPlusOneNeeded(comments, _userStore.githubUser.login);
+
     }
 
     atMentionPullRequests.sort((GitHubSearchResult a, GitHubSearchResult b) {
