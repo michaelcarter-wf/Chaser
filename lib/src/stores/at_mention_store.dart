@@ -26,12 +26,6 @@ class AtMentionStore extends ChaserStore {
     triggerOnAction(_chaserActions.atMentionActions.displayAll, _displayAll);
   }
 
-  _authed(bool authSuccessful) {
-    if (authSuccessful) {
-      load();
-    }
-  }
-
   _displayAll(bool displayAll) {
     showAll = displayAll;
     if (showAll == false) {
@@ -49,17 +43,20 @@ class AtMentionStore extends ChaserStore {
     displayPullRequests = [];
   }
 
-  /// Big Gorilla of a method that gets PRS that need your action from gh via notifications.
-  _getChaserAssetsFromGithub(LocalStorageStore localStorageStore) async {
-    _clearPullRequests();
-    updated = new DateTime.now();
-    atMentionPullRequests = await _gitHubService.searchForAtMentions(_userStore.githubUser.login);
-
+  _getPullRequestComments() async {
     for (GitHubSearchResult pullRequest in atMentionPullRequests) {
       List<GitHubComment> comments = await _gitHubService.getPullRequestComments(pullRequest);
       pullRequest.numberOfComments = comments.length;
       pullRequest.actionNeeded = await isPlusOneNeeded(comments, _userStore.githubUser.login);
     }
+  }
+
+  /// Big Gorilla of a method that gets PRS that need your action from gh via notifications.
+  _getChaserAssetsFromGithub(LocalStorageStore localStorageStore) async {
+    _clearPullRequests();
+    updated = new DateTime.now();
+    atMentionPullRequests = await _gitHubService.searchForAtMentions(_userStore.githubUser.login);
+    await _getPullRequestComments();
 
     atMentionPullRequests.sort((GitHubSearchResult a, GitHubSearchResult b) {
       return b.actionNeeded.toString().compareTo(a.actionNeeded.toString());
@@ -95,6 +92,7 @@ class AtMentionStore extends ChaserStore {
       await _getChaserAssetsFromGithub(localStorageStore);
     }
 
+    // TODO defer this and use the cache
     loading = false;
     trigger();
 
