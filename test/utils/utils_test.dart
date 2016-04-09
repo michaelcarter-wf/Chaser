@@ -24,5 +24,14 @@ void main() {
       bool plusOneNeeded = isPlusOneNeeded(comments, 'mikekeil-wf');
       expect(plusOneNeeded, false);
     });
+
+    test('new thumb should not be needed', () {
+      List<GitHubComment> comments = commentResponseTwo.map((comment) {
+        return new GitHubComment(comment);
+      }).toList();
+
+      bool plusOneNeeded = isPlusOneNeeded(comments, 'bradybecker-wf');
+      expect(plusOneNeeded, isFalse);
+    });
   });
 }

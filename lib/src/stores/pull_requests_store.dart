@@ -13,9 +13,9 @@ class PullRequestsStore extends ChaserStore {
   bool rowsHideable = false;
   bool loading = true;
 
-  PullRequestsStore(
-      this._chaserActions, this._gitHubService, this._userStore, this._locationStore, StatusService statusService)
-      : super(statusService) {
+  PullRequestsStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore,
+      StatusService statusService, LocalStorageService localStorageService)
+      : super(statusService, localStorageService) {
     updated = new DateTime.now();
     _chaserActions.locationActions.refreshView.listen((e) {
       load(force: true);
