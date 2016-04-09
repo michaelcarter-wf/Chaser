@@ -16,9 +16,9 @@ class AtMentionStore extends ChaserStore {
   bool rowsHideable = true;
   bool loading = true;
 
-  AtMentionStore(
-      this._chaserActions, this._gitHubService, this._userStore, this._locationStore, StatusService statusService)
-      : super(statusService) {
+  AtMentionStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore,
+      StatusService statusService, LocalStorageService localStorageService)
+      : super(statusService, localStorageService) {
     _chaserActions.locationActions.refreshView.listen((e) {
       load(force: true);
     });
@@ -52,7 +52,7 @@ class AtMentionStore extends ChaserStore {
   }
 
   /// Big Gorilla of a method that gets PRS that need your action from gh via notifications.
-  _getChaserAssetsFromGithub(LocalStorageStore localStorageStore) async {
+  _getChaserAssetsFromGithub() async {
     _clearPullRequests();
     updated = new DateTime.now();
     atMentionPullRequests = await _gitHubService.searchForAtMentions(_userStore.githubUser.login);
@@ -71,45 +71,24 @@ class AtMentionStore extends ChaserStore {
     loading = true;
     trigger();
 
-    LocalStorageStore localStorageStore = await LocalStorageStore.open();
-    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
-
-    if (!force && atMentionJson?.isNotEmpty) {
-      // Pull atMentioned JSON out of the cache.
-      String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
-      List atMentionObjects = JSON.decode(atMentionJson);
-      atMentionPullRequests = atMentionObjects.map((Map aMPR) {
-        return new GitHubSearchResult(aMPR);
-      }).toList();
-
-      // Pull updated date out of the cache.
-      String updatedIso8601String =
-          await localStorageStore.getByKey(LocalStorageConstants.atMentionUpdatedLocalStorageKey);
-      if (updatedIso8601String != null) {
-        updated = DateTime.parse(updatedIso8601String);
-      }
+    atMentionPullRequests = await localStorageService.atMentionPullRequests;
+    if (!force && atMentionPullRequests?.isNotEmpty) {
+      updated = localStorageService.atMentionsUpdated;
     } else {
-      await _getChaserAssetsFromGithub(localStorageStore);
+      await _getChaserAssetsFromGithub();
     }
+
+    // don't need to wait for these, they'll updated once they come in.
+    _getPullRequestsStatus();
 
     // TODO defer this and use the cache
     loading = false;
     trigger();
 
-    // don't need to wait for these, they'll updated once they come in.
-    _getPullRequestsStatus().then((_) {
-      List<String> atMentionJson = atMentionPullRequests?.map((GitHubSearchResult ghpr) {
-        return ghpr.toMap();
-      }).toList();
-
-      // not awaiting these, they shouldn't block
-      localStorageStore.save(JSON.encode(atMentionJson), LocalStorageConstants.atMentionLocalStorageKey);
-      localStorageStore.save(updated.toIso8601String(), LocalStorageConstants.atMentionUpdatedLocalStorageKey);
-    });
-
     displayPullRequests = atMentionPullRequests;
     _displayAll(showAll);
 
+    // TODO move to browser service
     if (chrome.browserAction.available) {
       chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(
           text: atMentionPullRequests?.where((GitHubSearchResult pr) => pr.actionNeeded).length.toString()));
@@ -130,6 +109,8 @@ class AtMentionStore extends ChaserStore {
         gsr.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
       });
     }
+
+    localStorageService.atMentionPullRequests = atMentionPullRequests;
     trigger();
   }
 }

@@ -13,7 +13,8 @@ bool isPlusOneNeeded(List<GitHubComment> gitHubComments, String userId) {
       atMentionedComment = gitHubComment;
       plusOneNeeded = true;
     } else if (plusOneNeeded && gitHubComment.user.login == userId) {
-      plusOneNeeded = !gitHubComment.body.contains('+1');
+      // need to check for 👍 http://www.fileformat.info/info/unicode/char/1F44D/index.htm
+      plusOneNeeded = !gitHubComment.body.contains('+1') && !gitHubComment.body.runes.contains(128077);
     }
   });
 

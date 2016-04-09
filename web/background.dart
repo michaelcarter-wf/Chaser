@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:js';
 
 import 'package:chrome/chrome_ext.dart' as chrome;
 
@@ -17,11 +18,29 @@ main() {
     checkForPrs();
   });
 
+  _processCallback(JsObject data) {
+    String url = data['url'];
+    if (url.isNotEmpty) {
+      if (url.contains('api.')) return;
+      print(url);
+    }
+  }
+
+  // JsObject _OnBeforeSendHeaders = context['chrome']['webRequest']['onCompleted'];
+  // var filter = new JsObject.jsify({
+  //   "urls": ["<all_urls>"]
+  // });
+
+  // _OnBeforeSendHeaders.callMethod('addListener', [_processCallback, filter]);
+
 //  checkForStatusUpdates();
   checkForPrs();
 }
 
 checkForPrs() async {
+  // reset the alarm
+  chrome.alarms.create(new chrome.AlarmCreateInfo(delayInMinutes: 15), 'refresh');
+
   LocalStorageStore _localStorageStore = await LocalStorageStore.open();
   String accessToken = await _localStorageStore.getByKey(LocalStorageConstants.githubTokenKey);
   DateTime updated = new DateTime.now();
@@ -51,7 +70,6 @@ checkForPrs() async {
 
   if (chrome.browserAction.available) {
     chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(text: actionNeeded.length.toString()));
-    chrome.alarms.create(new chrome.AlarmCreateInfo(delayInMinutes: 15), 'refresh');
   }
 }
 

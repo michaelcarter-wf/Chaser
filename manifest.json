@@ -12,16 +12,18 @@
   "permissions": [
     "storage",
     "notifications",
+    "*://github.com/*",
     "https://api.github.com/*",
     "tabs",
-    "alarms"
+    "alarms",
+    "webRequest"
   ],
   "commands": {
    	"_execute_browser_action": {
 	    "suggested_key": {
 		  "default": "Alt+Shift+K"
 	    }
-	}
+	   }
   },
   "browser_action": {
     "default_icon": "./lib/images/chaser.png",
