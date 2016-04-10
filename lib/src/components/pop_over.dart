@@ -13,7 +13,7 @@ class _PopOver extends react.Component {
   getInitialState() =>
       {'active': false, 'popOverProps': null, 'pageX': null, 'pageY': null, 'id': null, 'content': null};
 
-  componentDidMount(_) {
+  componentDidMount() {
     chaserActions.popoverActions.closePopover.listen(close);
     chaserActions.popoverActions.showPopover.listen((PopoverProps popOverProps) {
       if (state['id'] == popOverProps.id && active) {

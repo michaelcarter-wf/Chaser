@@ -12,7 +12,7 @@ class _Alert extends react.Component {
 
   getInitialState() => {'alertText': ''};
 
-  void componentDidMount(rootNode) {
+  void componentDidMount() {
     statusService.alerts.listen((_) {});
     // statusService.alerts.listen((alertContent) {
     //   setState({'alertText': statusService.currentAlert});

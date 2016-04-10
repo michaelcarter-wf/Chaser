@@ -28,7 +28,7 @@ class LocationStorageService {
     LocalStorageStore localStorageStore = await LocalStorageStore.open();
     String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
 
-    if (atMentionJson.isNotEmpty) {
+    if (atMentionJson != null && atMentionJson.isNotEmpty) {
       List atMentionObjects = JSON.decode(atMentionJson);
 
       _atMentionPullRequests = atMentionObjects.map((Map aMPR) {
