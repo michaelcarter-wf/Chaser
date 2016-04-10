@@ -33,7 +33,7 @@ class _ChaserApp extends FluxComponent {
     return {'pullRequests': atMentionStore.atMentionPullRequests};
   }
 
-  componentDidMount(Element rootNode) {
+  componentDidMount() {
     window.onKeyDown.listen((KeyboardEvent keyboardEvent) {
       if (keyboardEvent.keyCode == leftArrowKey) {
         chaserActions.locationActions.changeViewPrevious();
