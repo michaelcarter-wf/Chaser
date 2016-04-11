@@ -14,29 +14,28 @@ class LocationStorageService {
   LocalStorageStore localStorageStore;
   List<GitHubSearchResult> _atMentionPullRequests = [];
   DateTime atMentionsUpdated = new DateTime.now();
+  int _totalPrsChased;
 
   load() async {
     localStorageStore = await LocalStorageStore.open();
   }
 
-  /// Gets a list of [GitHubSearchResult] requests from the cache if they exist.
-  Future<List<GitHubSearchResult>> get atMentionPullRequests async {
-    if (_atMentionPullRequests.isNotEmpty) {
-      return _atMentionPullRequests;
+  Future<int> get totalPrsChased async {
+    if (_totalPrsChased != null) {
+      return _totalPrsChased;
     }
 
-    LocalStorageStore localStorageStore = await LocalStorageStore.open();
-    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
+    String cachedTotalPrsChased = await localStorageStore.getByKey(LocalStorageConstants.totalPrsChased);
+    _totalPrsChased = cachedTotalPrsChased != null ? int.parse(cachedTotalPrsChased) : 0;
 
-    if (atMentionJson != null && atMentionJson.isNotEmpty) {
-      List atMentionObjects = JSON.decode(atMentionJson);
+    return _totalPrsChased;
+  }
 
-      _atMentionPullRequests = atMentionObjects.map((Map aMPR) {
-        return new GitHubSearchResult(aMPR);
-      }).toList();
-    }
-
-    return _atMentionPullRequests;
+  addPrsChased(int prsToAdd) async {
+    int prsCount = await this.totalPrsChased;
+    _totalPrsChased = prsCount += prsToAdd;
+    // not awaiting these, they shouldn't block
+    localStorageStore.save(_totalPrsChased.toString(), LocalStorageConstants.totalPrsChased);
   }
 
   set atMentionPullRequests(List<GitHubSearchResult> atMenionPullRequests) {
@@ -48,5 +47,24 @@ class LocationStorageService {
     // not awaiting these, they shouldn't block
     localStorageStore.save(JSON.encode(atMentionJson), LocalStorageConstants.atMentionLocalStorageKey);
     localStorageStore.save(atMentionsUpdated.toIso8601String(), LocalStorageConstants.atMentionUpdatedLocalStorageKey);
+  }
+
+  /// Gets a list of [GitHubSearchResult] requests from the cache if they exist.
+  Future<List<GitHubSearchResult>> get atMentionPullRequests async {
+    if (_atMentionPullRequests.isNotEmpty) {
+      return _atMentionPullRequests;
+    }
+
+    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
+
+    if (atMentionJson != null && atMentionJson.isNotEmpty) {
+      List atMentionObjects = JSON.decode(atMentionJson);
+
+      _atMentionPullRequests = atMentionObjects.map((Map aMPR) {
+        return new GitHubSearchResult(aMPR);
+      }).toList();
+    }
+
+    return _atMentionPullRequests;
   }
 }

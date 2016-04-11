@@ -8,23 +8,27 @@ import 'package:lawndart/lawndart.dart' show LocalStorageStore;
 
 import 'package:wChaser/src/constants.dart';
 import 'package:wChaser/src/models/models.dart';
+import 'package:wChaser/src/services/local_storage.dart';
 import 'package:wChaser/src/services/github.dart';
 import 'package:wChaser/src/utils/utils.dart';
 
 GitHubService _gitHubService = new GitHubService();
+LocationStorageService locationStorageService = new LocationStorageService();
 
-main() {
+main() async {
+  await locationStorageService.load();
+
   chrome.alarms.onAlarm.listen((chrome.Alarm alarm) {
     checkForPrs();
   });
 
-  _processCallback(JsObject data) {
-    String url = data['url'];
-    if (url.isNotEmpty) {
-      if (url.contains('api.')) return;
-      print(url);
-    }
-  }
+  // _processCallback(JsObject data) {
+  //   String url = data['url'];
+  //   if (url.isNotEmpty) {
+  //     if (url.contains('api.')) return;
+  //     print(url);
+  //   }
+  // }
 
   // JsObject _OnBeforeSendHeaders = context['chrome']['webRequest']['onCompleted'];
   // var filter = new JsObject.jsify({
@@ -35,15 +39,12 @@ main() {
 
 //  checkForStatusUpdates();
   checkForPrs();
+  chrome.alarms.create(new chrome.AlarmCreateInfo(periodInMinutes: 15), 'refresh');
 }
 
 checkForPrs() async {
-  // reset the alarm
-  chrome.alarms.create(new chrome.AlarmCreateInfo(delayInMinutes: 15), 'refresh');
-
   LocalStorageStore _localStorageStore = await LocalStorageStore.open();
   String accessToken = await _localStorageStore.getByKey(LocalStorageConstants.githubTokenKey);
-  DateTime updated = new DateTime.now();
 
   GitHubUser githubUser = await _authUser(accessToken);
   if (githubUser == null) {
@@ -58,15 +59,10 @@ checkForPrs() async {
     pullRequest.actionNeeded = await isPlusOneNeeded(comments, githubUser.login);
   }
 
+  locationStorageService.atMentionPullRequests = atMentionPullRequests;
+
   List<GitHubSearchResult> actionNeeded =
       atMentionPullRequests.where((GitHubSearchResult gpr) => gpr.actionNeeded).toList();
-
-  List<String> atMentionJson = atMentionPullRequests.map((GitHubSearchResult ghpr) {
-    return ghpr.toMap();
-  }).toList();
-
-  _localStorageStore.save(JSON.encode(atMentionJson), LocalStorageConstants.atMentionLocalStorageKey);
-  _localStorageStore.save(updated.toIso8601String(), LocalStorageConstants.atMentionUpdatedLocalStorageKey);
 
   if (chrome.browserAction.available) {
     chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(text: actionNeeded.length.toString()));
@@ -82,6 +78,7 @@ Future<GitHubUser> _authUser(String ghToken) async {
   try {
     return await _gitHubService.setAndCheckToken(ghToken);
   } catch (e) {
+    print('error authing user $e');
     return null;
   }
 }
