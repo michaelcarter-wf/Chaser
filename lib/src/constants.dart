@@ -1,9 +1,10 @@
 library wChaser.src.constants;
 
 class LocalStorageConstants {
-  static final String githubTokenKey = 'github';
-  static final String atMentionLocalStorageKey = 'chaserAtMentionStorage';
-  static final String atMentionUpdatedLocalStorageKey = 'atMentionUpdated';
+  static const String githubTokenKey = 'github';
+  static const String atMentionLocalStorageKey = 'chaserAtMentionStorage';
+  static const String atMentionUpdatedLocalStorageKey = 'atMentionUpdated';
+  static const String totalPrsChased = 'totalPrsChased';
 }
 
 enum ChaserViews { atMentions, pullRequests }

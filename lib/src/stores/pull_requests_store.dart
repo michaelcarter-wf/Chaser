@@ -32,6 +32,7 @@ class PullRequestsStore extends ChaserStore {
     displayPullRequests = [];
     updated = new DateTime.now();
     displayPullRequests = await _gitHubService.searchForOpenPullRequests(_userStore.githubUser.login);
+    localStorageService.addPrsChased(displayPullRequests.length);
     trigger();
     _getPullRequestsStatus();
     _gitPullRequestsComments();

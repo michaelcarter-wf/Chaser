@@ -25,10 +25,10 @@ class GitHubService {
     Map headers = {'Authorization': 'token $_accessToken'};
     try {
       HttpRequest req = await HttpRequest.request(url, method: httpRequestType, requestHeaders: headers);
-      _statusService.authed = true;
+      _statusService?.authed = true;
       return JSON.decode(req.response.toString());
     } catch (e) {
-      _statusService.authed = false;
+      _statusService?.authed = false;
       print(e);
     }
   }

@@ -56,6 +56,8 @@ class AtMentionStore extends ChaserStore {
     _clearPullRequests();
     updated = new DateTime.now();
     atMentionPullRequests = await _gitHubService.searchForAtMentions(_userStore.githubUser.login);
+    localStorageService.addPrsChased(atMentionPullRequests.length);
+
     await _getPullRequestComments();
 
     atMentionPullRequests.sort((GitHubSearchResult a, GitHubSearchResult b) {
@@ -76,6 +78,7 @@ class AtMentionStore extends ChaserStore {
       updated = localStorageService.atMentionsUpdated;
     } else {
       await _getChaserAssetsFromGithub();
+      localStorageService.atMentionPullRequests = atMentionPullRequests;
     }
 
     // don't need to wait for these, they'll updated once they come in.
@@ -110,7 +113,6 @@ class AtMentionStore extends ChaserStore {
       });
     }
 
-    localStorageService.atMentionPullRequests = atMentionPullRequests;
     trigger();
   }
 }
