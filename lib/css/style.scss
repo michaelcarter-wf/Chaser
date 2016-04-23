@@ -97,8 +97,15 @@ $gray: #999;
 
 .chaser-row {
 	margin: 0 !important;
+	min-height: 55px;
+	.label {
+		font-size: 60%;
+		margin-left: 2px;
+		padding: .1em .5em .2em;
+	}
 	&:hover {
 		background-color: $hover-color !important;
+
 		.chaser-close-button {
 			-webkit-transform: scale(1.2);
         	-ms-transform: scale(1.2);

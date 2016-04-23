@@ -7,7 +7,6 @@ class AtMentionStore extends ChaserStore {
   UserStore _userStore;
   ChaserActions _chaserActions;
   LocationStore _locationStore;
-  GitHubService _gitHubService;
 
   List<GitHubSearchResult> atMentionPullRequests = [];
   List<GitHubSearchResult> displayPullRequests = null;
@@ -16,9 +15,9 @@ class AtMentionStore extends ChaserStore {
   bool rowsHideable = true;
   bool loading = true;
 
-  AtMentionStore(this._chaserActions, this._gitHubService, this._userStore, this._locationStore,
+  AtMentionStore(this._chaserActions, GitHubService gitHubService, this._userStore, this._locationStore,
       StatusService statusService, LocalStorageService localStorageService)
-      : super(statusService, localStorageService) {
+      : super(statusService, localStorageService, gitHubService) {
     _chaserActions.locationActions.refreshView.listen((e) {
       load(force: true);
     });
@@ -45,9 +44,8 @@ class AtMentionStore extends ChaserStore {
 
   _getPullRequestComments() async {
     for (GitHubSearchResult pullRequest in atMentionPullRequests) {
-      List<GitHubComment> comments = await _gitHubService.getPullRequestComments(pullRequest);
-      pullRequest.numberOfComments = comments.length;
-      pullRequest.actionNeeded = await isPlusOneNeeded(comments, _userStore.githubUser.login);
+      List<GitHubComment> comments = await gitHubService.getPullRequestComments(pullRequest);
+      pullRequest.actionNeeded = isPlusOneNeeded(comments, _userStore.githubUser.login);
     }
   }
 
@@ -55,7 +53,7 @@ class AtMentionStore extends ChaserStore {
   _getChaserAssetsFromGithub() async {
     _clearPullRequests();
     updated = new DateTime.now();
-    atMentionPullRequests = await _gitHubService.searchForAtMentions(_userStore.githubUser.login);
+    atMentionPullRequests = await gitHubService.searchForAtMentions(_userStore.githubUser.login);
     localStorageService.addPrsChased(atMentionPullRequests.length);
 
     await _getPullRequestComments();
@@ -81,9 +79,6 @@ class AtMentionStore extends ChaserStore {
       localStorageService.atMentionPullRequests = atMentionPullRequests;
     }
 
-    // don't need to wait for these, they'll updated once they come in.
-    _getPullRequestsStatus();
-
     // TODO defer this and use the cache
     loading = false;
     trigger();
@@ -96,23 +91,11 @@ class AtMentionStore extends ChaserStore {
       chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(
           text: atMentionPullRequests?.where((GitHubSearchResult pr) => pr.actionNeeded).length.toString()));
     }
-  }
 
-  Future _getPullRequestsStatus() async {
+    await getPullRequestsStatus(atMentionPullRequests);
+
     for (GitHubSearchResult gsr in atMentionPullRequests) {
-      if (gsr.pullRequestUrl == null) {
-        print('url is null ${gsr.fullName}');
-        continue;
-      }
-      gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
-      List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.githubPullRequest);
-
-      // first one in the list should be the current
-      githubStatuses.forEach((GitHubStatus ghStatus) {
-        gsr.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
-      });
+      gitHubService.getPullRequestCommits(gsr.githubPullRequest);
     }
-
-    trigger();
   }
 }
