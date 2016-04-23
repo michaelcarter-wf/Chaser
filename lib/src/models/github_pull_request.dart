@@ -60,7 +60,7 @@ class GitHubPullRequest implements GithubBaseModel {
     }
     id = json[GitHubPullRequestConstants.id];
     merged = json[GitHubPullRequestConstants.merged];
-    mergeable = json[GitHubPullRequestConstants.mergeable] != null ? json[GitHubPullRequestConstants.mergeable]: null;
+    mergeable = json[GitHubPullRequestConstants.mergeable] != null ? json[GitHubPullRequestConstants.mergeable] : null;
     title = json[GitHubPullRequestConstants.title];
     updatedAt = json[GitHubPullRequestConstants.updatedAt];
     updatedAtPretty = getPrettyDates(DateTime.parse(updatedAt));

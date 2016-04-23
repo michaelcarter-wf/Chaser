@@ -36,7 +36,7 @@ class _ChaserRow extends react.Component {
     if (pullRequest.actionNeeded) {
       labels.add(Label({'text': 'Action Needed'}));
     }
-    
+
     if (pullRequest.githubPullRequest?.mergeable == false) {
       labels.add(Label({'text': 'Merge Conflicts'}));
     }
