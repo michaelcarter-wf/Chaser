@@ -101,6 +101,7 @@ $gray: #999;
 	.label {
 		font-size: 60%;
 		margin-left: 2px;
+		padding: .1em .5em .2em;
 	}
 	&:hover {
 		background-color: $hover-color !important;

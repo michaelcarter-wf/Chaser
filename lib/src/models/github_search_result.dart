@@ -41,20 +41,20 @@ class GitHubSearchResult implements GithubBaseModel {
   bool actionNeeded;
 
   GitHubSearchResult(Map json) {
-    print(json);
     if (json == null) {
       return;
     }
-    comments = json[GitHubSearchResultConstants.comments];
+    comments = json[GitHubSearchResultConstants.labels] != null ? json[GitHubSearchResultConstants.comments] : 0;
     state = json[GitHubSearchResultConstants.state];
     commentsUrl = json[GitHubSearchResultConstants.commentsUrl];
     htmlUrl = json[GitHubSearchResultConstants.htmlUrl];
     statusesUrl = json[GitHubSearchResultConstants.statusesUrl];
-    fullName = 'tester';
 
-    githubLabels = json[GitHubSearchResultConstants.labels].map((labelJson) {
-      return new GitHubLabel(labelJson);
-    }).toList();
+    githubLabels = json[GitHubSearchResultConstants.labels] != null
+        ? json[GitHubSearchResultConstants.labels].map((labelJson) {
+            return new GitHubLabel(labelJson);
+          }).toList()
+        : [];
 
     // for some reason this can be null
     if (json['head'] != null) {
