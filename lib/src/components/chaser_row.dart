@@ -7,8 +7,9 @@ import 'package:react/react.dart' as react;
 import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/components/pull_request_status.dart';
+import 'package:wChaser/src/components/label.dart';
 
-var mediaWidth = {'width': '80%'};
+var mediaWidth = {'width': '100%'};
 
 var ChaserRow = react.registerComponent(() => new _ChaserRow());
 
@@ -31,6 +32,21 @@ class _ChaserRow extends react.Component {
   }
 
   renderTitle() {
+    List labels = [];
+    if (pullRequest.actionNeeded) {
+      labels.add(Label({'text': 'Action Needed'}));
+    }
+
+    if (pullRequest.githubLabels.isNotEmpty) {
+      pullRequest.githubLabels.forEach((GitHubLabel label) {
+        labels.add(Label({'text': label.name}));
+      });
+    }
+
+    if (labels.isEmpty) {
+      labels.add(react.small({'className': 'small-text'}, pullRequest.updatedAtPretty));
+    }
+
     return react.div({
       'className': 'media-body pull-left',
       'style': mediaWidth,
@@ -38,18 +54,8 @@ class _ChaserRow extends react.Component {
     }, [
       react.small({'className': 'small-text create-date'},
           react.em({}, pullRequest.htmlUrl.replaceAll('https://github.com/', ''))),
-      react.h6({
-        'className': 'media-heading'
-      }, [
-        pullRequest.title,
-        react.br({}),
-        react.small({
-          'className': 'small-text'
-        }, [
-          pullRequest.updatedAtPretty,
-          react.span({'className': 'red'}, pullRequest.actionNeeded ? ' Action Needed' : '')
-        ])
-      ])
+      react.h6({'className': 'media-heading'}, pullRequest.title),
+      labels
     ]);
   }
 
@@ -74,7 +80,7 @@ class _ChaserRow extends react.Component {
     }, [
       renderImage(),
       PullRequestStatus({'gitHubPullRequest': pullRequest.githubPullRequest, 'actions': actions}),
-      react.div({'className': 'media'}, [renderTitle(), comments])
+      react.div({'className': 'media'}, renderTitle())
     ]);
   }
 }

@@ -97,6 +97,11 @@ $gray: #999;
 
 .chaser-row {
 	margin: 0 !important;
+	min-height: 55px;
+	.label {
+		font-size: 60%;
+		margin-left: 2px;
+	}
 	&:hover {
 		background-color: $hover-color !important;
 
