@@ -1,24 +1,25 @@
 part of wChaser.src.models.models;
 
 class GitHubSearchResultConstants {
-  static final actionNeeded = 'action_needed';
-  static final state = 'state';
-  static final commentsUrl = 'comments_url';
-  static final htmlUrl = 'html_url';
-  static final fullName = 'full_name';
-  static final id = 'id';
-  static final title = 'title';
-  static final updatedAt = 'updated_at';
-  static final githubUser = 'user';
-  static final merged = 'merged';
-  static final statusesUrl = 'statuses_url';
-  static final pullRequest = 'pull_request';
-  static final numberOfComments = 'num_of_comments';
+  static const actionNeeded = 'action_needed';
+  static const state = 'state';
+  static const commentsUrl = 'comments_url';
+  static const comments = 'comments';
+  static const htmlUrl = 'html_url';
+  static const fullName = 'full_name';
+  static const id = 'id';
+  static const title = 'title';
+  static const updatedAt = 'updated_at';
+  static const githubUser = 'user';
+  static const merged = 'merged';
+  static const statusesUrl = 'statuses_url';
+  static const pullRequest = 'pull_request';
 }
 
 class GitHubSearchResult implements GithubBaseModel {
   bool actionNeeded;
   String commentsUrl;
+  int comments;
   String fullName;
   GitHubUser githubUser;
   String pullRequestUrl;
@@ -32,14 +33,15 @@ class GitHubSearchResult implements GithubBaseModel {
   String updatedAt;
   String updatedAtPretty;
   String repoFullName;
-  int numberOfComments = 0;
 
   bool get isOpen => state == 'open';
 
   GitHubSearchResult(Map json) {
+    print(json);
     if (json == null) {
       return;
     }
+    comments = json[GitHubSearchResultConstants.comments];
     state = json[GitHubSearchResultConstants.state];
     commentsUrl = json[GitHubSearchResultConstants.commentsUrl];
     htmlUrl = json[GitHubSearchResultConstants.htmlUrl];
@@ -69,13 +71,10 @@ class GitHubSearchResult implements GithubBaseModel {
     if (json.containsKey(GitHubSearchResultConstants.actionNeeded)) {
       actionNeeded = json[GitHubSearchResultConstants.actionNeeded];
     }
-
-    if (json.containsKey(GitHubSearchResultConstants.numberOfComments)) {
-      numberOfComments = json[GitHubSearchResultConstants.numberOfComments];
-    }
   }
 
   Map toMap() => {
+        GitHubSearchResultConstants.comments: comments,
         GitHubSearchResultConstants.state: state,
         GitHubSearchResultConstants.commentsUrl: commentsUrl,
         GitHubSearchResultConstants.htmlUrl: htmlUrl,
@@ -91,6 +90,5 @@ class GitHubSearchResult implements GithubBaseModel {
         GitHubSearchResultConstants.updatedAt: updatedAt,
         GitHubSearchResultConstants.actionNeeded: actionNeeded,
         GitHubSearchResultConstants.statusesUrl: statusesUrl,
-        GitHubSearchResultConstants.numberOfComments: numberOfComments
       };
 }

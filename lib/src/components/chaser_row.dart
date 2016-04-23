@@ -60,11 +60,11 @@ class _ChaserRow extends react.Component {
             react.i({'className': 'close-x icon icon-sm icon-close close-x',}))
         : null;
 
-    var comments = pullRequest.numberOfComments > 0
+    var comments = pullRequest.comments > 0
         ? react.div({
             'className': 'pull-right comment-icon'
           }, [
-            '${pullRequest.numberOfComments.toString()} ',
+            '${pullRequest.comments.toString()} ',
             react.i({'className': 'glyphicon glyphicon-comment icon icon-sm'})
           ])
         : null;

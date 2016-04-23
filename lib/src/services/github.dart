@@ -46,6 +46,11 @@ class GitHubService {
     }).toList();
   }
 
+  Future<List<GitHubCommit>> getPullRequestCommits(GitHubPullRequest pullRequest) async {
+
+
+  }
+
   /// Get all repos from github that the authed user owns.
   /// Github docs: https://developer.github.com/v3/repos/#list-your-repositories/
   ///
@@ -103,6 +108,7 @@ class GitHubService {
     var userJson = await _requestAuthed('GET', uri.toString());
     return new GitHubUser(userJson);
   }
+
 
   Future<List<GitHubStatus>> getPullRequestStatus(GitHubPullRequest githubPullReqeust) async {
     var statusJson = await _requestAuthed('GET', githubPullReqeust.statusesUrl);

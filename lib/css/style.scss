@@ -99,6 +99,7 @@ $gray: #999;
 	margin: 0 !important;
 	&:hover {
 		background-color: $hover-color !important;
+
 		.chaser-close-button {
 			-webkit-transform: scale(1.2);
         	-ms-transform: scale(1.2);

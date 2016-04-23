@@ -35,15 +35,6 @@ class PullRequestsStore extends ChaserStore {
     localStorageService.addPrsChased(displayPullRequests.length);
     trigger();
     _getPullRequestsStatus();
-    _gitPullRequestsComments();
-  }
-
-  _gitPullRequestsComments() async {
-    for (GitHubSearchResult gsr in displayPullRequests) {
-      List<GitHubComment> comments = await _gitHubService.getPullRequestComments(gsr);
-      gsr.numberOfComments = comments.length;
-    }
-    trigger();
   }
 
   _getPullRequestsStatus() async {

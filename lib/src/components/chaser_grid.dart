@@ -37,7 +37,8 @@ class _ChaserGrid extends react.Component {
     }
 
     return react.div({
-      'style': divStyle
+      'style': divStyle,
+      'className': 'chaser-grid'
     }, [
       PopOver({'actions': chaserActions}),
       content
