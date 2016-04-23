@@ -18,8 +18,8 @@ class GitHubComment implements GithubBaseModel {
   }
 
   Map toMap() => {
-    GitHubCommentConstants.body: body,
-    GitHubCommentConstants.updatedAt: updatedAt,
-    GitHubCommentConstants.user: user.toMap(),
-  };
+        GitHubCommentConstants.body: body,
+        GitHubCommentConstants.updatedAt: updatedAt,
+        GitHubCommentConstants.user: user.toMap(),
+      };
 }

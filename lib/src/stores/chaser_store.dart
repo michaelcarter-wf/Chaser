@@ -18,7 +18,6 @@ class ChaserStore extends Store {
   StatusService _statusService;
 
   ChaserStore(StatusService statusService, this.localStorageService, this.gitHubService) {
-
     _statusService = statusService;
     _statusService.auth.listen((_) {
       load();

@@ -111,7 +111,6 @@ class GitHubService {
     return new GitHubUser(userJson);
   }
 
-
   Future<List<GitHubStatus>> getPullRequestStatus(GitHubPullRequest githubPullReqeust) async {
     var statusJson = await _requestAuthed('GET', githubPullReqeust.statusesUrl);
 

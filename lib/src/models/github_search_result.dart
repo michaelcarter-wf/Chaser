@@ -8,6 +8,7 @@ class GitHubSearchResultConstants {
   static const htmlUrl = 'html_url';
   static const fullName = 'full_name';
   static const id = 'id';
+  static const labels = 'labels';
   static const title = 'title';
   static const updatedAt = 'updated_at';
   static const githubUser = 'user';
@@ -17,13 +18,12 @@ class GitHubSearchResultConstants {
 }
 
 class GitHubSearchResult implements GithubBaseModel {
-  bool actionNeeded;
   String commentsUrl;
   int comments;
   String fullName;
   GitHubUser githubUser;
   String pullRequestUrl;
-  GitHubPullRequest githubPullRequest;
+  List<GitHubLabel> githubLabels;
   String htmlUrl;
   int id;
   bool merged;
@@ -31,10 +31,14 @@ class GitHubSearchResult implements GithubBaseModel {
   String statusesUrl;
   String title;
   String updatedAt;
-  String updatedAtPretty;
   String repoFullName;
 
   bool get isOpen => state == 'open';
+
+  // Not returned from the endpoint
+  GitHubPullRequest githubPullRequest;
+  String updatedAtPretty;
+  bool actionNeeded;
 
   GitHubSearchResult(Map json) {
     print(json);
@@ -47,6 +51,10 @@ class GitHubSearchResult implements GithubBaseModel {
     htmlUrl = json[GitHubSearchResultConstants.htmlUrl];
     statusesUrl = json[GitHubSearchResultConstants.statusesUrl];
     fullName = 'tester';
+
+    githubLabels = json[GitHubSearchResultConstants.labels].map((labelJson) {
+      return new GitHubLabel(labelJson);
+    }).toList();
 
     // for some reason this can be null
     if (json['head'] != null) {

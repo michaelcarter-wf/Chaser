@@ -97,6 +97,5 @@ class AtMentionStore extends ChaserStore {
     for (GitHubSearchResult gsr in atMentionPullRequests) {
       gitHubService.getPullRequestCommits(gsr.githubPullRequest);
     }
-
   }
 }

@@ -18,8 +18,8 @@ class GitHubCommit implements GithubBaseModel {
   }
 
   Map toMap() => {
-    GitHubCommitConstants.body: body,
-    GitHubCommitConstants.updatedAt: updatedAt,
-    GitHubCommitConstants.user: user.toMap(),
-  };
+        GitHubCommitConstants.body: body,
+        GitHubCommitConstants.updatedAt: updatedAt,
+        GitHubCommitConstants.user: user.toMap(),
+      };
 }
