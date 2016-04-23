@@ -1,7 +1,5 @@
 library wChaser.src.models.models;
 
-import 'dart:js' as js;
-
 import 'package:wChaser/src/utils/dates.dart';
 
 part 'github_base_model.dart';
