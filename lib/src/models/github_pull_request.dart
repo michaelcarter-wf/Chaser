@@ -10,6 +10,7 @@ class GitHubPullRequestConstants {
   static const fullName = 'full_name';
   static const githubUser = 'user';
   static const merged = 'merged';
+  static const mergeable = 'mergeable';
   static const state = 'state';
   static const statusesUrl = 'statuses_url';
   static const title = 'title';
@@ -29,6 +30,8 @@ class GitHubPullRequest implements GithubBaseModel {
   int id;
   String url;
   bool merged;
+  // could be true, false, or null(still loading)
+  var mergeable;
   String state;
   String statusesUrl;
   String title;
@@ -57,6 +60,8 @@ class GitHubPullRequest implements GithubBaseModel {
     }
     id = json[GitHubPullRequestConstants.id];
     merged = json[GitHubPullRequestConstants.merged];
+    // print(json);
+    mergeable = json[GitHubPullRequestConstants.mergeable] != null ? json[GitHubPullRequestConstants.mergeable]: null;
     title = json[GitHubPullRequestConstants.title];
     updatedAt = json[GitHubPullRequestConstants.updatedAt];
     updatedAtPretty = getPrettyDates(DateTime.parse(updatedAt));

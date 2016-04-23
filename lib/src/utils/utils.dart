@@ -21,8 +21,6 @@ bool isPlusOneNeeded(List<GitHubComment> gitHubComments, String userId) {
   return plusOneNeeded;
 }
 
-getPlusOneCount() {}
-
 String formatDate(DateTime dateTime) {
   var formatter = new DateFormat('MM/dd/yyyy');
   String formatted = formatter.format(dateTime);

@@ -36,12 +36,16 @@ class _ChaserRow extends react.Component {
     if (pullRequest.actionNeeded) {
       labels.add(Label({'text': 'Action Needed'}));
     }
-
-    if (pullRequest.githubLabels.isNotEmpty) {
-      pullRequest.githubLabels.forEach((GitHubLabel label) {
-        labels.add(Label({'text': label.name}));
-      });
+    print('mergeable ${pullRequest.githubPullRequest?.mergeable}');
+    if (pullRequest.githubPullRequest?.mergeable == false) {
+      labels.add(Label({'text': 'Merge Conflicts'}));
     }
+
+    // if (pullRequest.githubLabels.isNotEmpty) {
+    //   pullRequest.githubLabels.forEach((GitHubLabel label) {
+    //     labels.add(Label({'text': label.name}));
+    //   });
+    // }
 
     if (labels.isEmpty) {
       labels.add(react.small({'className': 'small-text'}, pullRequest.updatedAtPretty));
