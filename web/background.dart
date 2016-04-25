@@ -13,11 +13,10 @@ import 'package:wChaser/src/services/github.dart';
 import 'package:wChaser/src/utils/utils.dart';
 
 GitHubService _gitHubService = new GitHubService();
-LocationStorageService locationStorageService = new LocationStorageService();
+LocalStorageService localStorageService = new LocalStorageService();
 
 main() async {
-  await locationStorageService.load();
-
+  await localStorageService.load();
   chrome.alarms.onAlarm.listen((chrome.Alarm alarm) {
     checkForPrs();
   });
@@ -37,7 +36,7 @@ main() async {
 
   // _OnBeforeSendHeaders.callMethod('addListener', [_processCallback, filter]);
 
-//  checkForStatusUpdates();
+
   checkForPrs();
   chrome.alarms.create(new chrome.AlarmCreateInfo(periodInMinutes: 15), 'refresh');
 }
@@ -59,7 +58,7 @@ checkForPrs() async {
     pullRequest.actionNeeded = await isPlusOneNeeded(comments, githubUser.login);
   }
 
-  locationStorageService.atMentionPullRequests = atMentionPullRequests;
+  localStorageService.atMentionPullRequests = atMentionPullRequests;
 
   List<GitHubSearchResult> actionNeeded =
       atMentionPullRequests.where((GitHubSearchResult gpr) => gpr.actionNeeded).toList();
@@ -67,11 +66,38 @@ checkForPrs() async {
   if (chrome.browserAction.available) {
     chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(text: actionNeeded.length.toString()));
   }
+
+  // TODO Get user's prs
+  getPullRequestsStatus(atMentionPullRequests);
 }
 
-checkForStatusUpdates() {
-  //    chrome.NotificationOptions no = new chrome.NotificationOptions(title:'Testing', message: 'Baller!', iconUrl: './packages/wChaser/images/github.png', type: chrome.TemplateType.BASIC);
-//    chrome.notifications.create(no);
+throwAlert(text) {
+  try {
+    chrome.NotificationOptions no = new chrome.NotificationOptions(title:'Build Failed!', message: text, iconUrl: './packages/wChaser/images/chaser_grade.png', type: chrome.TemplateType.BASIC);
+    chrome.notifications.create(no, 'test');
+  } catch (e) {
+    print(e);
+  }
+}
+
+getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
+  for (GitHubSearchResult gsr in searchResults) {
+    gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
+
+    List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.githubPullRequest);
+
+    // first one in the list should be the current
+    githubStatuses.forEach((GitHubStatus ghStatus) {
+      gsr.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
+    });
+
+    // check for my user for errors not everyone else.
+    gsr.githubPullRequest.githubStatus.forEach((String key, GitHubStatus ghs) {
+      if (ghs.state == GitHubStatusState.failure) {
+        throwAlert(gsr.githubPullRequest.title);
+      }
+    });
+  }
 }
 
 Future<GitHubUser> _authUser(String ghToken) async {

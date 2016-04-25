@@ -61,6 +61,7 @@ class AtMentionStore extends ChaserStore {
     atMentionPullRequests.sort((GitHubSearchResult a, GitHubSearchResult b) {
       return b.actionNeeded.toString().compareTo(a.actionNeeded.toString());
     });
+    localStorageService.atMentionPullRequests = atMentionPullRequests;
   }
 
   @override
@@ -76,10 +77,8 @@ class AtMentionStore extends ChaserStore {
       updated = localStorageService.atMentionsUpdated;
     } else {
       await _getChaserAssetsFromGithub();
-      localStorageService.atMentionPullRequests = atMentionPullRequests;
     }
 
-    // TODO defer this and use the cache
     loading = false;
     trigger();
 
@@ -94,8 +93,8 @@ class AtMentionStore extends ChaserStore {
 
     await getPullRequestsStatus(atMentionPullRequests);
 
-    for (GitHubSearchResult gsr in atMentionPullRequests) {
-      gitHubService.getPullRequestCommits(gsr.githubPullRequest);
-    }
+    // for (GitHubSearchResult gsr in atMentionPullRequests) {
+    //   gitHubService.getPullRequestCommits(gsr.githubPullRequest);
+    // }
   }
 }

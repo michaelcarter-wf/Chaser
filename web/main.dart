@@ -10,11 +10,11 @@ import 'package:wChaser/src/actions/actions.dart';
 
 main() async {
   reactClient.setClientConfiguration();
-  LocationStorageService locationStorageService = new LocationStorageService();
-  await locationStorageService.load();
+  LocalStorageService localStorageService = new LocalStorageService();
+  await localStorageService.load();
 
   ChaserActions chaserActions = new ChaserActions();
-  ChaserStores chaserStores = new ChaserStores(chaserActions, locationStorageService);
+  ChaserStores chaserStores = new ChaserStores(chaserActions, localStorageService);
 
   react.render(ChaserApp({'store': chaserStores, 'actions': chaserActions}), querySelector('#output'));
 }

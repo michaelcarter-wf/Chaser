@@ -2,15 +2,13 @@ library wChaser.src.services.local_storage;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 
-import 'package:crypto/crypto.dart';
 import 'package:lawndart/lawndart.dart' show LocalStorageStore;
 
 import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/constants.dart';
 
-class LocationStorageService {
+class LocalStorageService {
   LocalStorageStore localStorageStore;
   List<GitHubSearchResult> _atMentionPullRequests = [];
   DateTime atMentionsUpdated = new DateTime.now();

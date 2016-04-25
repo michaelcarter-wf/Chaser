@@ -9,7 +9,7 @@ import 'package:wChaser/src/models/models.dart';
 
 class ChaserStore extends Store {
   List<GitHubSearchResult> displayPullRequests;
-  LocationStorageService localStorageService;
+  LocalStorageService localStorageService;
   DateTime updated;
   GitHubService gitHubService;
   bool showAll;
@@ -27,6 +27,7 @@ class ChaserStore extends Store {
   getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
     for (GitHubSearchResult gsr in searchResults) {
       gsr.githubPullRequest = await gitHubService.getPullRequest(gsr.pullRequestUrl);
+      
       List<GitHubStatus> githubStatuses = await gitHubService.getPullRequestStatus(gsr.githubPullRequest);
 
       // first one in the list should be the current

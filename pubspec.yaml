@@ -28,6 +28,5 @@ dev_dependencies:
 transformers:
   - $dart2js:
       minify: false
-      csp: true
   - chrome
   - sass
