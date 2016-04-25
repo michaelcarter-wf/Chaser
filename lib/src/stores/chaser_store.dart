@@ -27,7 +27,7 @@ class ChaserStore extends Store {
   getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
     for (GitHubSearchResult gsr in searchResults) {
       gsr.githubPullRequest = await gitHubService.getPullRequest(gsr.pullRequestUrl);
-      
+
       List<GitHubStatus> githubStatuses = await gitHubService.getPullRequestStatus(gsr.githubPullRequest);
 
       // first one in the list should be the current

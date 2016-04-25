@@ -36,7 +36,6 @@ main() async {
 
   // _OnBeforeSendHeaders.callMethod('addListener', [_processCallback, filter]);
 
-
   checkForPrs();
   chrome.alarms.create(new chrome.AlarmCreateInfo(periodInMinutes: 15), 'refresh');
 }
@@ -73,7 +72,11 @@ checkForPrs() async {
 
 throwAlert(text) {
   try {
-    chrome.NotificationOptions no = new chrome.NotificationOptions(title:'Build Failed!', message: text, iconUrl: './packages/wChaser/images/chaser_grade.png', type: chrome.TemplateType.BASIC);
+    chrome.NotificationOptions no = new chrome.NotificationOptions(
+        title: 'Build Failed!',
+        message: text,
+        iconUrl: './packages/wChaser/images/chaser_grade.png',
+        type: chrome.TemplateType.BASIC);
     chrome.notifications.create(no, 'test');
   } catch (e) {
     print(e);
