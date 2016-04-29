@@ -15,6 +15,7 @@ class GitHubSearchResultConstants {
   static const merged = 'merged';
   static const statusesUrl = 'statuses_url';
   static const pullRequest = 'pull_request';
+  static const notificationsActive = 'notifications_active';
 }
 
 class GitHubSearchResult implements GithubBaseModel {
@@ -39,6 +40,7 @@ class GitHubSearchResult implements GithubBaseModel {
   GitHubPullRequest githubPullRequest;
   String updatedAtPretty;
   bool actionNeeded;
+  bool notificationsActive;
 
   GitHubSearchResult(Map json) {
     if (json == null) {
@@ -57,9 +59,8 @@ class GitHubSearchResult implements GithubBaseModel {
         : [];
 
     // for some reason this can be null
-    if (json['head'] != null) {
-      fullName = json['head']['repo'][GitHubSearchResultConstants.fullName];
-    }
+    fullName = json['head'] != null ? json['head']['repo'][GitHubSearchResultConstants.fullName] : null;
+
 
     if (json[GitHubSearchResultConstants.pullRequest] != null) {
       pullRequestUrl = json[GitHubSearchResultConstants.pullRequest]['url'];
@@ -74,6 +75,7 @@ class GitHubSearchResult implements GithubBaseModel {
 
     // make a call to get this later
     githubPullRequest = json['githubPullRequest'] ?? null;
+    notificationsActive = json[GitHubSearchResultConstants.notificationsActive] != null ? json[GitHubSearchResultConstants.notificationsActive]: false;
 
     // this will only come from cached data
     if (json.containsKey(GitHubSearchResultConstants.actionNeeded)) {
@@ -98,5 +100,6 @@ class GitHubSearchResult implements GithubBaseModel {
         GitHubSearchResultConstants.updatedAt: updatedAt,
         GitHubSearchResultConstants.actionNeeded: actionNeeded,
         GitHubSearchResultConstants.statusesUrl: statusesUrl,
+        GitHubSearchResultConstants.notificationsActive: notificationsActive,
       };
 }

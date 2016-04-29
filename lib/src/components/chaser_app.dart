@@ -75,6 +75,7 @@ class _ChaserApp extends FluxComponent {
   }
 
   render() {
+    print('rerender');
     if (!chaserStores.userStore.isReady) {
       return react.div({'className': 'chaser-container'}, renderLoading());
     }

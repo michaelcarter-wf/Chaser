@@ -47,6 +47,19 @@ class LocalStorageService {
     localStorageStore.save(atMentionsUpdated.toIso8601String(), LocalStorageConstants.atMentionUpdatedLocalStorageKey);
   }
 
+  updateNotificationForPr(GitHubSearchResult gsr) async {
+      String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.prsWithNotifications) ?? '[]';
+      Set notificationMap = JSON.decode(atMentionJson);
+      gsr.notificationsActive ? notificationMap.add(gsr.id) : notificationMap.remove(gsr.id);
+      localStorageStore.save(notificationMap.toString(), LocalStorageConstants.prsWithNotifications);
+  }
+
+  Future<Set> get prsWithNotifications async {
+      String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.prsWithNotifications) ?? '[]';
+      Set notificationMap = JSON.decode(atMentionJson);
+      return notificationMap;
+  }
+
   /// Gets a list of [GitHubSearchResult] requests from the cache if they exist.
   Future<List<GitHubSearchResult>> get atMentionPullRequests async {
     if (_atMentionPullRequests.isNotEmpty) {

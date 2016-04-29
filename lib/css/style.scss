@@ -2,6 +2,8 @@ $red: #ED1212;
 $header-bg: #FBFBFB;
 $hover-color: #e3e4e3;
 
+$green: green;
+
 $black-bg: rgb(82, 82, 82);
 $orange: orange;
 $popup-width: 400px;
@@ -98,6 +100,18 @@ $gray: #999;
 .chaser-row {
 	margin: 0 !important;
 	min-height: 55px;
+	.bell-active {
+		font-size: 12px;
+		// color: rgb(88, 169, 88);
+		display: block !important;
+	}
+	.glyphicon-bell {
+		display: none;
+	}
+	.icons {
+		padding-top: 6px;
+		z-index: 100;
+	}
 	.label {
 		font-size: 60%;
 		margin-left: 2px;
@@ -111,6 +125,10 @@ $gray: #999;
         	-ms-transform: scale(1.2);
         	transform: scale(1.2);
 			color: $red;
+		}
+
+		.glyphicon-bell {
+			display: block;
 		}
 
 		.action-needed-img {
@@ -178,6 +196,9 @@ $gray: #999;
 }
 
 .media {
+	.media-body {
+		padding-right: 5px;
+	}
 	cursor:pointer;
 	padding: 0px 5px 7px 5px;
 	margin: 0px;
@@ -218,10 +239,10 @@ $gray: #999;
 }
 
 .row-passed {
-	border-left: solid 5px green;
+	border-left: solid 5px $green;
 	transition: all .1s ease-in-out;
 	&:hover {
-		border-left: solid 5px green;
+		border-left: solid 5px $green;
 	}
 }
 
@@ -241,7 +262,7 @@ $gray: #999;
 	}
 
 	.passed {
-		background-color: green;
+		background-color: $green;
 		cursor: pointer;
 	}
 

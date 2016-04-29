@@ -5,7 +5,6 @@ class AtMentionStore extends ChaserStore {
 
   StreamController alertsController;
   UserStore _userStore;
-  ChaserActions _chaserActions;
   LocationStore _locationStore;
 
   List<GitHubSearchResult> atMentionPullRequests = [];
@@ -15,14 +14,27 @@ class AtMentionStore extends ChaserStore {
   bool rowsHideable = true;
   bool loading = true;
 
-  AtMentionStore(this._chaserActions, GitHubService gitHubService, this._userStore, this._locationStore,
+  AtMentionStore(ChaserActions chaserActions, GitHubService gitHubService, this._userStore, this._locationStore,
       StatusService statusService, LocalStorageService localStorageService)
-      : super(statusService, localStorageService, gitHubService) {
-    _chaserActions.locationActions.refreshView.listen((e) {
+      : super(statusService, localStorageService, gitHubService, chaserActions) {
+
+    triggerOnAction(chaserActions.atMentionActions.displayAll, _displayAll);
+
+    chaserActions.locationActions.refreshView.listen((e) {
+        if (_locationStore.currentView != ChaserViews.atMentions) {
+          return;
+        }
       load(force: true);
     });
 
-    triggerOnAction(_chaserActions.atMentionActions.displayAll, _displayAll);
+    chaserActions.atMentionActions.toggleNotification.listen((GitHubSearchResult gsr) {
+        if (_locationStore.currentView != ChaserViews.atMentions) {
+          return;
+        }
+        gsr.notificationsActive = !gsr.notificationsActive;
+        localStorageService.updateNotificationForPr(gsr);
+        trigger();
+    });
   }
 
   _displayAll(bool displayAll) {

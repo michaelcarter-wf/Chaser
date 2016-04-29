@@ -2,12 +2,14 @@ library wChaser.src.stores.chaser_store;
 
 import 'package:w_flux/w_flux.dart';
 
+import 'package:wChaser/src/actions/actions.dart';
+import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/services/local_storage.dart';
 import 'package:wChaser/src/services/github.dart';
 import 'package:wChaser/src/services/status_service.dart';
-import 'package:wChaser/src/models/models.dart';
 
 class ChaserStore extends Store {
+  ChaserActions chaserActions;
   List<GitHubSearchResult> displayPullRequests;
   LocalStorageService localStorageService;
   DateTime updated;
@@ -17,8 +19,7 @@ class ChaserStore extends Store {
   bool loading;
   StatusService _statusService;
 
-  ChaserStore(StatusService statusService, this.localStorageService, this.gitHubService) {
-    _statusService = statusService;
+  ChaserStore(StatusService this._statusService, this.localStorageService, this.gitHubService, this.chaserActions) {
     _statusService.auth.listen((_) {
       load();
     });

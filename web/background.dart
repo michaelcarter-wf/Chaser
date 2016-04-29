@@ -15,6 +15,12 @@ import 'package:wChaser/src/utils/utils.dart';
 GitHubService _gitHubService = new GitHubService();
 LocalStorageService localStorageService = new LocalStorageService();
 
+class ChaserAlert {
+  String title;
+  String message;
+  ChaserAlert(this.title, this.message);
+}
+
 main() async {
   await localStorageService.load();
   chrome.alarms.onAlarm.listen((chrome.Alarm alarm) {
@@ -66,15 +72,16 @@ checkForPrs() async {
     chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(text: actionNeeded.length.toString()));
   }
 
-  // TODO Get user's prs
-  getPullRequestsStatus(atMentionPullRequests);
+  List<GitHubSearchResult> userPrs = await _gitHubService.searchForOpenPullRequests(githubUser.login);
+  getPullRequestsStatus(userPrs);
 }
 
-throwAlert(text) {
+// chrome service
+throwAlert(ChaserAlert chaserAlert) {
   try {
     chrome.NotificationOptions no = new chrome.NotificationOptions(
-        title: 'Build Failed!',
-        message: text,
+        title: chaserAlert.title,
+        message: chaserAlert.message,
         iconUrl: './packages/wChaser/images/chaser_grade.png',
         type: chrome.TemplateType.BASIC);
     chrome.notifications.create(no, 'test');
@@ -83,6 +90,7 @@ throwAlert(text) {
   }
 }
 
+// TODO Move this into a reusable class
 getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
   for (GitHubSearchResult gsr in searchResults) {
     gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
@@ -97,7 +105,10 @@ getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
     // check for my user for errors not everyone else.
     gsr.githubPullRequest.githubStatus.forEach((String key, GitHubStatus ghs) {
       if (ghs.state == GitHubStatusState.failure) {
-        throwAlert(gsr.githubPullRequest.title);
+        // TODO find the reason for the failure and put it in the message
+        throwAlert(new ChaserAlert('Build Failed', ghs.context));
+      } else if (!gsr.githubPullRequest.mergeable) {
+        throwAlert(new ChaserAlert('Merge Conflicts', gsr.title));
       }
     });
   }

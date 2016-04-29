@@ -33,6 +33,7 @@ class _ChaserRow extends react.Component {
 
   renderTitle() {
     List labels = [];
+    List<String> notificationIconClasses = ['glyphicon', 'glyphicon-bell'];
     if (pullRequest.actionNeeded) {
       labels.add(Label({'text': 'Action Needed'}));
     }
@@ -45,15 +46,25 @@ class _ChaserRow extends react.Component {
       labels.add(react.small({'className': 'small-text'}, pullRequest.updatedAtPretty));
     }
 
+    if (pullRequest.notificationsActive) {
+        notificationIconClasses.add('bell-active');
+    }
+
+    String notificationClasses = notificationIconClasses.join(' ');
+
     return react.div({
       'className': 'media-body pull-left',
       'style': mediaWidth,
       'onClick': openNewTab
     }, [
-      react.small({'className': 'small-text create-date'},
-          react.em({}, pullRequest.htmlUrl.replaceAll('https://github.com/', ''))),
-      react.h6({'className': 'media-heading'}, pullRequest.title),
-      labels
+      react.small({'className': 'small-text create-date'}, [
+         react.em({}, pullRequest.htmlUrl.replaceAll('https://github.com/', '')),
+         react.em({'className': 'pull-right icons', 'onClick': _notificationClick}, react.i({'className': notificationClasses}))
+      ]),
+      react.div({}, [
+          react.h6({'className': 'media-heading'}, pullRequest.title),
+          labels
+      ])
     ]);
   }
 
@@ -80,5 +91,12 @@ class _ChaserRow extends react.Component {
       PullRequestStatus({'gitHubPullRequest': pullRequest.githubPullRequest, 'actions': actions}),
       react.div({'className': 'media'}, renderTitle())
     ]);
+  }
+
+  _notificationClick(react.SyntheticEvent e) {
+      print('click click');
+      actions.atMentionActions.toggleNotification(pullRequest);
+      e.preventDefault();
+      e.stopPropagation();
   }
 }

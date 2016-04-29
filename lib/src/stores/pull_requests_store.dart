@@ -5,7 +5,6 @@ class PullRequestsStore extends ChaserStore {
 
   UserStore _userStore;
   LocationStore _locationStore;
-  ChaserActions _chaserActions;
 
   DateTime updated;
   List<GitHubSearchResult> displayPullRequests;
@@ -13,17 +12,30 @@ class PullRequestsStore extends ChaserStore {
   bool rowsHideable = false;
   bool loading = true;
 
-  PullRequestsStore(this._chaserActions, GitHubService gitHubService, this._userStore, this._locationStore,
+  PullRequestsStore(ChaserActions chaserActions, GitHubService gitHubService, this._userStore, this._locationStore,
       StatusService statusService, LocalStorageService localStorageService)
-      : super(statusService, localStorageService, gitHubService) {
+      : super(statusService, localStorageService, gitHubService, chaserActions) {
     updated = new DateTime.now();
-    _chaserActions.locationActions.refreshView.listen((e) {
-      load(force: true);
-    });
 
     // listen for location changes
     _locationStore.listen((_) {
       load(force: false);
+    });
+
+    chaserActions.locationActions.refreshView.listen((e) {
+        if (_locationStore.currentView != ChaserViews.pullRequests) {
+          return;
+        }
+      load(force: true);
+    });
+
+    chaserActions.atMentionActions.toggleNotification.listen((GitHubSearchResult gsr) {
+        if (_locationStore.currentView != ChaserViews.pullRequests) {
+          return;
+        }
+        gsr.notificationsActive = !gsr.notificationsActive;
+        localStorageService.updateNotificationForPr(gsr);
+        trigger();
     });
   }
 
@@ -31,6 +43,12 @@ class PullRequestsStore extends ChaserStore {
     displayPullRequests = [];
     updated = new DateTime.now();
     displayPullRequests = await gitHubService.searchForOpenPullRequests(_userStore.githubUser.login);
+    Set notificationPrs = await localStorageService.prsWithNotifications;
+
+
+    displayPullRequests.forEach((GitHubSearchResult gsr) {
+        gsr.notificationsActive = notificationPrs.contains(gsr.id);
+    });
     localStorageService.addPrsChased(displayPullRequests.length);
     trigger();
     getPullRequestsStatus(displayPullRequests);
