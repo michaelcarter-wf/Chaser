@@ -23,19 +23,19 @@ class PullRequestsStore extends ChaserStore {
     });
 
     chaserActions.locationActions.refreshView.listen((e) {
-        if (_locationStore.currentView != ChaserViews.pullRequests) {
-          return;
-        }
+      if (_locationStore.currentView != ChaserViews.pullRequests) {
+        return;
+      }
       load(force: true);
     });
 
     chaserActions.atMentionActions.toggleNotification.listen((GitHubSearchResult gsr) {
-        if (_locationStore.currentView != ChaserViews.pullRequests) {
-          return;
-        }
-        gsr.notificationsActive = !gsr.notificationsActive;
-        localStorageService.updateNotificationForPr(gsr);
-        trigger();
+      if (_locationStore.currentView != ChaserViews.pullRequests) {
+        return;
+      }
+      gsr.notificationsActive = !gsr.notificationsActive;
+      localStorageService.updateNotificationStatus(gsr);
+      trigger();
     });
   }
 
@@ -43,11 +43,16 @@ class PullRequestsStore extends ChaserStore {
     displayPullRequests = [];
     updated = new DateTime.now();
     displayPullRequests = await gitHubService.searchForOpenPullRequests(_userStore.githubUser.login);
-    Set notificationPrs = await localStorageService.prsWithNotifications;
-
+    Set notificationPrs = await localStorageService.watchNotifications;
+    Set ignoredPrs = await localStorageService.ignoredNotifications;
 
     displayPullRequests.forEach((GitHubSearchResult gsr) {
-        gsr.notificationsActive = notificationPrs.contains(gsr.id);
+      bool watched = notificationPrs.contains(gsr.id);
+      bool ignored = ignoredPrs.contains(gsr.id);
+      gsr.notificationsActive = ignored ? false : true;
+      if (!watched && !ignored) {
+        localStorageService.updateNotificationStatus(gsr);
+      }
     });
     localStorageService.addPrsChased(displayPullRequests.length);
     trigger();

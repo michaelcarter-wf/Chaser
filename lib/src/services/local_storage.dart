@@ -47,17 +47,35 @@ class LocalStorageService {
     localStorageStore.save(atMentionsUpdated.toIso8601String(), LocalStorageConstants.atMentionUpdatedLocalStorageKey);
   }
 
-  updateNotificationForPr(GitHubSearchResult gsr) async {
-      String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.prsWithNotifications) ?? '[]';
-      Set notificationMap = JSON.decode(atMentionJson);
-      gsr.notificationsActive ? notificationMap.add(gsr.id) : notificationMap.remove(gsr.id);
-      localStorageStore.save(notificationMap.toString(), LocalStorageConstants.prsWithNotifications);
+  updateNotificationStatus(GitHubSearchResult gsr) {
+    ignoreNotification(gsr);
+    watchForNotification(gsr);
   }
 
-  Future<Set> get prsWithNotifications async {
-      String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.prsWithNotifications) ?? '[]';
-      Set notificationMap = JSON.decode(atMentionJson);
-      return notificationMap;
+  ignoreNotification(GitHubSearchResult gsr) async {
+    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.ignoreNotifications) ?? '[]';
+    Set notificationMap = JSON.decode(atMentionJson);
+    !gsr.notificationsActive ? notificationMap.add(gsr.id) : notificationMap.remove(gsr.id);
+    localStorageStore.save(notificationMap.toString(), LocalStorageConstants.ignoreNotifications);
+  }
+
+  watchForNotification(GitHubSearchResult gsr) async {
+    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.watchNotifications) ?? '[]';
+    Set notificationMap = JSON.decode(atMentionJson);
+    gsr.notificationsActive ? notificationMap.add(gsr.id) : notificationMap.remove(gsr.id);
+    localStorageStore.save(notificationMap.toString(), LocalStorageConstants.watchNotifications);
+  }
+
+  Future<Set> get watchNotifications async {
+    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.watchNotifications) ?? '[]';
+    Set notificationMap = JSON.decode(atMentionJson);
+    return notificationMap;
+  }
+
+  Future<Set> get ignoredNotifications async {
+    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.ignoreNotifications) ?? '[]';
+    Set notificationMap = JSON.decode(atMentionJson);
+    return notificationMap;
   }
 
   /// Gets a list of [GitHubSearchResult] requests from the cache if they exist.

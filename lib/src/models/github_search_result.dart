@@ -61,7 +61,6 @@ class GitHubSearchResult implements GithubBaseModel {
     // for some reason this can be null
     fullName = json['head'] != null ? json['head']['repo'][GitHubSearchResultConstants.fullName] : null;
 
-
     if (json[GitHubSearchResultConstants.pullRequest] != null) {
       pullRequestUrl = json[GitHubSearchResultConstants.pullRequest]['url'];
     }
@@ -75,7 +74,9 @@ class GitHubSearchResult implements GithubBaseModel {
 
     // make a call to get this later
     githubPullRequest = json['githubPullRequest'] ?? null;
-    notificationsActive = json[GitHubSearchResultConstants.notificationsActive] != null ? json[GitHubSearchResultConstants.notificationsActive]: false;
+    notificationsActive = json[GitHubSearchResultConstants.notificationsActive] != null
+        ? json[GitHubSearchResultConstants.notificationsActive]
+        : false;
 
     // this will only come from cached data
     if (json.containsKey(GitHubSearchResultConstants.actionNeeded)) {

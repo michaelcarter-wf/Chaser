@@ -17,23 +17,22 @@ class AtMentionStore extends ChaserStore {
   AtMentionStore(ChaserActions chaserActions, GitHubService gitHubService, this._userStore, this._locationStore,
       StatusService statusService, LocalStorageService localStorageService)
       : super(statusService, localStorageService, gitHubService, chaserActions) {
-
     triggerOnAction(chaserActions.atMentionActions.displayAll, _displayAll);
 
     chaserActions.locationActions.refreshView.listen((e) {
-        if (_locationStore.currentView != ChaserViews.atMentions) {
-          return;
-        }
+      if (_locationStore.currentView != ChaserViews.atMentions) {
+        return;
+      }
       load(force: true);
     });
 
     chaserActions.atMentionActions.toggleNotification.listen((GitHubSearchResult gsr) {
-        if (_locationStore.currentView != ChaserViews.atMentions) {
-          return;
-        }
-        gsr.notificationsActive = !gsr.notificationsActive;
-        localStorageService.updateNotificationForPr(gsr);
-        trigger();
+      if (_locationStore.currentView != ChaserViews.atMentions) {
+        return;
+      }
+      gsr.notificationsActive = !gsr.notificationsActive;
+      localStorageService.updateNotificationForPr(gsr);
+      trigger();
     });
   }
 

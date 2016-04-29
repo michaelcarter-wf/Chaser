@@ -5,7 +5,8 @@ class LocalStorageConstants {
   static const String atMentionLocalStorageKey = 'chaserAtMentionStorage';
   static const String atMentionUpdatedLocalStorageKey = 'atMentionUpdated';
   static const String totalPrsChased = 'totalPrsChased';
-  static const String prsWithNotifications = 'prsWithNotifications';
+  static const String watchNotifications = 'watchNotifications';
+  static const String ignoreNotifications = 'ignoreNotifications';
 }
 
 enum ChaserViews { atMentions, pullRequests }

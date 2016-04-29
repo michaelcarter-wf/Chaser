@@ -47,7 +47,7 @@ class _ChaserRow extends react.Component {
     }
 
     if (pullRequest.notificationsActive) {
-        notificationIconClasses.add('bell-active');
+      notificationIconClasses.add('bell-active');
     }
 
     String notificationClasses = notificationIconClasses.join(' ');
@@ -57,13 +57,16 @@ class _ChaserRow extends react.Component {
       'style': mediaWidth,
       'onClick': openNewTab
     }, [
-      react.small({'className': 'small-text create-date'}, [
-         react.em({}, pullRequest.htmlUrl.replaceAll('https://github.com/', '')),
-         react.em({'className': 'pull-right icons', 'onClick': _notificationClick}, react.i({'className': notificationClasses}))
+      react.small({
+        'className': 'small-text create-date'
+      }, [
+        react.em({}, pullRequest.htmlUrl.replaceAll('https://github.com/', '')),
+        react.em({'className': 'pull-right icons', 'onClick': _notificationClick},
+            react.i({'className': notificationClasses}))
       ]),
       react.div({}, [
-          react.h6({'className': 'media-heading'}, pullRequest.title),
-          labels
+        react.h6({'className': 'media-heading'}, pullRequest.title),
+        labels
       ])
     ]);
   }
@@ -94,9 +97,9 @@ class _ChaserRow extends react.Component {
   }
 
   _notificationClick(react.SyntheticEvent e) {
-      print('click click');
-      actions.atMentionActions.toggleNotification(pullRequest);
-      e.preventDefault();
-      e.stopPropagation();
+    print('click click');
+    actions.atMentionActions.toggleNotification(pullRequest);
+    e.preventDefault();
+    e.stopPropagation();
   }
 }
