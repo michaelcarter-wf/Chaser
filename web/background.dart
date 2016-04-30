@@ -27,21 +27,6 @@ main() async {
     checkForPrs();
   });
 
-  // _processCallback(JsObject data) {
-  //   String url = data['url'];
-  //   if (url.isNotEmpty) {
-  //     if (url.contains('api.')) return;
-  //     print(url);
-  //   }
-  // }
-
-  // JsObject _OnBeforeSendHeaders = context['chrome']['webRequest']['onCompleted'];
-  // var filter = new JsObject.jsify({
-  //   "urls": ["<all_urls>"]
-  // });
-
-  // _OnBeforeSendHeaders.callMethod('addListener', [_processCallback, filter]);
-
   checkForPrs();
   chrome.alarms.create(new chrome.AlarmCreateInfo(periodInMinutes: 15), 'refresh');
 }
@@ -72,6 +57,7 @@ checkForPrs() async {
     chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(text: actionNeeded.length.toString()));
   }
 
+  getPullRequestsStatus(atMentionPullRequests);
   List<GitHubSearchResult> userPrs = await _gitHubService.searchForOpenPullRequests(githubUser.login);
   getPullRequestsStatus(userPrs);
 }
@@ -93,6 +79,7 @@ throwAlert(ChaserAlert chaserAlert) {
 // TODO Move this into a reusable class
 getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
   for (GitHubSearchResult gsr in searchResults) {
+    if (gsr.notificationsActive) return;
     gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
 
     List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.githubPullRequest);
@@ -104,8 +91,7 @@ getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
 
     // check for my user for errors not everyone else.
     gsr.githubPullRequest.githubStatus.forEach((String key, GitHubStatus ghs) {
-      if (ghs.state == GitHubStatusState.failure) {
-        // TODO find the reason for the failure and put it in the message
+      if (ghs.state != GitHubStatusState.failure) {
         throwAlert(new ChaserAlert('Build Failed', ghs.context));
       } else if (!gsr.githubPullRequest.mergeable) {
         throwAlert(new ChaserAlert('Merge Conflicts', gsr.title));

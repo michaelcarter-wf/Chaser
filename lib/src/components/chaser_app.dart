@@ -47,6 +47,7 @@ class _ChaserApp extends FluxComponent {
     ChaserStore chaserStore = null;
 
     if (chaserStores.locationStore.currentView == ChaserViews.pullRequests) {
+      print('core prs');
       chaserStore = chaserStores.pullRequestsStore;
     } else {
       chaserStore = chaserStores.atMentionStore;
@@ -75,7 +76,7 @@ class _ChaserApp extends FluxComponent {
   }
 
   render() {
-    print('rerender');
+    print('rerender ${chaserStores.userStore.isReady}');
     if (!chaserStores.userStore.isReady) {
       return react.div({'className': 'chaser-container'}, renderLoading());
     }

@@ -4,7 +4,6 @@ class PullRequestsStore extends ChaserStore {
   static final String NAME = 'pullRequestsStore';
 
   UserStore _userStore;
-  LocationStore _locationStore;
 
   DateTime updated;
   List<GitHubSearchResult> displayPullRequests;
@@ -12,31 +11,11 @@ class PullRequestsStore extends ChaserStore {
   bool rowsHideable = false;
   bool loading = true;
 
-  PullRequestsStore(ChaserActions chaserActions, GitHubService gitHubService, this._userStore, this._locationStore,
-      StatusService statusService, LocalStorageService localStorageService)
-      : super(statusService, localStorageService, gitHubService, chaserActions) {
+  PullRequestsStore(ChaserActions chaserActions, GitHubService gitHubService, this._userStore,
+      LocationStore locationStore, StatusService statusService, LocalStorageService localStorageService)
+      : super(statusService, localStorageService, gitHubService, chaserActions, locationStore) {
+    viewName = ChaserViews.pullRequests.toString();
     updated = new DateTime.now();
-
-    // listen for location changes
-    _locationStore.listen((_) {
-      load(force: false);
-    });
-
-    chaserActions.locationActions.refreshView.listen((e) {
-      if (_locationStore.currentView != ChaserViews.pullRequests) {
-        return;
-      }
-      load(force: true);
-    });
-
-    chaserActions.atMentionActions.toggleNotification.listen((GitHubSearchResult gsr) {
-      if (_locationStore.currentView != ChaserViews.pullRequests) {
-        return;
-      }
-      gsr.notificationsActive = !gsr.notificationsActive;
-      localStorageService.updateNotificationStatus(gsr);
-      trigger();
-    });
   }
 
   _getChaserAssetsFromGithub() async {
@@ -61,13 +40,11 @@ class PullRequestsStore extends ChaserStore {
 
   @override
   load({force: false}) async {
-    if (_locationStore.currentView == ChaserViews.pullRequests) {
-      loading = true;
-      trigger();
+    loading = true;
+    trigger();
 
-      await _getChaserAssetsFromGithub();
-      loading = false;
-      trigger();
-    }
+    await _getChaserAssetsFromGithub();
+    loading = false;
+    trigger();
   }
 }

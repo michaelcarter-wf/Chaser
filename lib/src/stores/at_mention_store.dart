@@ -1,11 +1,8 @@
 part of wChaser.src.stores.chaser_stores;
 
 class AtMentionStore extends ChaserStore {
-  static final String NAME = 'atMentionStore';
-
   StreamController alertsController;
   UserStore _userStore;
-  LocationStore _locationStore;
 
   List<GitHubSearchResult> atMentionPullRequests = [];
   List<GitHubSearchResult> displayPullRequests = null;
@@ -14,26 +11,11 @@ class AtMentionStore extends ChaserStore {
   bool rowsHideable = true;
   bool loading = true;
 
-  AtMentionStore(ChaserActions chaserActions, GitHubService gitHubService, this._userStore, this._locationStore,
+  AtMentionStore(ChaserActions chaserActions, GitHubService gitHubService, this._userStore, LocationStore locationStore,
       StatusService statusService, LocalStorageService localStorageService)
-      : super(statusService, localStorageService, gitHubService, chaserActions) {
+      : super(statusService, localStorageService, gitHubService, chaserActions, locationStore) {
+    viewName = ChaserViews.atMentions.toString();
     triggerOnAction(chaserActions.atMentionActions.displayAll, _displayAll);
-
-    chaserActions.locationActions.refreshView.listen((e) {
-      if (_locationStore.currentView != ChaserViews.atMentions) {
-        return;
-      }
-      load(force: true);
-    });
-
-    chaserActions.atMentionActions.toggleNotification.listen((GitHubSearchResult gsr) {
-      if (_locationStore.currentView != ChaserViews.atMentions) {
-        return;
-      }
-      gsr.notificationsActive = !gsr.notificationsActive;
-      localStorageService.updateNotificationForPr(gsr);
-      trigger();
-    });
   }
 
   _displayAll(bool displayAll) {
@@ -43,7 +25,6 @@ class AtMentionStore extends ChaserStore {
     } else {
       displayPullRequests = atMentionPullRequests;
     }
-
     trigger();
   }
 
@@ -77,9 +58,6 @@ class AtMentionStore extends ChaserStore {
 
   @override
   load({force: false}) async {
-    if (_locationStore.currentView != ChaserViews.atMentions) {
-      return;
-    }
     loading = true;
     trigger();
 

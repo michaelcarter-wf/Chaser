@@ -4,7 +4,6 @@ class LocationStore extends Store {
   static final String NAME = 'locationStore';
 
   ChaserViews currentView;
-
   ChaserActions _chaserActions;
 
   LocationStore(this._chaserActions) {
@@ -13,6 +12,7 @@ class LocationStore extends Store {
     _chaserActions.locationActions.changeViewNext.listen((e) {
       int newIndex = ChaserViews.values.indexOf(currentView) + 1;
       currentView = newIndex > ChaserViews.values.length - 1 ? ChaserViews.values[0] : ChaserViews.values[newIndex];
+      print(currentView);
       trigger();
     });
 
