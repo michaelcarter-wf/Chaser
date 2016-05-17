@@ -16,6 +16,7 @@ class GitHubSearchResultConstants {
   static const statusesUrl = 'statuses_url';
   static const pullRequest = 'pull_request';
   static const notificationsActive = 'notifications_active';
+  static const localStorageMeta = 'localStorageMeta';
 }
 
 class GitHubSearchResult implements GithubBaseModel {
@@ -36,11 +37,10 @@ class GitHubSearchResult implements GithubBaseModel {
 
   bool get isOpen => state == 'open';
 
-  // Not returned from the endpoint
-  GitHubPullRequest githubPullRequest;
+  LocalStorageMeta localStorageMeta;
+
+  // not returned from endpoint
   String updatedAtPretty;
-  bool actionNeeded;
-  bool notificationsActive;
 
   GitHubSearchResult(Map json) {
     if (json == null) {
@@ -72,16 +72,7 @@ class GitHubSearchResult implements GithubBaseModel {
     updatedAtPretty = getPrettyDates(DateTime.parse(updatedAt));
     githubUser = new GitHubUser(json[GitHubSearchResultConstants.githubUser]);
 
-    // make a call to get this later
-    githubPullRequest = json['githubPullRequest'] ?? null;
-    notificationsActive = json[GitHubSearchResultConstants.notificationsActive] != null
-        ? json[GitHubSearchResultConstants.notificationsActive]
-        : false;
-
-    // this will only come from cached data
-    if (json.containsKey(GitHubSearchResultConstants.actionNeeded)) {
-      actionNeeded = json[GitHubSearchResultConstants.actionNeeded];
-    }
+    localStorageMeta = new LocalStorageMeta(json[GitHubSearchResultConstants.localStorageMeta]);
   }
 
   Map toMap() => {
@@ -95,12 +86,8 @@ class GitHubSearchResult implements GithubBaseModel {
         'head': {
           'repo': {GitHubSearchResultConstants.fullName: fullName}
         },
-        // if there's no pullRequest present at least put the url in the cache
-        GitHubSearchResultConstants.pullRequest: githubPullRequest?.toMap() ?? {'url': pullRequestUrl},
         GitHubSearchResultConstants.title: title,
         GitHubSearchResultConstants.updatedAt: updatedAt,
-        GitHubSearchResultConstants.actionNeeded: actionNeeded,
-        GitHubSearchResultConstants.statusesUrl: statusesUrl,
-        GitHubSearchResultConstants.notificationsActive: notificationsActive,
+        GitHubSearchResultConstants.localStorageMeta: localStorageMeta.toMap()
       };
 }

@@ -76,11 +76,11 @@ class _ChaserApp extends FluxComponent {
   }
 
   render() {
-    print('rerender ${chaserStores.userStore.isReady}');
     if (!chaserStores.userStore.isReady) {
       return react.div({'className': 'chaser-container'}, renderLoading());
     }
 
+    print('AUTHED ${chaserStores.statusService.authed}');
     return react.div(
         {'className': 'chaser-container'}, chaserStores.statusService.authed ? renderChaserCore() : renderLogin());
   }

@@ -28,7 +28,7 @@ class PullRequestsStore extends ChaserStore {
     displayPullRequests.forEach((GitHubSearchResult gsr) {
       bool watched = notificationPrs.contains(gsr.id);
       bool ignored = ignoredPrs.contains(gsr.id);
-      gsr.notificationsActive = ignored ? false : true;
+      gsr.localStorageMeta.notificationsEnabled = ignored ? false : true;
       if (!watched && !ignored) {
         localStorageService.updateNotificationStatus(gsr);
       }

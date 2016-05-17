@@ -2,7 +2,7 @@ library wChaser.src.stores.chaser_stores;
 
 import 'dart:async';
 
-import 'package:chrome/chrome_ext.dart' as chrome;
+// import 'package:chrome/chrome_ext.dart' as chrome;
 import 'package:lawndart/lawndart.dart' show LocalStorageStore;
 import 'package:w_flux/w_flux.dart';
 

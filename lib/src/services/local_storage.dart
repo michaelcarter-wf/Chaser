@@ -12,6 +12,7 @@ class LocalStorageService {
   LocalStorageStore localStorageStore;
   List<GitHubSearchResult> _atMentionPullRequests = [];
   DateTime atMentionsUpdated = new DateTime.now();
+  DateTime openPullRequestsUpdated = new DateTime.now();
   int _totalPrsChased;
 
   load() async {
@@ -36,6 +37,17 @@ class LocalStorageService {
     localStorageStore.save(_totalPrsChased.toString(), LocalStorageConstants.totalPrsChased);
   }
 
+  set openPullRequests(List<GitHubSearchResult> openPullRequests) {
+      openPullRequestsUpdated = new DateTime.now();
+      List<String> openPrJson = openPullRequests?.map((GitHubSearchResult gsr) {
+        return gsr.toMap();
+      }).toList();
+
+      // not awaiting these, they shouldn't block
+      localStorageStore.save(JSON.encode(openPrJson), LocalStorageConstants.atMentionKey);
+      localStorageStore.save(atMentionsUpdated.toIso8601String(), LocalStorageConstants.atMentionUpdatedKey);
+  }
+
   set atMentionPullRequests(List<GitHubSearchResult> atMenionPullRequests) {
     atMentionsUpdated = new DateTime.now();
     List<String> atMentionJson = atMenionPullRequests?.map((GitHubSearchResult ghpr) {
@@ -43,8 +55,8 @@ class LocalStorageService {
     }).toList();
 
     // not awaiting these, they shouldn't block
-    localStorageStore.save(JSON.encode(atMentionJson), LocalStorageConstants.atMentionLocalStorageKey);
-    localStorageStore.save(atMentionsUpdated.toIso8601String(), LocalStorageConstants.atMentionUpdatedLocalStorageKey);
+    localStorageStore.save(JSON.encode(atMentionJson), LocalStorageConstants.atMentionKey);
+    localStorageStore.save(atMentionsUpdated.toIso8601String(), LocalStorageConstants.atMentionUpdatedKey);
   }
 
   updateNotificationStatus(GitHubSearchResult gsr) {
@@ -55,27 +67,27 @@ class LocalStorageService {
   ignoreNotification(GitHubSearchResult gsr) async {
     String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.ignoreNotifications) ?? '[]';
     Set notificationMap = JSON.decode(atMentionJson);
-    !gsr.notificationsActive ? notificationMap.add(gsr.id) : notificationMap.remove(gsr.id);
+    !gsr.localStorageMeta.notificationsEnabled ? notificationMap.add(gsr.id) : notificationMap.remove(gsr.id);
     localStorageStore.save(notificationMap.toString(), LocalStorageConstants.ignoreNotifications);
   }
 
   watchForNotification(GitHubSearchResult gsr) async {
     String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.watchNotifications) ?? '[]';
     Set notificationMap = JSON.decode(atMentionJson);
-    gsr.notificationsActive ? notificationMap.add(gsr.id) : notificationMap.remove(gsr.id);
+    gsr.localStorageMeta.notificationsEnabled ? notificationMap.add(gsr.id) : notificationMap.remove(gsr.id);
     localStorageStore.save(notificationMap.toString(), LocalStorageConstants.watchNotifications);
   }
 
   Future<Set> get watchNotifications async {
     String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.watchNotifications) ?? '[]';
-    Set notificationMap = JSON.decode(atMentionJson);
-    return notificationMap;
+    List notificationMap = JSON.decode(atMentionJson);
+    return new Set.from(notificationMap);
   }
 
   Future<Set> get ignoredNotifications async {
     String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.ignoreNotifications) ?? '[]';
-    Set notificationMap = JSON.decode(atMentionJson);
-    return notificationMap;
+    List notificationMap = JSON.decode(atMentionJson);
+    return new Set.from(notificationMap);
   }
 
   /// Gets a list of [GitHubSearchResult] requests from the cache if they exist.
@@ -84,7 +96,7 @@ class LocalStorageService {
       return _atMentionPullRequests;
     }
 
-    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionLocalStorageKey);
+    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.atMentionKey);
 
     if (atMentionJson != null && atMentionJson.isNotEmpty) {
       List atMentionObjects = JSON.decode(atMentionJson);

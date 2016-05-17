@@ -21,7 +21,7 @@ class AtMentionStore extends ChaserStore {
   _displayAll(bool displayAll) {
     showAll = displayAll;
     if (showAll == false) {
-      displayPullRequests = displayPullRequests?.where((GitHubSearchResult pr) => pr.actionNeeded).toList();
+      displayPullRequests = displayPullRequests?.where((GitHubSearchResult pr) => pr.localStorageMeta.actionNeeded).toList();
     } else {
       displayPullRequests = atMentionPullRequests;
     }
@@ -37,7 +37,7 @@ class AtMentionStore extends ChaserStore {
   _getPullRequestComments() async {
     for (GitHubSearchResult pullRequest in atMentionPullRequests) {
       List<GitHubComment> comments = await gitHubService.getPullRequestComments(pullRequest);
-      pullRequest.actionNeeded = isPlusOneNeeded(comments, _userStore.githubUser.login);
+      pullRequest.localStorageMeta.actionNeeded = isPlusOneNeeded(comments, _userStore.githubUser.login);
     }
   }
 
@@ -51,9 +51,8 @@ class AtMentionStore extends ChaserStore {
     await _getPullRequestComments();
 
     atMentionPullRequests.sort((GitHubSearchResult a, GitHubSearchResult b) {
-      return b.actionNeeded.toString().compareTo(a.actionNeeded.toString());
+      return b.localStorageMeta.actionNeeded.toString().compareTo(a.localStorageMeta.actionNeeded.toString());
     });
-    localStorageService.atMentionPullRequests = atMentionPullRequests;
   }
 
   @override
@@ -75,12 +74,16 @@ class AtMentionStore extends ChaserStore {
     _displayAll(showAll);
 
     // TODO move to browser service
-    if (chrome.browserAction.available) {
-      chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(
-          text: atMentionPullRequests?.where((GitHubSearchResult pr) => pr.actionNeeded).length.toString()));
-    }
+    // if (chrome.browserAction.available) {
+    //   chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(
+    //       text: atMentionPullRequests?.where((GitHubSearchResult pr) => pr.localStorageMeta.actionNeeded).length.toString()));
+    // }
 
     await getPullRequestsStatus(atMentionPullRequests);
+    print(atMentionPullRequests.first.localStorageMeta.githubPullRequest.toMap());
+    localStorageService.atMentionPullRequests = atMentionPullRequests;
+
+
 
     // for (GitHubSearchResult gsr in atMentionPullRequests) {
     //   gitHubService.getPullRequestCommits(gsr.githubPullRequest);

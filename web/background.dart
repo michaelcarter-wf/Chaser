@@ -45,13 +45,13 @@ checkForPrs() async {
 
   for (GitHubSearchResult pullRequest in atMentionPullRequests) {
     List<GitHubComment> comments = await _gitHubService.getPullRequestComments(pullRequest);
-    pullRequest.actionNeeded = await isPlusOneNeeded(comments, githubUser.login);
+    pullRequest.localStorageMeta.actionNeeded = await isPlusOneNeeded(comments, githubUser.login);
   }
 
   localStorageService.atMentionPullRequests = atMentionPullRequests;
 
   List<GitHubSearchResult> actionNeeded =
-      atMentionPullRequests.where((GitHubSearchResult gpr) => gpr.actionNeeded).toList();
+      atMentionPullRequests.where((GitHubSearchResult gpr) => gpr.localStorageMeta.actionNeeded).toList();
 
   if (chrome.browserAction.available) {
     chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(text: actionNeeded.length.toString()));
@@ -79,24 +79,31 @@ throwAlert(ChaserAlert chaserAlert) {
 // TODO Move this into a reusable class
 getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
   for (GitHubSearchResult gsr in searchResults) {
-    if (gsr.notificationsActive) return;
-    gsr.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
+    if (gsr.localStorageMeta.notificationsEnabled) return;
+    gsr.localStorageMeta.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
 
-    List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.githubPullRequest);
+    List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.localStorageMeta.githubPullRequest);
 
     // first one in the list should be the current
     githubStatuses.forEach((GitHubStatus ghStatus) {
-      gsr.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
+      gsr.localStorageMeta.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
     });
 
+    List<ChaserAlert> alerts = [];
     // check for my user for errors not everyone else.
-    gsr.githubPullRequest.githubStatus.forEach((String key, GitHubStatus ghs) {
-      if (ghs.state != GitHubStatusState.failure) {
-        throwAlert(new ChaserAlert('Build Failed', ghs.context));
-      } else if (!gsr.githubPullRequest.mergeable) {
-        throwAlert(new ChaserAlert('Merge Conflicts', gsr.title));
+    gsr.localStorageMeta.githubPullRequest.githubStatus.forEach((String key, GitHubStatus ghs) {
+      if (ghs.state == GitHubStatusState.failure) {
+        alerts.add(new ChaserAlert('Build Failed', ghs.context));
+    } else if (!gsr.localStorageMeta.githubPullRequest.mergeable) {
+        alerts.add(new ChaserAlert('Merge Conflicts', gsr.title));
       }
     });
+
+    if (alerts.length == 1) {
+      throwAlert(alerts.first);
+    } else if (alerts.isNotEmpty) {
+      throwAlert(new ChaserAlert('Multiple Alerts', alerts.map((ChaserAlert alert) => '${alert.title}').join('\n')));
+    }
   }
 }
 

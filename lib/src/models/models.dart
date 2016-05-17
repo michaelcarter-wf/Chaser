@@ -2,6 +2,7 @@ library wChaser.src.models.models;
 
 import 'package:wChaser/src/utils/dates.dart';
 
+part 'local_storage_meta.dart';
 part 'github_base_model.dart';
 part 'github_comment.dart';
 part 'github_commit.dart';

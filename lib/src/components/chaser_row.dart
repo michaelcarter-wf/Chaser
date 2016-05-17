@@ -34,11 +34,11 @@ class _ChaserRow extends react.Component {
   renderTitle() {
     List labels = [];
     List<String> notificationIconClasses = ['glyphicon', 'glyphicon-bell'];
-    if (pullRequest.actionNeeded) {
+    if (pullRequest.localStorageMeta.actionNeeded ?? false) {
       labels.add(Label({'text': 'Action Needed'}));
     }
 
-    if (pullRequest.githubPullRequest?.mergeable == false) {
+    if (pullRequest.localStorageMeta.githubPullRequest?.mergeable == false) {
       labels.add(Label({'text': 'Merge Conflicts'}));
     }
 
@@ -46,7 +46,7 @@ class _ChaserRow extends react.Component {
       labels.add(react.small({'className': 'small-text'}, pullRequest.updatedAtPretty));
     }
 
-    if (pullRequest.notificationsActive) {
+    if (pullRequest.localStorageMeta.notificationsEnabled ?? false) {
       notificationIconClasses.add('bell-active');
     }
 
@@ -91,7 +91,7 @@ class _ChaserRow extends react.Component {
       'className': 'chaser-row'
     }, [
       renderImage(),
-      PullRequestStatus({'gitHubPullRequest': pullRequest.githubPullRequest, 'actions': actions}),
+      PullRequestStatus({'gitHubPullRequest': pullRequest.localStorageMeta.githubPullRequest, 'actions': actions}),
       react.div({'className': 'media'}, renderTitle())
     ]);
   }

@@ -42,7 +42,7 @@ class ChaserStore extends Store {
     chaserActions.atMentionActions.toggleNotification.listen((GitHubSearchResult gsr) {
       if (locationStore.currentView.toString() != viewName) return;
 
-      gsr.notificationsActive = !gsr.notificationsActive;
+      gsr.localStorageMeta.notificationsEnabled = !gsr.localStorageMeta.notificationsEnabled;
       localStorageService.watchForNotification(gsr);
       trigger();
     });
@@ -50,13 +50,12 @@ class ChaserStore extends Store {
 
   getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
     for (GitHubSearchResult gsr in searchResults) {
-      gsr.githubPullRequest = await gitHubService.getPullRequest(gsr.pullRequestUrl);
-
-      List<GitHubStatus> githubStatuses = await gitHubService.getPullRequestStatus(gsr.githubPullRequest);
+      gsr.localStorageMeta.githubPullRequest = await gitHubService.getPullRequest(gsr.pullRequestUrl);
+      List<GitHubStatus> githubStatuses = await gitHubService.getPullRequestStatus(gsr.localStorageMeta.githubPullRequest);
 
       // first one in the list should be the current
       githubStatuses.forEach((GitHubStatus ghStatus) {
-        gsr.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
+        gsr.localStorageMeta.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
       });
     }
     trigger();

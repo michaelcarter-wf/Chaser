@@ -22,6 +22,7 @@ class GitHubService {
   }
 
   Future<List> _requestAuthed(String httpRequestType, String url, {Map sendData}) async {
+    print('url $url');
     Map headers = {'Authorization': 'token $_accessToken'};
     try {
       HttpRequest req = await HttpRequest.request(url, method: httpRequestType, requestHeaders: headers);
@@ -29,12 +30,13 @@ class GitHubService {
       return JSON.decode(req.response.toString());
     } catch (e) {
       _statusService?.authed = false;
+      print('error');
       print(e);
     }
   }
 
   Future<GitHubPullRequest> getPullRequest(String url) async {
-    List pullRequestJson = await _requestAuthed('GET', url);
+    var pullRequestJson = await _requestAuthed('GET', url);
     return new GitHubPullRequest(pullRequestJson);
   }
 
@@ -111,11 +113,11 @@ class GitHubService {
     return new GitHubUser(userJson);
   }
 
-  Future<List<GitHubStatus>> getPullRequestStatus(GitHubPullRequest githubPullReqeust) async {
-    var statusJson = await _requestAuthed('GET', githubPullReqeust.statusesUrl);
+  Future<List<GitHubStatus>> getPullRequestStatus(GitHubPullRequest githubPullRequest) async {
+    var statusJson = await _requestAuthed('GET', githubPullRequest.statusesUrl);
 
-    return statusJson.map((Map openPrJson) {
+    return statusJson != null ? statusJson?.map((Map openPrJson) {
       return new GitHubStatus(openPrJson);
-    }).toList();
+    }).toList() : [];
   }
 }
