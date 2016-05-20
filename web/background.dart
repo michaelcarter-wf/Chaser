@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:js';
 
 import 'package:chrome/chrome_ext.dart' as chrome;
 
