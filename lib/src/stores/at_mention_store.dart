@@ -58,18 +58,14 @@ class AtMentionStore extends ChaserStore {
 
   @override
   load({force: false}) async {
-    print('LOAINDG');
     loading = true;
-    bool setCache = false;
     trigger();
 
     atMentionPullRequests = await localStorageService.atMentionPullRequests;
-    print(atMentionPullRequests);
     if (!force && atMentionPullRequests?.isNotEmpty) {
       updated = localStorageService.atMentionsUpdated;
     } else {
       await _getChaserAssetsFromGithub();
-      setCache = true;
     }
 
     loading = false;
@@ -85,10 +81,8 @@ class AtMentionStore extends ChaserStore {
     // }
 
     await getPullRequestsStatus(atMentionPullRequests);
-    if (setCache == true) {
-      print(atMentionPullRequests.first.toMap().toString());
-      localStorageService.atMentionPullRequests = atMentionPullRequests;
-    }
+    localStorageService.atMentionPullRequests = atMentionPullRequests;
+
 
     // for (GitHubSearchResult gsr in atMentionPullRequests) {
     //   gitHubService.getPullRequestCommits(gsr.githubPullRequest);
