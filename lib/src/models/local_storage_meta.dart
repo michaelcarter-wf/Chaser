@@ -16,14 +16,14 @@ class LocalStorageMeta implements GithubBaseModel {
       return;
     }
 
-    notificationsEnabled = json[LocalStorageMetaConstants.notificationsEnabled];
+    notificationsEnabled = json[LocalStorageMetaConstants.notificationsEnabled] ?? false;
     githubPullRequest = new GitHubPullRequest(json[LocalStorageMetaConstants.githubPullRequest]);
-    actionNeeded = json[LocalStorageMetaConstants.actionNeeded];
+    actionNeeded = json[LocalStorageMetaConstants.actionNeeded] ?? false;
   }
 
   Map toMap() => {
-      LocalStorageMetaConstants.notificationsEnabled: notificationsEnabled,
-      LocalStorageMetaConstants.githubPullRequest: githubPullRequest.toMap(),
-      LocalStorageMetaConstants.actionNeeded: actionNeeded,
-  };
+        LocalStorageMetaConstants.notificationsEnabled: notificationsEnabled,
+        LocalStorageMetaConstants.githubPullRequest: githubPullRequest.toMap(),
+        LocalStorageMetaConstants.actionNeeded: actionNeeded,
+      };
 }

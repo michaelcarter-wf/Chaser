@@ -22,14 +22,13 @@ class GitHubService {
   }
 
   Future<List> _requestAuthed(String httpRequestType, String url, {Map sendData}) async {
-    print('url $url');
     Map headers = {'Authorization': 'token $_accessToken'};
     try {
       HttpRequest req = await HttpRequest.request(url, method: httpRequestType, requestHeaders: headers);
       _statusService?.authed = true;
       return JSON.decode(req.response.toString());
     } catch (e) {
-      _statusService?.authed = false;
+      // _statusService?.authed = false;
       print('error');
       print(e);
     }
@@ -114,10 +113,13 @@ class GitHubService {
   }
 
   Future<List<GitHubStatus>> getPullRequestStatus(GitHubPullRequest githubPullRequest) async {
+    print(githubPullRequest.statusesUrl);
     var statusJson = await _requestAuthed('GET', githubPullRequest.statusesUrl);
 
-    return statusJson != null ? statusJson?.map((Map openPrJson) {
-      return new GitHubStatus(openPrJson);
-    }).toList() : [];
+    return statusJson != null
+        ? statusJson?.map((Map openPrJson) {
+            return new GitHubStatus(openPrJson);
+          }).toList()
+        : [];
   }
 }

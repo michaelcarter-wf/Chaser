@@ -81,7 +81,7 @@ class GitHubPullRequest implements GithubBaseModel {
         GitHubPullRequestConstants.htmlUrl: htmlUrl,
         GitHubPullRequestConstants.id: id,
         GitHubPullRequestConstants.merged: merged,
-        GitHubPullRequestConstants.githubUser: githubUser.toMap(),
+        GitHubPullRequestConstants.githubUser: githubUser?.toMap(),
         'head': {
           'repo': {GitHubPullRequestConstants.fullName: fullName}
         },

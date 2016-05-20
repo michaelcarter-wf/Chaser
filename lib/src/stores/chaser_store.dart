@@ -50,8 +50,13 @@ class ChaserStore extends Store {
 
   getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
     for (GitHubSearchResult gsr in searchResults) {
-      gsr.localStorageMeta.githubPullRequest = await gitHubService.getPullRequest(gsr.pullRequestUrl);
-      List<GitHubStatus> githubStatuses = await gitHubService.getPullRequestStatus(gsr.localStorageMeta.githubPullRequest);
+      print('PR URL');
+      print(gsr.pullRequestUrl);
+      GitHubPullRequest pr = await gitHubService.getPullRequest(gsr.pullRequestUrl);
+
+      print(pr.statusesUrl);
+      List<GitHubStatus> githubStatuses = await gitHubService.getPullRequestStatus(pr);
+      gsr.localStorageMeta.githubPullRequest = pr;
 
       // first one in the list should be the current
       githubStatuses.forEach((GitHubStatus ghStatus) {

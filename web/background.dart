@@ -82,7 +82,8 @@ getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
     if (gsr.localStorageMeta.notificationsEnabled) return;
     gsr.localStorageMeta.githubPullRequest = await _gitHubService.getPullRequest(gsr.pullRequestUrl);
 
-    List<GitHubStatus> githubStatuses = await _gitHubService.getPullRequestStatus(gsr.localStorageMeta.githubPullRequest);
+    List<GitHubStatus> githubStatuses =
+        await _gitHubService.getPullRequestStatus(gsr.localStorageMeta.githubPullRequest);
 
     // first one in the list should be the current
     githubStatuses.forEach((GitHubStatus ghStatus) {
@@ -94,7 +95,7 @@ getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
     gsr.localStorageMeta.githubPullRequest.githubStatus.forEach((String key, GitHubStatus ghs) {
       if (ghs.state == GitHubStatusState.failure) {
         alerts.add(new ChaserAlert('Build Failed', ghs.context));
-    } else if (!gsr.localStorageMeta.githubPullRequest.mergeable) {
+      } else if (!gsr.localStorageMeta.githubPullRequest.mergeable) {
         alerts.add(new ChaserAlert('Merge Conflicts', gsr.title));
       }
     });

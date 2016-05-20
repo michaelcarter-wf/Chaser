@@ -38,19 +38,22 @@ class LocalStorageService {
   }
 
   set openPullRequests(List<GitHubSearchResult> openPullRequests) {
-      openPullRequestsUpdated = new DateTime.now();
-      List<String> openPrJson = openPullRequests?.map((GitHubSearchResult gsr) {
-        return gsr.toMap();
-      }).toList();
+    openPullRequestsUpdated = new DateTime.now();
+    List<String> openPrJson = openPullRequests?.map((GitHubSearchResult gsr) {
+      return gsr.toMap();
+    }).toList();
 
-      // not awaiting these, they shouldn't block
-      localStorageStore.save(JSON.encode(openPrJson), LocalStorageConstants.atMentionKey);
-      localStorageStore.save(atMentionsUpdated.toIso8601String(), LocalStorageConstants.atMentionUpdatedKey);
+    // not awaiting these, they shouldn't block
+    localStorageStore.save(JSON.encode(openPrJson), LocalStorageConstants.atMentionKey);
+    localStorageStore.save(atMentionsUpdated.toIso8601String(), LocalStorageConstants.atMentionUpdatedKey);
   }
 
   set atMentionPullRequests(List<GitHubSearchResult> atMenionPullRequests) {
     atMentionsUpdated = new DateTime.now();
     List<String> atMentionJson = atMenionPullRequests?.map((GitHubSearchResult ghpr) {
+      print(ghpr.title);
+      print('LOCAL STORAGE META');
+      print(ghpr.localStorageMeta.toMap().toString());
       return ghpr.toMap();
     }).toList();
 
@@ -65,17 +68,19 @@ class LocalStorageService {
   }
 
   ignoreNotification(GitHubSearchResult gsr) async {
-    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.ignoreNotifications) ?? '[]';
-    Set notificationMap = JSON.decode(atMentionJson);
-    !gsr.localStorageMeta.notificationsEnabled ? notificationMap.add(gsr.id) : notificationMap.remove(gsr.id);
-    localStorageStore.save(notificationMap.toString(), LocalStorageConstants.ignoreNotifications);
+    String ignoreJson = await localStorageStore.getByKey(LocalStorageConstants.ignoreNotifications) ?? '[]';
+    Set ignoreJsonSet = new Set.from(JSON.decode(ignoreJson));
+    !gsr.localStorageMeta.notificationsEnabled ? ignoreJsonSet.add(gsr.id) : ignoreJsonSet.remove(gsr.id);
+    localStorageStore.save(ignoreJsonSet.toList().toString(), LocalStorageConstants.ignoreNotifications);
   }
 
   watchForNotification(GitHubSearchResult gsr) async {
-    String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.watchNotifications) ?? '[]';
-    Set notificationMap = JSON.decode(atMentionJson);
-    gsr.localStorageMeta.notificationsEnabled ? notificationMap.add(gsr.id) : notificationMap.remove(gsr.id);
-    localStorageStore.save(notificationMap.toString(), LocalStorageConstants.watchNotifications);
+    String watchNotificationsJson = await localStorageStore.getByKey(LocalStorageConstants.watchNotifications) ?? '[]';
+    Set watchNotificationsMap = new Set.from(JSON.decode(watchNotificationsJson));
+    gsr.localStorageMeta.notificationsEnabled
+        ? watchNotificationsMap.add(gsr.id)
+        : watchNotificationsMap.remove(gsr.id);
+    localStorageStore.save(watchNotificationsMap.toList().toString(), LocalStorageConstants.watchNotifications);
   }
 
   Future<Set> get watchNotifications async {
@@ -86,8 +91,8 @@ class LocalStorageService {
 
   Future<Set> get ignoredNotifications async {
     String atMentionJson = await localStorageStore.getByKey(LocalStorageConstants.ignoreNotifications) ?? '[]';
-    List notificationMap = JSON.decode(atMentionJson);
-    return new Set.from(notificationMap);
+    Set notificationMap = new Set.from(JSON.decode(atMentionJson));
+    return notificationMap;
   }
 
   /// Gets a list of [GitHubSearchResult] requests from the cache if they exist.

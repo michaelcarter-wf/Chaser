@@ -21,7 +21,8 @@ class AtMentionStore extends ChaserStore {
   _displayAll(bool displayAll) {
     showAll = displayAll;
     if (showAll == false) {
-      displayPullRequests = displayPullRequests?.where((GitHubSearchResult pr) => pr.localStorageMeta.actionNeeded).toList();
+      displayPullRequests =
+          displayPullRequests?.where((GitHubSearchResult pr) => pr.localStorageMeta.actionNeeded).toList();
     } else {
       displayPullRequests = atMentionPullRequests;
     }
@@ -57,14 +58,18 @@ class AtMentionStore extends ChaserStore {
 
   @override
   load({force: false}) async {
+    print('LOAINDG');
     loading = true;
+    bool setCache = false;
     trigger();
 
     atMentionPullRequests = await localStorageService.atMentionPullRequests;
+    print(atMentionPullRequests);
     if (!force && atMentionPullRequests?.isNotEmpty) {
       updated = localStorageService.atMentionsUpdated;
     } else {
       await _getChaserAssetsFromGithub();
+      setCache = true;
     }
 
     loading = false;
@@ -80,10 +85,10 @@ class AtMentionStore extends ChaserStore {
     // }
 
     await getPullRequestsStatus(atMentionPullRequests);
-    print(atMentionPullRequests.first.localStorageMeta.githubPullRequest.toMap());
-    localStorageService.atMentionPullRequests = atMentionPullRequests;
-
-
+    if (setCache == true) {
+      print(atMentionPullRequests.first.toMap().toString());
+      localStorageService.atMentionPullRequests = atMentionPullRequests;
+    }
 
     // for (GitHubSearchResult gsr in atMentionPullRequests) {
     //   gitHubService.getPullRequestCommits(gsr.githubPullRequest);

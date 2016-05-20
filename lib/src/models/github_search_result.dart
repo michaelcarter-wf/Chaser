@@ -86,6 +86,7 @@ class GitHubSearchResult implements GithubBaseModel {
         'head': {
           'repo': {GitHubSearchResultConstants.fullName: fullName}
         },
+        GitHubSearchResultConstants.pullRequest: {'url': pullRequestUrl},
         GitHubSearchResultConstants.title: title,
         GitHubSearchResultConstants.updatedAt: updatedAt,
         GitHubSearchResultConstants.localStorageMeta: localStorageMeta.toMap()

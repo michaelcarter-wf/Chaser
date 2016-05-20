@@ -47,7 +47,6 @@ class _ChaserApp extends FluxComponent {
     ChaserStore chaserStore = null;
 
     if (chaserStores.locationStore.currentView == ChaserViews.pullRequests) {
-      print('core prs');
       chaserStore = chaserStores.pullRequestsStore;
     } else {
       chaserStore = chaserStores.atMentionStore;
