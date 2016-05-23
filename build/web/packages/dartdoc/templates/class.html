@@ -1,0 +1,170 @@
+{{>head}}
+
+  <div class="col-xs-6 col-sm-3 col-md-3 sidebar sidebar-offcanvas-left">
+    {{#navLinks}}
+    <h5><a href="{{href}}">{{name}}</a></h5>
+    {{/navLinks}}
+
+    {{>sidebar_for_library}}
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-6 main-content">
+
+    {{#class}}
+    {{>documentation}}
+    {{/class}}
+
+    {{#class.hasModifiers}}
+    <section>
+        <dl class="dl-horizontal">
+        {{#class.hasAnnotations}}
+        <dt>Annotations</dt>
+        <dd><ul class="annotation-list class-relationships">
+            {{#class.annotations}}
+            <li>{{{.}}}</li>
+            {{/class.annotations}}
+        </ul></dd>
+        {{/class.hasAnnotations}}
+
+        {{#class.hasSupertype}}
+        <dt>Extends</dt>
+        <dd><ul class="gt-separated dark class-relationships">
+            <li>{{{linkedObjectType}}}</li>
+            {{#class.superChainReversed}}
+            <li>{{{linkedName}}}</li>
+            {{/class.superChainReversed}}
+            <li>{{{name}}}</li>
+        </ul></dd>
+        {{/class.hasSupertype}}
+
+        {{#class.hasInterfaces}}
+        <dt>Implements</dt>
+            <dd>
+                <ul class="comma-separated class-relationships">
+                    {{#class.interfaces}}
+                    <li>{{{linkedName}}}</li>
+                    {{/class.interfaces}}
+                </ul>
+            </dd>
+        {{/class.hasInterfaces}}
+
+        {{#class.hasMixins}}
+        <dt>Mixes-in</dt>
+        <dd><ul class="comma-separated class-relationships">
+            {{#class.mixins}}
+            <li>{{{linkedName}}}</li>
+            {{/class.mixins}}
+        </ul></dd>
+        {{/class.hasMixins}}
+
+        {{#class.hasImplementors}}
+        <dt>Implemented by</dt>
+        <dd><ul class="comma-separated class-relationships">
+            {{#class.implementors}}
+            <li>{{{linkedName}}}</li>
+            {{/class.implementors}}
+        </ul></dd>
+        {{/class.hasImplementors}}
+        </dl>
+    </section>
+    {{/class.hasModifiers}}
+
+    {{#class.hasConstants}}
+    <section class="summary" id="constants">
+        <h2>Constants</h2>
+
+        <dl class="properties">
+            {{#class.constants}}
+            {{>constant}}
+            {{/class.constants}}
+        </dl>
+    </section>
+    {{/class.hasConstants}}
+
+    {{#class.hasStaticProperties}}
+    <section class="summary" id="static-properties">
+        <h2>Static Properties</h2>
+
+        <dl class="properties">
+            {{#class.staticProperties}}
+            {{>property}}
+            {{/class.staticProperties}}
+        </dl>
+    </section>
+    {{/class.hasStaticProperties}}
+
+    {{#class.hasStaticMethods}}
+    <section class="summary" id="static-methods">
+        <h2>Static Methods</h2>
+        <dl class="callables">
+            {{#class.staticMethods}}
+            {{>callable}}
+            {{/class.staticMethods}}
+        </dl>
+    </section>
+    {{/class.hasStaticMethods}}
+
+    {{#class.hasProperties}}
+    <section class="summary" id="instance-properties">
+        <h2>Properties</h2>
+
+        <dl class="properties">
+            {{#class.allInstanceProperties}}
+            {{>property}}
+            {{/class.allInstanceProperties}}
+        </dl>
+    </section>
+    {{/class.hasProperties}}
+
+    {{#class.hasConstructors}}
+    <section class="summary" id="constructors">
+        <h2>Constructors</h2>
+
+        <dl class="constructor-summary-list">
+            {{#class.constructors}}
+            <dt id="{{htmlId}}" class="callable">
+                <span class="name">{{{linkedName}}}</span><span class="signature">({{{ linkedParams }}})</span>
+            </dt>
+            <dd>
+                {{#isConst}}
+                <div class="constructor-modifier">
+                    const
+                </div>
+                {{/isConst}}
+                {{{ oneLineDoc }}}
+            </dd>
+            {{/class.constructors}}
+        </dl>
+      </section>
+      {{/class.hasConstructors}}
+
+      {{#class.hasOperators}}
+      <section class="summary" id="operators">
+          <h2>Operators</h2>
+          <dl class="callables">
+              {{#class.allOperators}}
+              {{>callable}}
+              {{/class.allOperators}}
+          </dl>
+      </section>
+      {{/class.hasOperators}}
+
+      {{#class.hasMethods}}
+      <section class="summary" id="instance-methods">
+          <h2>Methods</h2>
+          <dl class="callables">
+              {{#class.allInstanceMethods}}
+              {{>callable}}
+              {{/class.allInstanceMethods}}
+          </dl>
+      </section>
+      {{/class.hasMethods}}
+
+    </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-3 sidebar sidebar-offcanvas-right">
+    <h5>{{self.name}}</h5>
+    {{>sidebar_for_class}}
+  </div><!--/.sidebar-offcanvas-->
+
+{{>footer}}

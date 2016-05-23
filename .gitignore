@@ -4,7 +4,6 @@
 .pub/
 test/*/packages
 test/packages
-packages/
 tool/packages
 pubspec.lock
 web/bower_components/

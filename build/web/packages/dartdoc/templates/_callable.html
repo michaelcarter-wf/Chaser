@@ -1,0 +1,14 @@
+<dt id="{{htmlId}}" class="callable">
+    {{#isInherited}}{{>name_summary}}{{/isInherited}}{{^isInherited}}<a href="{{href}}">{{>name_summary}}</a>{{/isInherited}}<span class="signature">(<wbr>{{{ linkedParamsNoMetadata }}})
+        &#8594;
+        <span class="returntype">{{{ linkedReturnType }}}</span>
+    </span>
+</dt>
+<dd>
+    {{#isInherited}}
+    <div>
+      <span class="is-inherited">inherited</span>
+    </div>
+    {{/isInherited}}
+    {{{ oneLineDoc }}}
+</dd>
