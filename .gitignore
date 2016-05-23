@@ -2,7 +2,10 @@
 .DS_Store
 .idea
 .pub/
-packages
+test/*/packages
+test/packages
+packages/
+tool/packages
 pubspec.lock
 web/bower_components/
 .idea/
