@@ -75,10 +75,10 @@ class AtMentionStore extends ChaserStore {
     _displayAll(showAll);
 
     // TODO move to browser service
-    // if (chrome.browserAction.available) {
-    //   chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(
-    //       text: atMentionPullRequests?.where((GitHubSearchResult pr) => pr.localStorageMeta.actionNeeded).length.toString()));
-    // }
+    if (chrome.browserAction.available) {
+      chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(
+          text: atMentionPullRequests?.where((GitHubSearchResult pr) => pr.localStorageMeta.actionNeeded).length.toString()));
+    }
 
     await getPullRequestsStatus(atMentionPullRequests);
     localStorageService.atMentionPullRequests = atMentionPullRequests;
