@@ -14,6 +14,7 @@ Chaser [![Build Status](https://travis-ci.org/bradybecker-wf/Chaser.svg)](https:
 
 #### Installing Chaser *(until it's out on the chrome store)*
 * The [Dart SDK](https://www.dartlang.org/downloads/) is required.
+* [Sass](http://sass-lang.com/install) is required 
 * `pub get`
 * `pub build`
 * In Chrome navigate to: `chrome://extensions/`
