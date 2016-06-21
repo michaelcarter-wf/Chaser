@@ -1,9 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:js';
 
 import 'package:chrome/chrome_ext.dart' as chrome;
-
 import 'package:lawndart/lawndart.dart' show LocalStorageStore;
 
 import 'package:wChaser/src/constants.dart';

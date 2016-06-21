@@ -28,7 +28,7 @@ class AtMentionStore extends ChaserStore {
   _displayAll(bool displayAll) {
     showAll = displayAll;
     if (showAll == false) {
-      displayPullRequests = displayPullRequests?.where((GitHubSearchResult pr) => pr.actionNeeded).toList();
+      displayPullRequests = displayPullRequests.where((GitHubSearchResult pr) => pr.actionNeeded).toList();
     } else {
       displayPullRequests = atMentionPullRequests;
     }
@@ -72,7 +72,7 @@ class AtMentionStore extends ChaserStore {
     trigger();
 
     atMentionPullRequests = await localStorageService.atMentionPullRequests;
-    if (!force && atMentionPullRequests?.isNotEmpty) {
+    if (!force && atMentionPullRequests?.isNotEmpty ?? false) {
       updated = localStorageService.atMentionsUpdated;
     } else {
       await _getChaserAssetsFromGithub();
@@ -89,7 +89,7 @@ class AtMentionStore extends ChaserStore {
     // TODO move to browser service
     if (chrome.browserAction.available) {
       chrome.browserAction.setBadgeText(new chrome.BrowserActionSetBadgeTextParams(
-          text: atMentionPullRequests?.where((GitHubSearchResult pr) => pr.actionNeeded).length.toString()));
+          text: atMentionPullRequests.where((GitHubSearchResult pr) => pr.actionNeeded).length.toString()));
     }
 
     await getPullRequestsStatus(atMentionPullRequests);

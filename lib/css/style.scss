@@ -7,7 +7,6 @@ $orange: orange;
 $popup-width: 400px;
 $gray: #999;
 
-
 #output {
 	width: $popup-width;
 	overflow-x: hidden;
@@ -134,6 +133,26 @@ $gray: #999;
 	padding-right: 3px;
 }
 
+.flex-container {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+	margin: 5px;
+
+  -webkit-flex-flow: row nowrap;
+  // justify-content: space-around;
+}
+
+.flex-item {
+  line-height: 150px;
+  color: white;
+  font-weight: bold;
+  font-size: 3em;
+  text-align: center;
+}
+
 .footer {
 	border-top:1px solid #E7E7E7;
 	background-color:$header-bg;
@@ -229,6 +248,7 @@ $gray: #999;
 .status-container {
 	width: 15px;
 	height: 100%;
+	margin-bottom: 4px;
 	opacity: .7;
 	transition: all .5s ease-in-out;
 	padding: 3px 0px 0px 4px;
