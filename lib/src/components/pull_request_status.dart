@@ -28,7 +28,7 @@ class _PullRequestStatus extends react.Component {
       List statuses = [];
 
       // find all statuses if they exist
-      gitHubPullRequest?.githubStatus.forEach((String key, GitHubStatus ghs) {
+      gitHubPullRequest.githubStatus.forEach((String key, GitHubStatus ghs) {
         if (ghs.state == GitHubStatusState.success) {
           statuses.add(react.div({
             'onMouseOver': (react.SyntheticMouseEvent me) {

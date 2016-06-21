@@ -6,11 +6,11 @@ import 'package:intl/intl.dart';
 // checks all comments for the current user's +1
 bool isPlusOneNeeded(List<GitHubComment> gitHubComments, String userId) {
   bool plusOneNeeded = true;
-  GitHubComment atMentionedComment;
+  // GitHubComment atMentionedComment;
 
   gitHubComments.forEach((GitHubComment gitHubComment) {
     if (gitHubComment.body.contains('@$userId')) {
-      atMentionedComment = gitHubComment;
+      // atMentionedComment = gitHubComment;
       plusOneNeeded = true;
     } else if (plusOneNeeded && gitHubComment.user.login == userId) {
       // need to check for 👍 http://www.fileformat.info/info/unicode/char/1F44D/index.htm

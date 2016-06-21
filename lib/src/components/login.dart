@@ -3,6 +3,7 @@ library src.components.login;
 import 'dart:html';
 
 import 'package:react/react.dart' as react;
+import 'package:react/react_dom.dart' as react_dom;
 
 import 'package:wChaser/src/actions/actions.dart';
 
@@ -17,7 +18,7 @@ class _Login extends react.Component {
 
   submitToken(react.SyntheticEvent e) {
     var inputRef = ref(ghInput);
-    InputElement input = react.findDOMNode(inputRef);
+    InputElement input = react_dom.findDOMNode(inputRef);
     chaserActions.authActions.auth(input.value);
 
     int attempts = state['attempts'];

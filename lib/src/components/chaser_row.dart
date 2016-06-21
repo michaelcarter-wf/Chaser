@@ -26,7 +26,7 @@ class _ChaserRow extends react.Component {
 
   renderImage() {
     return react.span(
-        {'className': 'pull-left', 'onClick': openNewTab},
+        {'className': 'flex-item', 'onClick': openNewTab},
         react.img(
             {'className': 'media-object avatar-image', 'src': pullRequest.githubUser.avatarUrl, 'alt': 'avatar_url'}));
   }
@@ -74,7 +74,7 @@ class _ChaserRow extends react.Component {
         : null;
 
     return react.div({
-      'className': 'chaser-row'
+      'className': 'chaser-row flex-container'
     }, [
       renderImage(),
       PullRequestStatus({'gitHubPullRequest': pullRequest.githubPullRequest, 'actions': actions}),
