@@ -12,7 +12,12 @@ Chaser [![Build Status](https://travis-ci.org/bradybecker-wf/Chaser.svg)](https:
 * `Alt+Shift+K` Is a hot key to open the extension
 * Click on the build status circle to take you to the passed/failed/loading build
 
-#### Installing Chaser *(until it's out on the chrome store)*
+#### Installing Chaser: 
+* Get Chaser from the chrome store here: https://chrome.google.com/webstore/detail/chaser/gdhhmdknlmgfkplgepciffkmpefaphpj
+* Required Scopes: 
+* ![image](https://cloud.githubusercontent.com/assets/6053448/12988579/ff4fd818-d0c6-11e5-93d3-a762d15103bd.png)
+
+#### Developing Chaser
 * The [Dart SDK](https://www.dartlang.org/downloads/) is required.
 * [Sass](http://sass-lang.com/install) is required 
 * `pub get`
@@ -21,6 +26,4 @@ Chaser [![Build Status](https://travis-ci.org/bradybecker-wf/Chaser.svg)](https:
 * Make sure `Developer Mode` is checked
 * Click `Load Unpacked Extension` and select your Chaser repo
 * Required Scopes
-
-![image](https://cloud.githubusercontent.com/assets/6053448/12988579/ff4fd818-d0c6-11e5-93d3-a762d15103bd.png)
 * Happy Chasing
