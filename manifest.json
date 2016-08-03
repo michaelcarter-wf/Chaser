@@ -1,14 +1,19 @@
 {
   "manifest_version": 2,
-  "name": "wChaser",
+  "name": "Chaser",
   "description": "Chrome extension that chases pull requests that you've open or have been mentioned in",
   "version": "2.0.0",
+  "author": "https://github.com/bradybecker-wf",
   "background": {
     "scripts": [
       "./build/web/background.dart.js"
     ]
   },
-  // https://developer.chrome.com/extensions/storage
+  "icons": {
+    "16": "./lib/images/chaser.png",
+    "48": "./lib/images/chaser.png",
+    "128": "./lib/images/chaser.png"
+  },
   "permissions": [
     "storage",
     "notifications",
@@ -19,13 +24,12 @@
     "webRequest"
   ],
   "commands": {
-   	"_execute_browser_action": {
-	    "suggested_key": {
-		  "default": "Alt+Shift+K"
-	    }
-	   }
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+K"
+      }
+    }
   },
-  // https://github.com/facebook/react-devtools/blob/master/shells/chrome/manifest.json
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
     "default_icon": "./lib/images/chaser.png",
