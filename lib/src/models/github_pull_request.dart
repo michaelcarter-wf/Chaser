@@ -11,6 +11,7 @@ class GitHubPullRequestConstants {
   static const githubUser = 'user';
   static const merged = 'merged';
   static const mergeable = 'mergeable';
+  static const sha = 'sha';
   static const state = 'state';
   static const statusesUrl = 'statuses_url';
   static const title = 'title';
@@ -18,10 +19,12 @@ class GitHubPullRequestConstants {
   static const url = 'url';
 }
 
+// https://developer.github.com/v3/pulls/#list-commits-on-a-pull-request
 class GitHubPullRequest implements GithubBaseModel {
   bool actionNeeded;
   String commentsUrl;
   String commitsUrl;
+  String commitSha;
   int comments;
   String fullName;
   GitHubUser githubUser;
@@ -57,13 +60,14 @@ class GitHubPullRequest implements GithubBaseModel {
     // for some reason this can be null
     if (json['head'] != null) {
       fullName = json['head']['repo'][GitHubPullRequestConstants.fullName];
+      commitSha = json['head'][GitHubPullRequestConstants.sha];
     }
     id = json[GitHubPullRequestConstants.id];
     merged = json[GitHubPullRequestConstants.merged];
     mergeable = json[GitHubPullRequestConstants.mergeable] != null ? json[GitHubPullRequestConstants.mergeable] : null;
     title = json[GitHubPullRequestConstants.title];
     updatedAt = json[GitHubPullRequestConstants.updatedAt];
-    updatedAtPretty = getPrettyDates(DateTime.parse(updatedAt));
+    updatedAtPretty = updatedAt != null ? getPrettyDates(DateTime.parse(updatedAt)) : null;
     githubUser = new GitHubUser(json[GitHubPullRequestConstants.githubUser]);
     githubStatus = {};
 
@@ -83,7 +87,8 @@ class GitHubPullRequest implements GithubBaseModel {
         GitHubPullRequestConstants.merged: merged,
         GitHubPullRequestConstants.githubUser: githubUser.toMap(),
         'head': {
-          'repo': {GitHubPullRequestConstants.fullName: fullName}
+          'repo': {GitHubPullRequestConstants.fullName: fullName},
+          GitHubPullRequestConstants.sha: commitSha
         },
         GitHubPullRequestConstants.title: title,
         GitHubPullRequestConstants.url: url,

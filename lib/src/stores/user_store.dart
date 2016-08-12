@@ -29,13 +29,10 @@ class UserStore extends Store {
 
   // TODO Store User Object on the location store
   Future _authUser(String ghToken) async {
-    try {
-      githubUser = await _gitHubService.setAndCheckToken(ghToken);
-      authed = true;
-      await _localStorageStore.save(ghToken, LocalStorageConstants.githubTokenKey);
-    } catch (e) {
-      authed = false;
-    }
+    githubUser = await _gitHubService.setAndCheckToken(ghToken);
+    authed = true;
+    await _localStorageStore.save(ghToken, LocalStorageConstants.githubTokenKey);
+
     trigger();
   }
 }

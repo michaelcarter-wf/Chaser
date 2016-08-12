@@ -16,12 +16,13 @@ class AtMentionStore extends ChaserStore {
   bool loading = true;
 
   AtMentionStore(this._chaserActions, GitHubService gitHubService, this._userStore, this._locationStore,
-      StatusService statusService, LocalStorageService localStorageService)
+      StatusService statusService, localStorageService)
       : super(statusService, localStorageService, gitHubService) {
     _chaserActions.locationActions.refreshView.listen((e) {
       load(force: true);
     });
 
+    triggerOnAction(_chaserActions.atMentionActions.hidePr, _hidePR);
     triggerOnAction(_chaserActions.atMentionActions.displayAll, _displayAll);
   }
 
@@ -63,6 +64,8 @@ class AtMentionStore extends ChaserStore {
     });
   }
 
+  _hidePR(GitHubSearchResult searchResult) {}
+
   @override
   load({force: false}) async {
     if (_locationStore.currentView != ChaserViews.atMentions) {
@@ -71,15 +74,27 @@ class AtMentionStore extends ChaserStore {
     loading = true;
     trigger();
 
-    atMentionPullRequests = await localStorageService.atMentionPullRequests;
+    List<GitHubSearchResult> cachedAtMentionPullRequests = await localStorageService.atMentionPullRequests;
+    print(cachedAtMentionPullRequests.map((test) => test.toMap()));
+    Map<String, String> shaCache = new Map.fromIterable(cachedAtMentionPullRequests,
+        key: (GitHubSearchResult result) => result.id,
+        value: (GitHubSearchResult result) => result.githubPullRequest?.commitSha);
+    print(shaCache);
+
     if (!force && atMentionPullRequests?.isNotEmpty ?? false) {
       updated = localStorageService.atMentionsUpdated;
+      atMentionPullRequests = cachedAtMentionPullRequests;
+      atMentionPullRequests.forEach((GitHubSearchResult result) {
+        result.previousCommit = shaCache[result.id];
+      });
     } else {
       await _getChaserAssetsFromGithub();
+      atMentionPullRequests.forEach((GitHubSearchResult result) {
+        result.previousCommit = shaCache[result.id];
+      });
       localStorageService.atMentionPullRequests = atMentionPullRequests;
     }
 
-    // TODO defer this and use the cache
     loading = false;
     trigger();
 
@@ -93,9 +108,12 @@ class AtMentionStore extends ChaserStore {
     }
 
     await getPullRequestsStatus(atMentionPullRequests);
+    // print(atMentionPullRequests.map((test) => test.toMap()));
+    localStorageService.atMentionPullRequests = atMentionPullRequests;
+    _displayAll(showAll);
 
-    for (GitHubSearchResult gsr in atMentionPullRequests) {
-      gitHubService.getPullRequestCommits(gsr.githubPullRequest);
-    }
+    // for (GitHubSearchResult gsr in atMentionPullRequests) {
+    //   gitHubService.getPullRequestCommits(gsr.githubPullRequest);
+    // }
   }
 }

@@ -14,7 +14,7 @@ class PullRequestsStore extends ChaserStore {
   bool loading = true;
 
   PullRequestsStore(this._chaserActions, GitHubService gitHubService, this._userStore, this._locationStore,
-      StatusService statusService, LocalStorageService localStorageService)
+      StatusService statusService, localStorageService)
       : super(statusService, localStorageService, gitHubService) {
     updated = new DateTime.now();
     _chaserActions.locationActions.refreshView.listen((e) {

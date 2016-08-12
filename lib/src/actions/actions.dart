@@ -1,10 +1,12 @@
 library wChaser.src.actions;
 
 import 'package:w_flux/w_flux.dart';
+import 'package:wChaser/src/models/models.dart';
 
 class AtMentionActions {
   static final String NAME = 'atMentionActions';
   Action<bool> displayAll = new Action<bool>();
+  Action<GitHubSearchResult> hidePr = new Action();
 }
 
 class AuthActions {

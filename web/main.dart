@@ -16,5 +16,7 @@ main() async {
   ChaserActions chaserActions = new ChaserActions();
   ChaserStores chaserStores = new ChaserStores(chaserActions, locationStorageService);
 
+  await chaserStores.load();
+
   react_dom.render(ChaserApp({'store': chaserStores, 'actions': chaserActions}), querySelector('#output'));
 }

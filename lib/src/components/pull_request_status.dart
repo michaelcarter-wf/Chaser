@@ -12,6 +12,7 @@ var PullRequestStatus = react.registerComponent(() => new _PullRequestStatus());
 class _PullRequestStatus extends react.Component {
   GitHubPullRequest get gitHubPullRequest => props['gitHubPullRequest'];
   ChaserActions get actions => props['actions'];
+  bool get statusReady => props['statusReady'];
 
   onMouseOver(react.SyntheticMouseEvent mouseEvent, String context, String description) {
     var content = react.div({}, [
@@ -23,8 +24,18 @@ class _PullRequestStatus extends react.Component {
     actions.popoverActions.showPopover(new PopoverProps(mouseEvent.pageX, mouseEvent.pageY, context, content));
   }
 
+  renderDefault() {
+    return react.div({
+      'className': 'status-container hide-slide pull-left'
+    }, [
+      react.div({'className': 'circle passed blink-fast'}),
+      react.div({'className': 'circle loading blink'}),
+      react.div({'className': 'circle failed blink-slow'})
+    ]);
+  }
+
   render() {
-    if (gitHubPullRequest != null || gitHubPullRequest?.githubStatus != null) {
+    if ((gitHubPullRequest != null || gitHubPullRequest?.githubStatus != null) && statusReady) {
       List statuses = [];
 
       // find all statuses if they exist
@@ -68,13 +79,7 @@ class _PullRequestStatus extends react.Component {
       return react.div({'className': 'status-container show-slide pull-left'}, statuses);
     } else {
       // render default loading
-      return react.div({
-        'className': 'status-container hide-slide pull-left'
-      }, [
-        react.div({'className': 'circle passed blink-fast'}),
-        react.div({'className': 'circle loading blink'}),
-        react.div({'className': 'circle failed blink-slow'})
-      ]);
+      return renderDefault();
     }
   }
 }

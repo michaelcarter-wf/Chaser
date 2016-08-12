@@ -47,7 +47,6 @@ class LocationStorageService {
     localStorageStore.save(atMentionsUpdated.toIso8601String(), LocalStorageConstants.atMentionUpdatedLocalStorageKey);
   }
 
-  /// Gets a list of [GitHubSearchResult] requests from the cache if they exist.
   Future<List<GitHubSearchResult>> get atMentionPullRequests async {
     if (_atMentionPullRequests.isNotEmpty) {
       return _atMentionPullRequests;

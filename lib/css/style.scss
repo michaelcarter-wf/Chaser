@@ -61,13 +61,12 @@ $gray: #999;
 
 .chaser-close-button {
 	margin-right: 4px;
-	margin-top: 4px;
-	transition: all .2s ease-in-out;
 	.icon {
-		font-size: 12px;
+		font-size: 9px;
 	}
 	&:hover {
 		color:$red;
+		cursor: pointer;
 	}
 }
 
@@ -106,9 +105,6 @@ $gray: #999;
 		background-color: $hover-color !important;
 
 		.chaser-close-button {
-			-webkit-transform: scale(1.2);
-        	-ms-transform: scale(1.2);
-        	transform: scale(1.2);
 			color: $red;
 		}
 
@@ -140,17 +136,27 @@ $gray: #999;
   display: -webkit-flex;
   display: flex;
 	margin: 5px;
-
-  -webkit-flex-flow: row nowrap;
-  // justify-content: space-around;
+	width: 100%
 }
 
 .flex-item {
-  line-height: 150px;
-  color: white;
-  font-weight: bold;
-  font-size: 3em;
-  text-align: center;
+	flex: 1;
+	-webkit-flex: 1;
+}
+
+.flex-item-2 {
+	flex: 2;
+	-webkit-flex: 2;
+}
+
+.flex-item-3 {
+	flex: 3;
+	-webkit-flex: 3;
+}
+
+.flex-item-4 {
+	flex: 4;
+	-webkit-flex: 4;
 }
 
 .footer {

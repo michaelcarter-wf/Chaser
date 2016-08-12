@@ -10,7 +10,7 @@ import 'package:wChaser/src/actions/actions.dart';
 import 'package:wChaser/src/constants.dart';
 import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/services/github.dart';
-import 'package:wChaser/src/services/local_storage.dart' show LocationStorageService;
+import 'package:wChaser/src/services/local_storage.dart' as chaser_storage;
 import 'package:wChaser/src/services/status_service.dart';
 import 'package:wChaser/src/stores/chaser_store.dart';
 import 'package:wChaser/src/utils/utils.dart';
@@ -25,15 +25,22 @@ class ChaserStores {
   UserStore userStore;
   AtMentionStore atMentionStore;
   LocationStore locationStore;
-  LocationStorageService localStorageService;
+  chaser_storage.LocationStorageService localStorageService;
   PullRequestsStore pullRequestsStore;
   DateTime updated;
   StatusService statusService;
+  ChaserActions chaserActions;
+  GitHubService gitHubService;
 
-  ChaserStores(ChaserActions chaserActions, this.localStorageService) {
+  ChaserStores(ChaserActions this.chaserActions, this.localStorageService) {
     statusService = new StatusService();
-    GitHubService gitHubService = new GitHubService(statusService: statusService);
+    gitHubService = new GitHubService(statusService: statusService);
     userStore = new UserStore(chaserActions, gitHubService);
+  }
+
+  load() async {
+    await userStore.load();
+
     locationStore = new LocationStore(chaserActions);
     atMentionStore =
         new AtMentionStore(chaserActions, gitHubService, userStore, locationStore, statusService, localStorageService);

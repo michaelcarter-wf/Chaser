@@ -39,6 +39,7 @@ class GitHubSearchResult implements GithubBaseModel {
   GitHubPullRequest githubPullRequest;
   String updatedAtPretty;
   bool actionNeeded;
+  String previousCommit;
 
   GitHubSearchResult(Map json) {
     if (json == null) {
@@ -72,8 +73,9 @@ class GitHubSearchResult implements GithubBaseModel {
     updatedAtPretty = getPrettyDates(DateTime.parse(updatedAt));
     githubUser = new GitHubUser(json[GitHubSearchResultConstants.githubUser]);
 
-    // make a call to get this later
-    githubPullRequest = json['githubPullRequest'] ?? null;
+    if (json[GitHubSearchResultConstants.pullRequest] != null) {
+      githubPullRequest = new GitHubPullRequest(json[GitHubSearchResultConstants.pullRequest]);
+    }
 
     // this will only come from cached data
     if (json.containsKey(GitHubSearchResultConstants.actionNeeded)) {
@@ -90,7 +92,7 @@ class GitHubSearchResult implements GithubBaseModel {
         GitHubSearchResultConstants.merged: merged,
         GitHubSearchResultConstants.githubUser: githubUser.toMap(),
         'head': {
-          'repo': {GitHubSearchResultConstants.fullName: fullName}
+          'repo': {GitHubSearchResultConstants.fullName: fullName},
         },
         // if there's no pullRequest present at least put the url in the cache
         GitHubSearchResultConstants.pullRequest: githubPullRequest?.toMap() ?? {'url': pullRequestUrl},

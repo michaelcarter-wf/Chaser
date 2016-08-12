@@ -21,20 +21,20 @@ class GitHubService {
     _statusService = statusService;
   }
 
-  Future<List> _requestAuthed(String httpRequestType, String url, {Map sendData}) async {
+  Future _requestAuthed(String httpRequestType, String url, {Map sendData}) async {
     Map headers = {'Authorization': 'token $_accessToken'};
-    try {
-      HttpRequest req = await HttpRequest.request(url, method: httpRequestType, requestHeaders: headers);
-      _statusService?.authed = true;
-      return JSON.decode(req.response.toString());
-    } catch (e) {
-      _statusService?.authed = false;
-      print(e);
-    }
+    // try {
+    HttpRequest req = await HttpRequest.request(url, method: httpRequestType, requestHeaders: headers);
+    _statusService?.authed = true;
+    return JSON.decode(req.response.toString());
+    // } catch (e) {
+    //   _statusService?.authed = false;
+    //   print(e);
+    // }
   }
 
   Future<GitHubPullRequest> getPullRequest(String url) async {
-    List pullRequestJson = await _requestAuthed('GET', url);
+    Map pullRequestJson = await _requestAuthed('GET', url);
     return new GitHubPullRequest(pullRequestJson);
   }
 
@@ -70,7 +70,7 @@ class GitHubService {
     }).toList();
   }
 
-//  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf
+//  https://api.github.com/search/issues?q=is:open+is:pr+author:username
   Future<List<GitHubSearchResult>> searchForOpenPullRequests(String login) async {
     Fluri uri = new Fluri()
       ..scheme = githubScheme
@@ -83,7 +83,7 @@ class GitHubService {
     }).toList();
   }
 
-  //  https://api.github.com/search/issues?q=is:open+is:pr+author:bradybecker-wf
+  //  https://api.github.com/search/issues?q=is:open+is:pr+author:username
   Future<List<GitHubSearchResult>> searchForAtMentions(String login, {since: null}) async {
     DateTime oneMonthAgo = since ?? new DateTime.now().subtract(new Duration(days: 60));
     String formatted = new DateFormat('yyyy-MM-dd').format(oneMonthAgo);
@@ -95,6 +95,9 @@ class GitHubService {
 
     var openPrsJson =
         await _requestAuthed('GET', '${uri.toString()}?q=is:open+is:pr+created:>$formatted+mentions:$login');
+
+    if (openPrsJson == null) return [];
+
     return openPrsJson['items'].map((Map openPrJson) {
       return new GitHubSearchResult(openPrJson);
     }).toList();

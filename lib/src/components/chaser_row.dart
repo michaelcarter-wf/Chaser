@@ -10,6 +10,7 @@ import 'package:wChaser/src/components/pull_request_status.dart';
 import 'package:wChaser/src/components/label.dart';
 
 var mediaWidth = {'width': '100%'};
+// var mediaWidth = {};
 
 var ChaserRow = react.registerComponent(() => new _ChaserRow());
 
@@ -18,15 +19,19 @@ class _ChaserRow extends react.Component {
   bool get hideable => props['hideable'];
   ChaserActions get actions => props['actions'];
 
+  getDefaultProps() => {'hideable': true};
+
   openNewTab(_) {
     window.open(pullRequest.htmlUrl, pullRequest.id.toString());
   }
 
-  removeThisGuy(_) {}
+  removeThisGuy(_) {
+    actions.atMentionActions.hidePr(pullRequest);
+  }
 
   renderImage() {
     return react.span(
-        {'className': 'flex-item', 'onClick': openNewTab},
+        {'className': 'flex-item-1', 'onClick': openNewTab},
         react.img(
             {'className': 'media-object avatar-image', 'src': pullRequest.githubUser.avatarUrl, 'alt': 'avatar_url'}));
   }
@@ -41,12 +46,19 @@ class _ChaserRow extends react.Component {
       labels.add(Label({'text': 'Merge Conflicts'}));
     }
 
+    if (pullRequest.githubPullRequest != null &&
+        pullRequest.previousCommit != null &&
+        pullRequest.githubPullRequest.commitSha != null &&
+        pullRequest.githubPullRequest.commitSha != pullRequest.previousCommit) {
+      labels.add(Label({'text': 'Updated', 'labelType': 'label-info'}));
+    }
+
     if (labels.isEmpty) {
       labels.add(react.small({'className': 'small-text'}, pullRequest.updatedAtPretty));
     }
 
     return react.div({
-      'className': 'media-body pull-left',
+      'className': 'media-body',
       'style': mediaWidth,
       'onClick': openNewTab
     }, [
@@ -59,26 +71,22 @@ class _ChaserRow extends react.Component {
 
 // fa fa-comments-o
   render() {
-    var removeX = hideable
-        ? react.div({'className': 'pull-right chaser-close-button', 'onClick': removeThisGuy},
-            react.i({'className': 'close-x icon icon-sm icon-close close-x',}))
-        : null;
-
-    var comments = pullRequest.comments > 0
-        ? react.div({
-            'className': 'pull-right comment-icon'
-          }, [
-            '${pullRequest.comments.toString()} ',
-            react.i({'className': 'glyphicon glyphicon-comment icon icon-sm'})
-          ])
+    var hide = hideable
+        ? react.div({'className': 'pull-right chaser-close-button', 'onClick': removeThisGuy,},
+            react.i({'className': 'glyphicon glyphicon-remove icon icon-sm'}))
         : null;
 
     return react.div({
       'className': 'chaser-row flex-container'
     }, [
       renderImage(),
-      PullRequestStatus({'gitHubPullRequest': pullRequest.githubPullRequest, 'actions': actions}),
-      react.div({'className': 'media'}, renderTitle())
+      PullRequestStatus({
+        'gitHubPullRequest': pullRequest.githubPullRequest,
+        'actions': actions,
+        'statusReady': props['statusReady']
+      }),
+      react.div({'className': 'media flex-item-4'}, renderTitle()),
+      hide
     ]);
   }
 }

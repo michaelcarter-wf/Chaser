@@ -16,15 +16,18 @@ class ChaserStore extends Store {
   bool rowsHideable;
   bool loading;
   StatusService _statusService;
+  bool statusReady;
 
   ChaserStore(StatusService statusService, this.localStorageService, this.gitHubService) {
     _statusService = statusService;
     _statusService.auth.listen((_) {
       load();
     });
+    statusReady = false;
   }
 
   getPullRequestsStatus(List<GitHubSearchResult> searchResults) async {
+    statusReady = false;
     for (GitHubSearchResult gsr in searchResults) {
       gsr.githubPullRequest = await gitHubService.getPullRequest(gsr.pullRequestUrl);
       List<GitHubStatus> githubStatuses = await gitHubService.getPullRequestStatus(gsr.githubPullRequest);
@@ -34,6 +37,7 @@ class ChaserStore extends Store {
         gsr.githubPullRequest.githubStatus.putIfAbsent(ghStatus.context, () => ghStatus);
       });
     }
+    statusReady = true;
     trigger();
   }
 
