@@ -36,6 +36,7 @@ class _ChaserRow extends react.Component {
             {'className': 'media-object avatar-image', 'src': pullRequest.githubUser.avatarUrl, 'alt': 'avatar_url'}));
   }
 
+  // MOVE TO COMPONENT
   renderTitle() {
     List labels = [];
     if (pullRequest.actionNeeded) {
@@ -53,6 +54,7 @@ class _ChaserRow extends react.Component {
       labels.add(Label({'text': 'Updated', 'labelType': 'label-info'}));
     }
 
+    // TODO ADD THIS BACK
     if (labels.isEmpty) {
       labels.add(react.small({'className': 'small-text'}, pullRequest.updatedAtPretty));
     }

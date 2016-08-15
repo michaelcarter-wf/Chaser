@@ -10,6 +10,7 @@ class AtMentionStore extends ChaserStore {
 
   List<GitHubSearchResult> atMentionPullRequests = [];
   List<GitHubSearchResult> displayPullRequests = null;
+  Set prsToIgnore = new Set();
   DateTime updated = new DateTime.now();
   bool showAll = false;
   bool rowsHideable = true;
@@ -33,6 +34,11 @@ class AtMentionStore extends ChaserStore {
     } else {
       displayPullRequests = atMentionPullRequests;
     }
+
+    print(displayPullRequests.length);
+
+    displayPullRequests = displayPullRequests.where((pr) => !prsToIgnore.contains(pr.id));
+    print(displayPullRequests.length);
 
     trigger();
   }
@@ -64,22 +70,25 @@ class AtMentionStore extends ChaserStore {
     });
   }
 
-  _hidePR(GitHubSearchResult searchResult) {}
+  _hidePR(GitHubSearchResult searchResult) async {
+    GitHubSearchResult gsr = atMentionPullRequests.firstWhere((GitHubSearchResult gsr) => gsr.id == searchResult.id);
+    await localStorageService.addPrToIgnore(gsr.id, gsr.githubPullRequest.commitSha);
+    prsToIgnore = await localStorageService.getPrsToIgnore();
+    _displayAll(showAll);
+  }
 
   @override
   load({force: false}) async {
-    if (_locationStore.currentView != ChaserViews.atMentions) {
-      return;
-    }
+    if (_locationStore.currentView != ChaserViews.atMentions) return;
+
     loading = true;
     trigger();
 
     List<GitHubSearchResult> cachedAtMentionPullRequests = await localStorageService.atMentionPullRequests;
-    print(cachedAtMentionPullRequests.map((test) => test.toMap()));
-    Map<String, String> shaCache = new Map.fromIterable(cachedAtMentionPullRequests,
+
+    final Map<String, String> shaCache = new Map.fromIterable(cachedAtMentionPullRequests,
         key: (GitHubSearchResult result) => result.id,
         value: (GitHubSearchResult result) => result.githubPullRequest?.commitSha);
-    print(shaCache);
 
     if (!force && atMentionPullRequests?.isNotEmpty ?? false) {
       updated = localStorageService.atMentionsUpdated;
@@ -99,6 +108,7 @@ class AtMentionStore extends ChaserStore {
     trigger();
 
     displayPullRequests = atMentionPullRequests;
+
     _displayAll(showAll);
 
     // TODO move to browser service
@@ -107,6 +117,7 @@ class AtMentionStore extends ChaserStore {
           text: atMentionPullRequests.where((GitHubSearchResult pr) => pr.actionNeeded).length.toString()));
     }
 
+    prsToIgnore = await localStorageService.getPrsToIgnore();
     await getPullRequestsStatus(atMentionPullRequests);
     // print(atMentionPullRequests.map((test) => test.toMap()));
     localStorageService.atMentionPullRequests = atMentionPullRequests;

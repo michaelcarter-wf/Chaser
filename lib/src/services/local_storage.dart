@@ -5,8 +5,8 @@ import 'dart:convert';
 
 import 'package:lawndart/lawndart.dart' show LocalStorageStore;
 
-import 'package:wChaser/src/models/models.dart';
 import 'package:wChaser/src/constants.dart';
+import 'package:wChaser/src/models/models.dart';
 
 class LocationStorageService {
   LocalStorageStore localStorageStore;
@@ -34,6 +34,32 @@ class LocationStorageService {
     _totalPrsChased = prsCount += prsToAdd;
     // not awaiting these, they shouldn't block
     localStorageStore.save(_totalPrsChased.toString(), LocalStorageConstants.totalPrsChased);
+  }
+
+  // TODO getters/setters
+  // TODO TYPE this
+  addPrToIgnore(int prId, commit) async {
+    String ignoredPrs = await localStorageStore.getByKey(LocalStorageConstants.ignoredPrs);
+    String newList;
+
+    if (ignoredPrs != null) {
+      List<int> prsList = JSON.decode(ignoredPrs);
+      Set<int> list = prsList.toSet();
+
+      list.add(prId);
+      newList = JSON.encode(list.toList());
+    } else {
+      newList = JSON.encode([prId]);
+    }
+
+    // MAP { 'PRID': 'COMMIT HASH'}
+    localStorageStore.save(newList, LocalStorageConstants.ignoredPrs);
+  }
+
+  // TODO getters/setters
+  Future<Set> getPrsToIgnore() async {
+    String ignoredPrs = await localStorageStore.getByKey(LocalStorageConstants.ignoredPrs);
+    return ignoredPrs != null ? (JSON.decode(ignoredPrs)..toSet()) : new Set();
   }
 
   set atMentionPullRequests(List<GitHubSearchResult> atMenionPullRequests) {
