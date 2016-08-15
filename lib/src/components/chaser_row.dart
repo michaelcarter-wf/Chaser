@@ -71,13 +71,13 @@ class _ChaserRow extends react.Component {
     ]);
   }
 
-// fa fa-comments-o
   render() {
     var hide = hideable
         ? react.div({'className': 'pull-right chaser-close-button', 'onClick': removeThisGuy,},
             react.i({'className': 'glyphicon glyphicon-remove icon icon-sm'}))
         : null;
 
+    // TODO ADD DISABLED STATE
     return react.div({
       'className': 'chaser-row flex-container'
     }, [
